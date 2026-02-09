@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const Roles = require('../utils/roles');
 
 module.exports = function (req, res, next) {
     // Get token from header
@@ -20,7 +21,7 @@ module.exports = function (req, res, next) {
 };
 
 module.exports.admin = function (req, res, next) {
-    if (req.user && req.user.role === 'admin') {
+    if (req.user && req.user.role === Roles.ADMIN) {
         next();
     } else {
         res.status(403).json({ msg: 'Access denied: Admins only' });

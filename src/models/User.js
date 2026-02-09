@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Roles = require('../utils/roles');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -17,8 +18,8 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
+        enum: Object.values(Roles),
+        default: Roles.USER
     },
     date: {
         type: Date,

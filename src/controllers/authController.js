@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Roles = require('../utils/roles');
 
 exports.register = async (req, res) => {
     const { username, email, password, role } = req.body;
@@ -16,7 +17,7 @@ exports.register = async (req, res) => {
             username,
             email,
             password,
-            role: role || 'user' // Default to user if not provided
+            role: role || Roles.USER // Default to user if not provided
         });
 
         const salt = await bcrypt.genSalt(10);
