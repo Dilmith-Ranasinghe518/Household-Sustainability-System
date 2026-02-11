@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    sustainabilityScore: {
+        type: Number,
+        default: 0
     }
 });
 
