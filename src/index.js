@@ -17,6 +17,8 @@ app.use(cors());
 // Define Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use("/api/gemini", geminiRoutes);
+app.use("/api/disasters", require("./routes/disasterRoutes"));
+
 
 
 // Test Protected Route
