@@ -17,11 +17,20 @@ app.use(cors());
 // Define Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use("/api/gemini", geminiRoutes);
+app.use('/api/audit', require('./routes/auditRoutes'));
 
+
+const User = require('./models/User');
 
 // Test Protected Route
-app.get('/api/user/profile', authMiddleware, (req, res) => {
-    res.json({ msg: 'This is a protected user route', user: req.user });
+app.get('/api/user/profile', authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        res.json(user);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 });
 
 // Test Admin Route
