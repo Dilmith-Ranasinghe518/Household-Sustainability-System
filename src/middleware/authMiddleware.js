@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const Roles = require("../utils/roles");
 
 module.exports = function (req, res, next) {
-<<<<<<< HEAD
+
   // ✅ Support both: x-auth-token and Authorization: Bearer <token>
   let token = req.header("x-auth-token");
 
@@ -10,18 +10,18 @@ module.exports = function (req, res, next) {
     const authHeader = req.header("authorization"); // "Bearer <token>"
     if (authHeader && authHeader.startsWith("Bearer ")) {
       token = authHeader.split(" ")[1];
-=======
+
     // Get token from header
     const authHeader = req.header('Authorization');
 
     // Check if not token
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ msg: 'No token, authorization denied' });
->>>>>>> origin/main
+
     }
   }
 
-<<<<<<< HEAD
+
   if (!token) {
     return res.status(401).json({ msg: "No token, authorization denied" });
   }
@@ -33,7 +33,7 @@ module.exports = function (req, res, next) {
   } catch (err) {
     return res.status(401).json({ msg: "Token is not valid" });
   }
-=======
+
     const token = authHeader.split(' ')[1];
 
     // Verify token
@@ -44,10 +44,11 @@ module.exports = function (req, res, next) {
     } catch (err) {
         res.status(401).json({ msg: 'Token is not valid' });
     }
->>>>>>> origin/main
+
 };
 
 module.exports.admin = function (req, res, next) {
   if (req.user && req.user.role === Roles.ADMIN) return next();
   return res.status(403).json({ msg: "Access denied: Admins only" });
 };
+}
