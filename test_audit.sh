@@ -35,7 +35,7 @@ fi
 echo "Creating Audit..."
 CREATE_RESPONSE=$(curl -s -X POST "$BASE_URL/audit" \
   -H "Content-Type: application/json" \
-  -H "x-auth-token: $TOKEN" \
+  -H "Authorization: Bearer $TOKEN" \
   -d '{
     "environmental": {
         "electricityUsage": 120,
@@ -59,7 +59,7 @@ echo "Create Response: $CREATE_RESPONSE"
 # 4. Get Audit
 echo "Getting Audit..."
 GET_RESPONSE=$(curl -s -X GET "$BASE_URL/audit" \
-  -H "x-auth-token: $TOKEN")
+  -H "Authorization: Bearer $TOKEN")
 echo "Get Response: $GET_RESPONSE"
 
 AUDIT_ID=$(echo $GET_RESPONSE | grep -o '"_id":"[^"]*' | cut -d'"' -f4)
@@ -68,14 +68,14 @@ echo "Audit ID: $AUDIT_ID"
 # 5. Check User Score
 echo "Checking User Score..."
 USER_PROFILE_RESPONSE=$(curl -s -X GET "$BASE_URL/user/profile" \
-  -H "x-auth-token: $TOKEN")
+  -H "Authorization: Bearer $TOKEN")
 echo "User Profile Response: $USER_PROFILE_RESPONSE"
 
 # 6. Update Audit
 echo "Updating Audit..."
 UPDATE_RESPONSE=$(curl -s -X PUT "$BASE_URL/audit/$AUDIT_ID" \
   -H "Content-Type: application/json" \
-  -H "x-auth-token: $TOKEN" \
+  -H "Authorization: Bearer $TOKEN" \
   -d '{
     "environmental": {
         "electricityUsage": 400,
@@ -99,11 +99,11 @@ echo "Update Response: $UPDATE_RESPONSE"
 # 7. Check User Score Again
 echo "Checking User Score Again..."
 USER_PROFILE_RESPONSE_2=$(curl -s -X GET "$BASE_URL/user/profile" \
-  -H "x-auth-token: $TOKEN")
+  -H "Authorization: Bearer $TOKEN")
 echo "User Profile Response 2: $USER_PROFILE_RESPONSE_2"
 
 # 8. Delete Audit
 echo "Deleting Audit..."
 DELETE_RESPONSE=$(curl -s -X DELETE "$BASE_URL/audit/$AUDIT_ID" \
-  -H "x-auth-token: $TOKEN")
+  -H "Authorization: Bearer $TOKEN")
 echo "Delete Response: $DELETE_RESPONSE"

@@ -34,15 +34,15 @@ echo -e "\n"
 
 echo "5. Access User Profile (User Token)"
 curl -v -X GET $BASE_URL/user/profile \
-  -H "x-auth-token: $USER_TOKEN"
+  -H "Authorization: Bearer $USER_TOKEN"
 echo -e "\n"
 
 echo "6. Access Admin Dashboard (User Token) - Should Fail"
 curl -v -X GET $BASE_URL/admin/dashboard \
-  -H "x-auth-token: $USER_TOKEN"
+  -H "Authorization: Bearer $USER_TOKEN"
 echo -e "\n"
 
 echo "7. Access Admin Dashboard (Admin Token)"
 curl -v -X GET $BASE_URL/admin/dashboard \
-  -H "x-auth-token: $ADMIN_TOKEN"
+  -H "Authorization: Bearer $ADMIN_TOKEN"
 echo -e "\n"

@@ -35,7 +35,7 @@ fi
 # 3. Get All Audits (As Admin)
 echo "Getting All Audits (Admin)..."
 GET_ALL_RESPONSE=$(curl -s -X GET "$BASE_URL/audit/all" \
-  -H "x-auth-token: $ADMIN_TOKEN")
+  -H "Authorization: Bearer $ADMIN_TOKEN")
 echo "Get All Response: $GET_ALL_RESPONSE"
 
 # 4. Login User (Regular)
@@ -52,5 +52,5 @@ echo "User Token: $USER_TOKEN"
 # 5. Get All Audits (As User) - Should Fail
 echo "Getting All Audits (User) - Should Fail..."
 GET_ALL_FAIL_RESPONSE=$(curl -s -X GET "$BASE_URL/audit/all" \
-  -H "x-auth-token: $USER_TOKEN")
+  -H "Authorization: Bearer $USER_TOKEN")
 echo "Get All Response (Fail): $GET_ALL_FAIL_RESPONSE"
