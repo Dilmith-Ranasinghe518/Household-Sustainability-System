@@ -54,3 +54,4 @@ app.get('/api/admin/dashboard', [authMiddleware, admin], (req, res) => {
 const PORT = process.env.PORT || 5500;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
