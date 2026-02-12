@@ -20,7 +20,7 @@ const DisasterSchema = new mongoose.Schema(
     description: { type: String, default: "" },
 
     // Simple location fields (easy for CRUD)
-    locationName: { type: String, required: true }, // e.g., "Colombo"
+    locationName: { type: String, required: true }, 
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
 
