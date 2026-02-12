@@ -31,6 +31,12 @@ app.use("/api/disasters", require("./routes/disasterRoutes"));
 app.use('/api/audit', require('./routes/auditRoutes'));
 
 
+//articles and actions
+app.use("/api/actions", require("./routes/actionRoutes"));
+app.use("/api/articles", require("./routes/articleRoutes"));
+
+
+
 const User = require('./models/User');
 
 // Test Protected Route
