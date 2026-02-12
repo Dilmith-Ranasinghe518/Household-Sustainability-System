@@ -66,3 +66,4 @@ const ActionSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Action", ActionSchema);
+

@@ -35,3 +35,4 @@ exports.deleteArticle = async (req, res) => {
   await Article.findByIdAndDelete(req.params.id);
   res.json({ msg: "Deleted" });
 };
+

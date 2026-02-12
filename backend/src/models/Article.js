@@ -33,3 +33,4 @@ const ArticleSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Article", ArticleSchema);
+

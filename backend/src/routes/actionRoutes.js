@@ -36,3 +36,4 @@ router.post("/report/:id", authMiddleware, reportAction);
 router.get("/flagged", [authMiddleware, admin], getFlaggedActions);
 
 module.exports = router;
+

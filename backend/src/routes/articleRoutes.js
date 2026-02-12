@@ -19,3 +19,4 @@ router.put("/:id", [authMiddleware, admin], updateArticle);
 router.delete("/:id", [authMiddleware, admin], deleteArticle);
 
 module.exports = router;
+
