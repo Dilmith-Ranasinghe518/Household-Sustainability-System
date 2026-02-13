@@ -1,0 +1,101 @@
+import React, { useState, useEffect } from 'react';
+import Sidebar from '../components/Sidebar';
+import { FileText, Download } from 'lucide-react';
+import api from '../services/api';
+import { API_ENDPOINTS } from '../config/apiConfig';
+import { useAuth } from '../context/AuthContext';
+
+const AdminAudits = () => {
+    const { user } = useAuth();
+    const [audits, setAudits] = useState([]);
+    const [loadingAudits, setLoadingAudits] = useState(true);
+
+    const fetchAllAudits = async () => {
+        setLoadingAudits(true);
+        try {
+            const res = await api.get(API_ENDPOINTS.AUDIT.ALL);
+            setAudits(res.data);
+        } catch (err) {
+            console.error('Error fetching all audits:', err);
+        } finally {
+            setLoadingAudits(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchAllAudits();
+    }, []);
+
+    return (
+        <div className="flex min-h-screen bg-off-white">
+            <Sidebar isAdmin={true} />
+            <main className="flex-1 ml-[70px] md:ml-[260px] p-6 md:p-10 min-w-0 transition-all duration-300">
+                <header className="flex justify-between items-center mb-10">
+                    <div>
+                        <h1 className="text-3xl font-bold mb-2">Audit Logs</h1>
+                        <p className="text-text-muted">Review all sustainability audits submitted by users.</p>
+                    </div>
+                    <button onClick={fetchAllAudits} className="flex items-center gap-2 px-4 py-2 bg-white border border-border rounded-xl font-medium text-sm text-text-main hover:bg-off-white transition-colors shadow-sm">
+                        <FileText size={16} />
+                        Refresh List
+                    </button>
+                </header>
+
+                <section>
+                    <div className="bg-white rounded-[1.5rem] p-6 shadow-sm glass">
+                        {loadingAudits ? (
+                            <div className="text-center py-10">Loading audits...</div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">User</th>
+                                            <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">Date</th>
+                                            <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">Score</th>
+                                            <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {audits.map((audit) => (
+                                            <tr key={audit._id}>
+                                                <td className="p-4 border-b border-border">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xs">
+                                                            {audit.user?.username?.charAt(0).toUpperCase() || 'U'}
+                                                        </div>
+                                                        <span className="text-sm font-medium">{audit.user?.username || 'Unknown'}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="p-4 border-b border-border text-sm text-text-muted">
+                                                    {new Date(audit.date).toLocaleDateString()}
+                                                </td>
+                                                <td className="p-4 border-b border-border">
+                                                    <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${audit.score >= 80 ? 'bg-green-100 text-green-800' :
+                                                            audit.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                                                                'bg-red-100 text-red-800'
+                                                        }`}>
+                                                        {audit.score} / 100
+                                                    </span>
+                                                </td>
+                                                <td className="p-4 border-b border-border text-sm text-text-muted">
+                                                    <span className="text-xs">
+                                                        Env: {Object.values(audit.environmental).filter(Boolean).length} |
+                                                        Soc: {Object.values(audit.social).filter(Boolean).length} |
+                                                        Eco: {Object.values(audit.economic).filter(Boolean).length}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            </main>
+        </div>
+    );
+};
+
+export default AdminAudits;

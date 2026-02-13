@@ -7,8 +7,12 @@ import {
     Trophy,
     ChevronUp,
     TrendingDown,
+    Plus,
     Calendar
 } from 'lucide-react';
+import { useState } from 'react';
+import api from '../services/api';
+import { API_ENDPOINTS } from '../config/apiConfig';
 import { motion } from 'framer-motion';
 import {
     Chart as ChartJS,
@@ -41,6 +45,7 @@ import { useAuth } from '../context/AuthContext';
 
 const UserDashboard = () => {
     const { user } = useAuth();
+
 
     const lineData = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],

@@ -11,7 +11,8 @@ import {
     ShieldCheck,
     Zap,
     Recycle,
-    Droplets
+    Droplets,
+    FileText
 } from 'lucide-react';
 
 
@@ -27,14 +28,18 @@ const Sidebar = ({ isAdmin = false }) => {
 
     const userMenuItems = [
         { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
+        { name: 'My Audits', path: '/audits', icon: <FileText size={20} /> },
+        { name: 'Waste Mgmt', path: '/waste', icon: <Recycle size={20} /> },
         { name: 'Energy', path: '#', icon: <Zap size={20} /> },
-        { name: 'Waste', path: '#', icon: <Recycle size={20} /> },
+
         { name: 'Water', path: '#', icon: <Droplets size={20} /> },
         { name: 'Profile', path: '#', icon: <User size={20} /> },
     ];
 
     const adminMenuItems = [
         { name: 'Admin Overview', path: '/admin', icon: <ShieldCheck size={20} /> },
+        { name: 'Audit Logs', path: '/admin/audits', icon: <FileText size={20} /> },
+        { name: 'Waste Requests', path: '/admin/waste', icon: <Recycle size={20} /> },
         { name: 'Analytics', path: '#', icon: <BarChart3 size={20} /> },
         { name: 'Users', path: '#', icon: <User size={20} /> },
         { name: 'Settings', path: '#', icon: <Settings size={20} /> },
