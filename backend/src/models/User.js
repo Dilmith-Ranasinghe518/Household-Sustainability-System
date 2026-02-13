@@ -28,6 +28,16 @@ const UserSchema = new mongoose.Schema({
     sustainabilityScore: {
         type: Number,
         default: 0
+    },
+    otp: {
+        type: String
+    },
+    otpExpires: {
+        type: Date
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
     }
 });
 

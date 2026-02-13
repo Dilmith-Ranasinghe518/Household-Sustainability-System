@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
@@ -90,7 +90,7 @@ const Login = () => {
                     <label className="flex items-center gap-2 cursor-pointer text-text-main">
                         <input type="checkbox" className="w-4 h-4 rounded border-border text-primary-teal focus:ring-primary-teal" /> Remember me
                     </label>
-                    <a href="#" className="text-primary-teal font-medium hover:underline">Forgot password?</a>
+                    <Link to="/forgot-password" className="text-primary-teal font-medium hover:underline">Forgot password?</Link>
                 </div>
 
                 <button

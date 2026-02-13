@@ -2,8 +2,12 @@ export const API_BASE_URL = 'http://localhost:5001/api';
 
 export const API_ENDPOINTS = {
     AUTH: {
-        REGISTER: '/auth/register',
+        REGISTER_INITIATE: '/auth/register/initiate',
+        REGISTER_VERIFY: '/auth/register/verify',
+        REGISTER_COMPLETE: '/auth/register/complete',
         LOGIN: '/auth/login',
+        FORGOT_PASSWORD: '/auth/forgot-password',
+        RESET_PASSWORD: '/auth/reset-password',
         USER_PROFILE: '/user/profile'
     },
     ADMIN: {

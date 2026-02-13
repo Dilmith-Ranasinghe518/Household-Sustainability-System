@@ -13,6 +13,9 @@ import UserAudits from './pages/UserAudits';
 import AdminAudits from './pages/AdminAudits';
 import UserWaste from './pages/UserWaste';
 import AdminWaste from './pages/AdminWaste';
+import VerifyOTP from './pages/VerifyOTP';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import './styles/global.css';
 
 import { AuthProvider } from './context/AuthContext';
@@ -33,6 +36,9 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/verify-otp" element={<VerifyOTP />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
               </Route>
 
               {/* Protected Routes wrapped in DashboardLayout */}
