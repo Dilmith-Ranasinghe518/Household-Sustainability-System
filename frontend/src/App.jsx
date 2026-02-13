@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+// Footer removed from here, handled in layouts
+import PublicLayout from './layouts/PublicLayout';
+import DashboardLayout from './layouts/DashboardLayout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -26,24 +28,32 @@ function App() {
           <Navbar />
           <div className="flex-grow pt-[88px]"> {/* Add padding-top to account for fixed navbar */}
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-
-              <Route element={<ProtectedRoute />}>
-                <Route path="/dashboard" element={<UserDashboard />} />
-                <Route path="/audits" element={<UserAudits />} />
-                <Route path="/waste" element={<UserWaste />} />
+              {/* Public Routes wrapped in PublicLayout */}
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
               </Route>
 
+              {/* Protected Routes wrapped in DashboardLayout */}
+              <Route element={<ProtectedRoute />}>
+                <Route element={<DashboardLayout />}>
+                  <Route path="/dashboard" element={<UserDashboard />} />
+                  <Route path="/audits" element={<UserAudits />} />
+                  <Route path="/waste" element={<UserWaste />} />
+                </Route>
+              </Route>
+
+              {/* Admin Routes wrapped in DashboardLayout (Admin Mode) */}
               <Route element={<ProtectedRoute roles={[ROLES.ADMIN]} />}>
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/audits" element={<AdminAudits />} />
-                <Route path="/admin/waste" element={<AdminWaste />} />
+                <Route element={<DashboardLayout isAdmin={true} />}>
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/admin/audits" element={<AdminAudits />} />
+                  <Route path="/admin/waste" element={<AdminWaste />} />
+                </Route>
               </Route>
             </Routes>
           </div>
-          <Footer />
         </div>
       </Router>
     </AuthProvider>

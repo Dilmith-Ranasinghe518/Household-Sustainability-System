@@ -12,11 +12,14 @@ import {
     Zap,
     Recycle,
     Droplets,
-    FileText
+    FileText,
+    ChevronLeft,
+    ChevronRight,
+    Search
 } from 'lucide-react';
 
 
-const Sidebar = ({ isAdmin = false }) => {
+const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const { logout } = useAuth();
@@ -48,7 +51,18 @@ const Sidebar = ({ isAdmin = false }) => {
     const menuItems = isAdmin ? adminMenuItems : userMenuItems;
 
     return (
-        <aside className="fixed left-0 top-[88px] z-40 h-[calc(100vh-88px)] w-[70px] md:w-[260px] bg-forest-dark text-white flex flex-col transition-all duration-300 shadow-xl">
+        <aside
+            className={`fixed left-0 top-[88px] z-40 h-[calc(100vh-88px)] bg-forest-dark text-white flex flex-col transition-all duration-300 shadow-xl ${isOpen ? 'w-[70px] md:w-[260px]' : 'w-[70px] md:w-[80px]'
+                }`}
+        >
+
+            {/* Toggle Button (Desktop Only) */}
+            <button
+                onClick={toggleSidebar}
+                className="hidden md:flex absolute -right-3 top-6 bg-white text-forest-dark rounded-full p-1 shadow-md border border-gray-200 hover:bg-gray-100 transition-colors z-50"
+            >
+                {isOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+            </button>
             {/* Branding removed as it's in the global Navbar */}
 
             <nav className="flex-1 py-6 px-3 flex flex-col gap-2 items-center md:items-stretch">
@@ -56,14 +70,16 @@ const Sidebar = ({ isAdmin = false }) => {
                     <Link
                         key={item.name}
                         to={item.path}
-                        className={`flex items-center gap-3 px-3 py-3 md:px-4 md:py-3.5 rounded-xl font-medium transition-all w-full ${location.pathname === item.path
+                        className={`flex items-center gap-3 px-3 py-3 md:px-4 md:py-3.5 rounded-xl font-medium transition-all w-full overflow-hidden whitespace-nowrap ${location.pathname === item.path
                             ? 'bg-primary-teal text-white shadow-lg shadow-primary-teal/20'
                             : 'text-white/70 hover:text-white hover:bg-white/5'
                             }`}
                         title={item.name}
                     >
-                        {item.icon}
-                        <span className="hidden md:block">{item.name}</span>
+                        <div className="min-w-[20px]">{item.icon}</div>
+                        <span className={`hidden md:block transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0'}`}>
+                            {item.name}
+                        </span>
                     </Link>
                 ))}
             </nav>
@@ -73,8 +89,10 @@ const Sidebar = ({ isAdmin = false }) => {
                     onClick={handleLogout}
                     className="flex items-center gap-3 px-3 py-3 md:px-4 md:py-3.5 rounded-xl font-medium text-white/70 hover:text-red-400 hover:bg-red-400/10 transition-all w-full"
                 >
-                    <LogOut size={20} />
-                    <span className="hidden md:block">Logout</span>
+                    <div className="min-w-[20px]"><LogOut size={20} /></div>
+                    <span className={`hidden md:block transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0'}`}>
+                        Logout
+                    </span>
                 </button>
             </div>
         </aside>

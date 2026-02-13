@@ -1,13 +1,10 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Leaf, Mail, Twitter, Instagram, Linkedin, Facebook } from 'lucide-react';
 
 const Footer = () => {
-    const location = useLocation();
-    const isDashboard = location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/admin');
-
     return (
-        <footer className={`bg-white border-t border-border pt-16 pb-8 ${isDashboard ? 'ml-[70px] md:ml-[260px]' : ''} transition-all duration-300`}>
+        <footer className="bg-white border-t border-border pt-16 pb-8 transition-all duration-300">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
                     {/* Brand Column */}
