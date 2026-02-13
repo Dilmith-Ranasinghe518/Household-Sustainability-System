@@ -56,13 +56,13 @@ exports.createAudit = async (req, res) => {
 
 exports.getAudit = async (req, res) => {
     try {
-        const audit = await SustainabilityAudit.findOne({ user: req.user.id }).sort({ date: -1 });
+        const audits = await SustainabilityAudit.find({ user: req.user.id }).sort({ date: -1 });
 
-        if (!audit) {
-            return res.status(404).json({ msg: 'No audit found for this user' });
+        if (!audits) {
+            return res.status(404).json({ msg: 'No audits found for this user' });
         }
 
-        res.json(audit);
+        res.json(audits);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

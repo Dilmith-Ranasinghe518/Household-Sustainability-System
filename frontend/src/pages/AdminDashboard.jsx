@@ -9,6 +9,7 @@ import {
     Filter,
     Download
 } from 'lucide-react';
+
 import { motion } from 'framer-motion';
 import { Bar, Pie } from 'react-chartjs-2';
 import {
@@ -44,6 +45,8 @@ const AdminDashboard = () => {
             setLoadingUsers(false);
         }
     };
+
+
 
     const handleDeleteUser = async (id) => {
         if (window.confirm('Are you sure you want to delete this user?')) {
@@ -232,6 +235,9 @@ const AdminDashboard = () => {
                             </div>
                         )}
                     </div>
+
+
+
                 </section>
 
                 {/* Edit User Modal */}
@@ -280,7 +286,7 @@ const AdminDashboard = () => {
                     </div>
                 )}
             </main>
-        </div>
+        </div >
     );
 };
 

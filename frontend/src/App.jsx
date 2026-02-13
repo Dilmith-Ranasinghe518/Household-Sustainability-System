@@ -7,6 +7,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import UserAudits from './pages/UserAudits';
+import AdminAudits from './pages/AdminAudits';
+import UserWaste from './pages/UserWaste';
+import AdminWaste from './pages/AdminWaste';
 import './styles/global.css';
 
 import { AuthProvider } from './context/AuthContext';
@@ -28,10 +32,14 @@ function App() {
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<UserDashboard />} />
+                <Route path="/audits" element={<UserAudits />} />
+                <Route path="/waste" element={<UserWaste />} />
               </Route>
 
               <Route element={<ProtectedRoute roles={[ROLES.ADMIN]} />}>
                 <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/audits" element={<AdminAudits />} />
+                <Route path="/admin/waste" element={<AdminWaste />} />
               </Route>
             </Routes>
           </div>
