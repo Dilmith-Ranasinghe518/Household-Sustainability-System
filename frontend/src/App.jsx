@@ -23,6 +23,10 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ROLES } from './utils/roles';
 
+// ✅ NEW: Disaster pages
+import UserDisasters from './pages/UserDisasters';
+import AdminDisasters from './pages/AdminDisasters';
+
 function App() {
   return (
     <AuthProvider>
@@ -47,6 +51,9 @@ function App() {
                   <Route path="/dashboard" element={<UserDashboard />} />
                   <Route path="/audits" element={<UserAudits />} />
                   <Route path="/waste" element={<UserWaste />} />
+
+                  {/* users can only view */}
+                  <Route path="/disasters" element={<UserDisasters />} />
                 </Route>
               </Route>
 
@@ -56,6 +63,9 @@ function App() {
                   <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/admin/audits" element={<AdminAudits />} />
                   <Route path="/admin/waste" element={<AdminWaste />} />
+
+                  {/* admins can do anything */}
+                  <Route path="/admin/disasters" element={<AdminDisasters />} />
                 </Route>
               </Route>
             </Routes>

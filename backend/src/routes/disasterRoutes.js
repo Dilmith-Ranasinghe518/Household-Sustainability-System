@@ -12,11 +12,14 @@ const {
   deleteDisaster,
 } = require("../controllers/disasterController");
 
-// ✅ Admin must be logged in for everything 
+
+router.get("/", authMiddleware, getDisasters);
+router.get("/:id", authMiddleware, getDisasterById);
+
+// keep admin only for create/update/delete
 router.post("/", authMiddleware, admin, createDisaster);
-router.get("/", authMiddleware, admin, getDisasters);
-router.get("/:id", authMiddleware, admin, getDisasterById);
 router.put("/:id", authMiddleware, admin, updateDisaster);
 router.delete("/:id", authMiddleware, admin, deleteDisaster);
+
 
 module.exports = router;
