@@ -36,7 +36,8 @@ app.use('/api/waste', require('./routes/wasteRoutes'));
 app.use("/api/actions", require("./routes/actionRoutes"));
 app.use("/api/articles", require("./routes/articleRoutes"));
 
-
+app.use("/api/products", require("./routes/productRoutes"));
+app.use("/api/orders/", require("./routes/orderRoutes"));
 
 const User = require('./models/User');
 
