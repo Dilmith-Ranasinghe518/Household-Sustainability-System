@@ -4,7 +4,7 @@ const { calculateCarbon } = require("../services/carbonService");
 // Create Product
 exports.createProduct = async (req, res) => {
   try {
-    const { title, description, price, category, condition } = req.body;
+    const { title, description, imageUrl, price, category, condition } = req.body;
 
     if (!title || !category) {
       return res.status(400).json({
@@ -17,6 +17,7 @@ exports.createProduct = async (req, res) => {
     const product = new Product({
       title,
       description,
+      imageUrl,
       price,
       category,
       condition,
@@ -104,6 +105,12 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
+    if (product.status !== "Available") {
+      return res.status(400).json({
+          message: "Cannot modify a product that is reserved or sold."
+      });
+    }
+
     const { category } = req.body;
 
     // Recalculate carbon only if category changed
@@ -156,6 +163,26 @@ exports.deleteProduct = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Error deleting product.",
+      error: error.message
+    });
+  }
+};
+
+// Get User Products
+exports.getMyProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ seller: req.user.id })
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      message: "Your products retrieved successfully.",
+      count: products.length,
+      products
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to retrieve your products.",
       error: error.message
     });
   }

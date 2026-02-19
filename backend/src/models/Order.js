@@ -13,16 +13,18 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
 
+    seller: {   
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+
     status: {
         type: String,
         enum: ["Pending", "Confirmed", "Cancelled", "Completed"],
         default: "Pending"
-    },
-
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
-});
+    
+}, { timestamps: true });
 
 module.exports = mongoose.model("Order", orderSchema);

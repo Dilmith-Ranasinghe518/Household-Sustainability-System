@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const productSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: String,
+    imageUrl: String,
     price: Number,
     category: { type: String, required: true },
     condition: String,
@@ -14,12 +15,8 @@ const productSchema = new mongoose.Schema({
         default: "Available"
     },
 
-    co2Saved: Number, 
-
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+    co2Saved: Number
+    
+}, { timestamps: true });
 
 module.exports = mongoose.model("Product", productSchema);

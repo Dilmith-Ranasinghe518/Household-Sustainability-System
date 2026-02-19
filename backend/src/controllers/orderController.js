@@ -1,25 +1,6 @@
 const Order = require("../models/Order");
 const Product = require("../models/Product");
-const User = require("../models/User");
-
-// Sustainability reward helper
-async function awardSustainabilityPoints(order) {
-  const co2Value = order.product.co2Saved || 0;
-
-  const buyer = await User.findById(order.buyer);
-  const seller = await User.findById(order.product.seller);
-
-  if (buyer) {
-    buyer.sustainabilityScore += co2Value;
-    await buyer.save();
-  }
-
-  if (seller) {
-    seller.sustainabilityScore += co2Value;
-    await seller.save();
-  }
-}
-
+const { awardSustainabilityPoints } = require("../services/sustainabilityService");
 
 // Create Order (Buy Now)
 exports.createOrder = async (req, res) => {
@@ -41,6 +22,7 @@ exports.createOrder = async (req, res) => {
     const order = new Order({
       product: product._id,
       buyer: req.user.id,
+      seller: product.seller,
       status: "Pending"
     });
 
@@ -80,15 +62,9 @@ exports.confirmOrder = async (req, res) => {
     }
 
     if (order.status !== "Pending") {
-        return res.status(400).json({
-            message: "Only pending orders can be confirmed."
-        });
-    }
-
-    if (order.status === "Confirmed") {
-        return res.status(400).json({
-            message: "This order has already been confirmed."
-        });
+      return res.status(400).json({
+        message: "Only pending orders can be confirmed."
+      });
     }
 
     order.status = "Confirmed";
@@ -124,15 +100,18 @@ exports.cancelOrder = async (req, res) => {
         });
     }
 
+    const isBuyer = order.buyer.toString() === req.user.id;
+    const isSeller = order.product.seller.toString() === req.user.id;
+
+    if (!isBuyer && !isSeller) {
+      return res.status(403).json({
+        message: "You are not authorized to cancel this order."
+      });
+    }
+
     if (order.status !== "Pending") {
         return res.status(400).json({
             message: "Only pending orders can be cancelled."
-        });
-    }
-
-    if (order.status === "Confirmed") {
-        return res.status(400).json({
-            message: "Confirmed orders cannot be cancelled."
         });
     }
 
@@ -150,6 +129,32 @@ exports.cancelOrder = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Failed to cancel order.",
+      error: error.message
+    });
+  }
+};
+
+// get User Orders
+exports.getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({
+      $or: [
+        { buyer: req.user.id },
+        { seller: req.user.id }
+      ]
+    })
+    .populate("product")
+    .sort({ createdAt: -1 });
+
+    return res.json({
+      message: "Your orders retrieved successfully.",
+      count: orders.length,
+      orders
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to retrieve your orders.",
       error: error.message
     });
   }
