@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
+const { allowedCategories } = require("../utils/emissionCategories");
 
 const productSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: String,
     imageUrl: String,
     price: Number,
-    category: { type: String, required: true },
+    category: {
+        type: String,
+        enum: allowedCategories,
+        required: true
+    },
     condition: String,
     seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 

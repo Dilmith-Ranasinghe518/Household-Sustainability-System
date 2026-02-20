@@ -1,26 +1,39 @@
+require("dotenv").config();
 const axios = require("axios");
-
-// Simple category emission mapping
-const categoryEmissionMap = {
-  chair: 18,
-  table: 25,
-  laptop: 200,
-  phone: 70
-};
+const { emissionCategories } = require("../utils/emissionCategories");
+const { manualCarbonFallback } = require("../utils/manualCarbonFallback");
 
 async function calculateCarbon(category) {
   try {
-    // if using real API
-    // const response = await axios.post("API_URL", {...});
-    // return response.data.co2e;
+    const item = emissionCategories[category];
+    if (!item) return null;
 
-    // Simulated calculation
-    const value = categoryEmissionMap[category.toLowerCase()] || 10;
-    return value;
+    const response = await axios.post(
+      "https://api.climatiq.io/data/v1/estimate",
+      {
+        emission_factor: {
+          activity_id: item.activityId,
+          data_version: "^21"
+        },
+        parameters: {
+          weight: item.weight,
+          weight_unit: "kg"
+        }
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.CLIMATIQ_API_KEY}`
+        }
+      }
+    );
+
+    return Math.round(response.data.co2e);
 
   } catch (error) {
-    console.error("Carbon API error:", error.message);
-    return null; // important: don't crash
+    console.error("Carbon API error, using fallback:", error.response?.data || error.message);
+
+    // Fallback calculation
+    return manualCarbonFallback[category] || 5;
   }
 }
 
