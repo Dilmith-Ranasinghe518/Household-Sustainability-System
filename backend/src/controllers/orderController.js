@@ -1,6 +1,12 @@
 const Order = require("../models/Order");
 const Product = require("../models/Product");
+const User = require("../models/User");
 const { awardSustainabilityPoints } = require("../services/sustainabilityService");
+const {
+  sendOrderPlacedEmail,
+  sendOrderConfirmedEmail,
+  sendOrderCancelledEmail
+} = require("../services/orderEmailService");
 
 // Create Order (Buy Now)
 exports.createOrder = async (req, res) => {
@@ -30,6 +36,11 @@ exports.createOrder = async (req, res) => {
     await product.save();
     await order.save();
 
+    const buyer = await User.findById(req.user.id);
+    const seller = await User.findById(product.seller);
+
+    sendOrderPlacedEmail(order, product, buyer, seller).catch(err => console.error("Email error:", err));
+
     return res.status(201).json({
       message: "Order placed successfully. Waiting for seller confirmation.",
       order
@@ -47,7 +58,10 @@ exports.createOrder = async (req, res) => {
 // Confirm Order (Seller)
 exports.confirmOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate("product");
+    const order = await Order.findById(req.params.id)
+    .populate("product")
+    .populate("buyer")
+    .populate("seller");
 
     if (!order) {
       return res.status(404).json({
@@ -75,6 +89,8 @@ exports.confirmOrder = async (req, res) => {
     await order.product.save();
     await order.save();
 
+    sendOrderConfirmedEmail(order, order.product, order.buyer, order.seller).catch(err => console.error("Email error:", err));
+
     return res.json({
       message: "Order confirmed successfully. Sustainability points awarded.",
       order
@@ -92,7 +108,10 @@ exports.confirmOrder = async (req, res) => {
 // Cancel Order
 exports.cancelOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate("product");
+    const order = await Order.findById(req.params.id)
+    .populate("product")
+    .populate("buyer")
+    .populate("seller");
 
     if (!order) {
         return res.status(404).json({
@@ -120,6 +139,8 @@ exports.cancelOrder = async (req, res) => {
 
     await order.product.save();
     await order.save();
+
+    sendOrderCancelledEmail(order, order.product, order.buyer, order.seller).catch(err => console.error("Email error:", err));
 
     return res.json({
       message: "Order cancelled successfully.",
@@ -155,6 +176,53 @@ exports.getMyOrders = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Failed to retrieve your orders.",
+      error: error.message
+    });
+  }
+};
+
+// Get All Orders Report 
+exports.getOrdersReport = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Access denied. Admins only."
+      });
+    }
+
+    const orders = await Order.find()
+      .populate("product", "title price")
+      .populate("buyer", "username email")
+      .populate("seller", "username email")
+      .sort({ createdAt: -1 });
+
+    const totalOrders = orders.length;
+
+    const summary = {
+      total: totalOrders,
+      pending: orders.filter(o => o.status === "Pending").length,
+      confirmed: orders.filter(o => o.status === "Confirmed").length,
+      cancelled: orders.filter(o => o.status === "Cancelled").length,
+      completed: orders.filter(o => o.status === "Completed").length
+    };
+
+    const completionRate =
+      totalOrders > 0
+        ? ((summary.confirmed + summary.completed) / totalOrders * 100).toFixed(2)
+        : 0;
+
+    return res.json({
+      message: "Order report generated successfully.",
+      summary: {
+        ...summary,
+        completionRate: `${completionRate}%`
+      },
+      orders
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to generate order report.",
       error: error.message
     });
   }
