@@ -23,7 +23,9 @@ const orderSchema = new mongoose.Schema({
         type: String,
         enum: ["Pending", "Confirmed", "Cancelled", "Completed"],
         default: "Pending"
-    }
+    },
+
+    expiresAt: { type: Date }
     
 }, { timestamps: true });
 

@@ -3,6 +3,8 @@ const connectDB = require('./config/db');
 const cors = require('cors');
 const authMiddleware = require('./middleware/authMiddleware'); // Middleware function
 const { admin } = require('./middleware/authMiddleware'); // Admin middleware
+const cron = require("node-cron");
+const { processExpiredOrders } = require("./services/orderExpiryService");
 
 const app = express();
 
@@ -61,5 +63,16 @@ app.get('/api/admin/dashboard', [authMiddleware, admin], (req, res) => {
 
 const PORT = process.env.PORT || 5500;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+
+    cron.schedule("* * * * *", async () => {
+        try {
+            console.log("Checking for expired orders...");
+            await processExpiredOrders();
+        } catch (error) {
+            console.error("Error processing expired orders:", error.message);
+        }
+    });
+});
 

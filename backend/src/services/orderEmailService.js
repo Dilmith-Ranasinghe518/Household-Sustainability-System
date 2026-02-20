@@ -85,18 +85,30 @@ async function sendOrderConfirmedEmail(order, product, buyer, seller) {
 
 
 // Order Cancelled (to Both Buyer and Seller)
-async function sendOrderCancelledEmail(order, product, buyer, seller) {
+async function sendOrderCancelledEmail(order, product, buyer, seller, reason = "manual") {
 
-  const subject = "Order Cancelled";
+  const subject = reason === "expired"
+    ? "Order Expired Automatically"
+    : "Order Cancelled";
+
+  const reasonMessage = reason === "expired"
+    ? `
+      <p>This order was automatically cancelled because it was not confirmed within the allowed time period.</p>
+      <p>The product is now available for other community members.</p>
+    `
+    : `
+      <p>The order has been cancelled by one of the participants.</p>
+      <p>If you still wish to proceed, you may place a new order.</p>
+    `;
 
   const content = `
     <p>Hello,</p>
 
     <p>The order for <strong>${product.title}</strong> has been cancelled.</p>
 
-    <p>If you still wish to proceed, you may place a new order.</p>
+    ${reasonMessage}
 
-    <p>Thank you for being part of a sustainable community</p>
+    <p>Thank you for supporting sustainable reuse.</p>
   `;
 
   await sendEmail(
