@@ -24,13 +24,15 @@ exports.createOrder = async (req, res) => {
         message: "You cannot place an order on your own product."
       });
     }
-    /* 
+    
     const expiryDays = 5;
     const expiresAt = new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000); 
-    * * For testing purposes, 5 minutes expiry time is set. */
+    
+    /* For testing purposes, 5 minutes expiry time is set. 
    
     const expiryMinutes = 5;
     const expiresAt = new Date(Date.now() + expiryMinutes * 60 * 1000);
+    */
 
     const order = new Order({
       product: product._id,
