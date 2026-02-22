@@ -67,7 +67,7 @@ const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 
-    cron.schedule("* * * * *", async () => {
+    cron.schedule("0 0 * * *", async () => {
         try {
             console.log("Checking for expired orders...");
             await processExpiredOrders();
