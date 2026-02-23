@@ -3,49 +3,67 @@ const User = require('../models/User');
 
 // Helper function to calculate score
 const calculateScore = (data) => {
-    let score = 0;
+    let environmentalPoints = 0;
+    let socialPoints = 0;
+    let economicPoints = 0;
 
-    // Environmental (Max 40)
+    // Environmental (Max 50)
     // Electricity Usage (Max 10)
-    if (data.environmental.electricityUsage < 150) score += 10;
-    else if (data.environmental.electricityUsage < 300) score += 5;
+    if (data.environmental.electricityUsage < 150) environmentalPoints += 10;
+    else if (data.environmental.electricityUsage < 300) environmentalPoints += 5;
+
+    // Water Usage (Max 10)
+    if (data.environmental.waterUsage < 100) environmentalPoints += 10;
+    else if (data.environmental.waterUsage < 200) environmentalPoints += 5;
 
     // Boolean questions (10 points each)
-    if (data.environmental.solarPanels) score += 10;
-    if (data.environmental.waterSavingTaps) score += 10;
-    if (data.environmental.wasteSeparation) score += 10;
+    if (data.environmental.solarPanels) environmentalPoints += 10;
+    if (data.environmental.waterSavingTaps) environmentalPoints += 10;
+    if (data.environmental.wasteSeparation) environmentalPoints += 10;
 
     // Social (Max 30)
-    if (data.social.communityParticipation) score += 10;
-    if (data.social.safeNeighborhood) score += 10;
-    if (data.social.publicTransportUsage) score += 10;
+    if (data.social.communityParticipation) socialPoints += 10;
+    if (data.social.safeNeighborhood) socialPoints += 10;
+    if (data.social.publicTransportUsage) socialPoints += 10;
 
     // Economic (Max 30)
-    if (data.economic.energyEfficientAppliances) score += 10;
-    if (data.economic.budgetTracking) score += 10;
-    if (data.economic.sustainableShopping) score += 10;
+    if (data.economic.energyEfficientAppliances) economicPoints += 10;
+    if (data.economic.budgetTracking) economicPoints += 10;
+    if (data.economic.sustainableShopping) economicPoints += 10;
 
-    return Math.min(score, 100); // Ensure max is 100
+    const totalPoints = environmentalPoints + socialPoints + economicPoints;
+    const maxPoints = 110; // 50 (Env) + 30 (Soc) + 30 (Eco)
+
+    const environmentalScore = (environmentalPoints / 50) * 100;
+    const overallSustainabilityPercentage = (totalPoints / maxPoints) * 100;
+
+    return {
+        score: Math.min(totalPoints, 100), // Keep legacy score for backward compatibility if needed, but capped at 100
+        environmentalScore: Math.round(environmentalScore * 100) / 100,
+        overallSustainabilityPercentage: Math.round(overallSustainabilityPercentage * 100) / 100
+    };
 };
 
 exports.createAudit = async (req, res) => {
     try {
         const { environmental, social, economic } = req.body;
 
-        const score = calculateScore({ environmental, social, economic });
+        const scores = calculateScore({ environmental, social, economic });
 
         const newAudit = new SustainabilityAudit({
             user: req.user.id,
             environmental,
             social,
             economic,
-            score
+            score: scores.score,
+            environmentalScore: scores.environmentalScore,
+            overallSustainabilityPercentage: scores.overallSustainabilityPercentage
         });
 
         const audit = await newAudit.save();
 
         // Update User's sustainability score
-        await User.findByIdAndUpdate(req.user.id, { sustainabilityScore: score });
+        await User.findByIdAndUpdate(req.user.id, { sustainabilityScore: scores.overallSustainabilityPercentage });
 
         res.json(audit);
     } catch (err) {
@@ -93,16 +111,25 @@ exports.updateAudit = async (req, res) => {
             return res.status(401).json({ msg: 'Not authorized' });
         }
 
-        const score = calculateScore({ environmental, social, economic });
+        const scores = calculateScore({ environmental, social, economic });
 
         audit = await SustainabilityAudit.findByIdAndUpdate(
             req.params.id,
-            { $set: { environmental, social, economic, score } },
+            {
+                $set: {
+                    environmental,
+                    social,
+                    economic,
+                    score: scores.score,
+                    environmentalScore: scores.environmentalScore,
+                    overallSustainabilityPercentage: scores.overallSustainabilityPercentage
+                }
+            },
             { new: true }
         );
 
         // Update User's sustainability score
-        await User.findByIdAndUpdate(req.user.id, { sustainabilityScore: score });
+        await User.findByIdAndUpdate(req.user.id, { sustainabilityScore: scores.overallSustainabilityPercentage });
 
         res.json(audit);
     } catch (err) {

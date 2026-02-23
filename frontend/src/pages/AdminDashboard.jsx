@@ -6,7 +6,9 @@ import {
     AlertTriangle,
     Search,
     Filter,
-    Download
+    Download,
+    Settings as SettingsIcon,
+    Shield
 } from 'lucide-react';
 
 import { motion } from 'framer-motion';
@@ -32,6 +34,8 @@ const AdminDashboard = () => {
     const [loadingUsers, setLoadingUsers] = useState(true);
     const [editingUser, setEditingUser] = useState(null);
     const [editFormData, setEditFormData] = useState({ username: '', email: '', role: '' });
+    const [settings, setSettings] = useState({ isRegistrationOtpEnabled: true });
+    const [loadingSettings, setLoadingSettings] = useState(true);
 
     const fetchUsers = async () => {
         setLoadingUsers(true);
@@ -42,6 +46,30 @@ const AdminDashboard = () => {
             console.error('Error fetching users:', err);
         } finally {
             setLoadingUsers(false);
+        }
+    };
+
+    const fetchSettings = async () => {
+        setLoadingSettings(true);
+        try {
+            const res = await api.get(API_ENDPOINTS.SETTINGS);
+            setSettings(res.data);
+        } catch (err) {
+            console.error('Error fetching settings:', err);
+        } finally {
+            setLoadingSettings(false);
+        }
+    };
+
+    const handleToggleOtp = async () => {
+        try {
+            const newStatus = !settings.isRegistrationOtpEnabled;
+            const res = await api.put(API_ENDPOINTS.SETTINGS, { isRegistrationOtpEnabled: newStatus });
+            setSettings(res.data);
+            alert(`Registration OTP ${newStatus ? 'enabled' : 'disabled'} successfully`);
+        } catch (err) {
+            console.error('Error updating settings:', err);
+            alert('Failed to update settings');
         }
     };
 
@@ -84,6 +112,7 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         fetchUsers();
+        fetchSettings();
     }, []);
 
     const pieData = {
@@ -234,6 +263,26 @@ const AdminDashboard = () => {
                 </div>
 
 
+                <div className="bg-white rounded-[1.5rem] p-6 shadow-sm glass">
+                    <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+                        <SettingsIcon size={20} className="text-primary-teal" />
+                        System Settings
+                    </h3>
+                    <div className="flex items-center justify-between p-4 bg-off-white rounded-xl border border-border">
+                        <div>
+                            <strong className="block text-sm text-text-main font-bold">Email OTP for Registration</strong>
+                            <p className="text-xs text-text-muted mt-1">If disabled, users can complete registration immediately after entering their email.</p>
+                        </div>
+                        <button
+                            onClick={handleToggleOtp}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ring-2 ring-transparent ring-offset-2 ${settings.isRegistrationOtpEnabled ? 'bg-primary-teal' : 'bg-gray-300'}`}
+                        >
+                            <span
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.isRegistrationOtpEnabled ? 'translate-x-6' : 'translate-x-1'}`}
+                            />
+                        </button>
+                    </div>
+                </div>
 
             </section>
 

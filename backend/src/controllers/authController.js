@@ -6,6 +6,7 @@ const sendEmail = require('../services/emailService');
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 const RegistrationOTP = require('../models/RegistrationOTP');
+const Settings = require('../models/Settings');
 
 // Step 1: Initiate Registration (Send OTP)
 // exports.initiateRegister = async (req, res) => {
@@ -42,13 +43,23 @@ const logger = require("../utils/logger");
 exports.initiateRegister = async (req, res) => {
     try {
         logger.info("Initiate register called");
-        logger.info(`Request body: ${JSON.stringify(req.body)}`);
-
         const { email } = req.body;
 
         if (!email) {
-            logger.error("Email missing");
             return res.status(400).json({ msg: "Email is required" });
+        }
+
+        // Check Settings
+        let settings = await Settings.findOne();
+        if (!settings) {
+            settings = new Settings();
+            await settings.save();
+        }
+
+        if (!settings.isRegistrationOtpEnabled) {
+            logger.info("OTP is disabled. Generating registerToken directly.");
+            const registerToken = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '15m' });
+            return res.json({ success: true, msg: "OTP bypassed", email, registerToken, skipOtp: true });
         }
 
         const otp = generateOTP();
@@ -60,16 +71,12 @@ exports.initiateRegister = async (req, res) => {
             { upsert: true, new: true }
         );
 
-        logger.info("OTP saved in database");
-
         await sendEmail(email, "Verify your email", `Your OTP is ${otp}`);
-
-        logger.info("Email function completed");
 
         return res.json({ success: true, msg: "OTP sent", email });
 
     } catch (err) {
-        logger.error("FULL ERROR", err);
+        logger.error("Error in initiateRegister", err);
         return res.status(500).json({ success: false, message: err.message });
     }
 };

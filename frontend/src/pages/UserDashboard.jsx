@@ -75,6 +75,7 @@ const UserDashboard = () => {
     };
 
     const stats = [
+        { label: 'Sustainability Score', value: `${user?.sustainabilityScore || 0}%`, icon: <Trophy color="#10b981" />, trend: 'Overall', color: 'teal' },
         { label: 'Energy Saved', value: '24%', icon: <Zap color="#facc15" />, trend: '+12%', color: 'yellow' },
         { label: 'Waste Recycled', value: '85%', icon: <Recycle color="#0ea5a4" />, trend: '+5%', color: 'teal' },
         { label: 'Water Usage', value: '-15%', icon: <Droplets color="#3b82f6" />, trend: '-3%', color: 'blue' }

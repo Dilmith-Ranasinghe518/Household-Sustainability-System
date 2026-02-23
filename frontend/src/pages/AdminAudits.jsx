@@ -50,7 +50,8 @@ const AdminAudits = () => {
                                     <tr>
                                         <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">User</th>
                                         <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">Date</th>
-                                        <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">Score</th>
+                                        <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">Sustainability %</th>
+                                        <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">Env Score</th>
                                         <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">Details</th>
                                     </tr>
                                 </thead>
@@ -69,11 +70,19 @@ const AdminAudits = () => {
                                                 {new Date(audit.date).toLocaleDateString()}
                                             </td>
                                             <td className="p-4 border-b border-border">
-                                                <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${audit.score >= 80 ? 'bg-green-100 text-green-800' :
-                                                    audit.score >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                                                <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${audit.overallSustainabilityPercentage >= 80 ? 'bg-green-100 text-green-800' :
+                                                    audit.overallSustainabilityPercentage >= 50 ? 'bg-yellow-100 text-yellow-800' :
                                                         'bg-red-100 text-red-800'
                                                     }`}>
-                                                    {audit.score} / 100
+                                                    {audit.overallSustainabilityPercentage ? `${audit.overallSustainabilityPercentage}%` : 'N/A'}
+                                                </span>
+                                            </td>
+                                            <td className="p-4 border-b border-border">
+                                                <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${audit.environmentalScore >= 80 ? 'bg-green-100 text-green-800' :
+                                                    audit.environmentalScore >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                                                        'bg-red-100 text-red-800'
+                                                    }`}>
+                                                    {audit.environmentalScore ?? 'N/A'}
                                                 </span>
                                             </td>
                                             <td className="p-4 border-b border-border text-sm text-text-muted">

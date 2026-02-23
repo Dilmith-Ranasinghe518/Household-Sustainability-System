@@ -7,7 +7,8 @@ const AuditForm = ({ isOpen, onClose, onSubmit, initialData }) => {
             electricityUsage: 0,
             solarPanels: false,
             waterSavingTaps: false,
-            wasteSeparation: false
+            wasteSeparation: false,
+            waterUsage: 0
         },
         social: {
             communityParticipation: false,
@@ -31,7 +32,7 @@ const AuditForm = ({ isOpen, onClose, onSubmit, initialData }) => {
         } else {
             // Reset form when opening for new entry
             setFormData({
-                environmental: { electricityUsage: 0, solarPanels: false, waterSavingTaps: false, wasteSeparation: false },
+                environmental: { electricityUsage: 0, solarPanels: false, waterSavingTaps: false, wasteSeparation: false, waterUsage: 0 },
                 social: { communityParticipation: false, safeNeighborhood: false, publicTransportUsage: false },
                 economic: { energyEfficientAppliances: false, budgetTracking: false, sustainableShopping: false }
             });
@@ -81,6 +82,20 @@ const AuditForm = ({ isOpen, onClose, onSubmit, initialData }) => {
                                     min="0"
                                     value={formData.environmental.electricityUsage}
                                     onChange={(e) => handleChange('environmental', 'electricityUsage', Number(e.target.value))}
+                                    className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-primary-teal/20 outline-none"
+                                    required
+                                />
+                                <p className="text-xs text-text-muted mt-1 flex items-center gap-1">
+                                    <AlertCircle size={12} /> Lower is better for the score
+                                </p>
+                            </div>
+                            <div className="col-span-1 md:col-span-2">
+                                <label className="block text-sm font-medium text-text-main mb-1">Monthly Water Usage (Liters)</label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    value={formData.environmental.waterUsage}
+                                    onChange={(e) => handleChange('environmental', 'waterUsage', Number(e.target.value))}
                                     className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-primary-teal/20 outline-none"
                                     required
                                 />
@@ -212,7 +227,7 @@ const AuditForm = ({ isOpen, onClose, onSubmit, initialData }) => {
                     </div>
                 </form>
             </div>
-        </div>
+        </div >
     );
 };
 

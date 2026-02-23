@@ -34,6 +34,7 @@ app.use("/api/disasters", require("./routes/disasterRoutes"));
 
 app.use('/api/audit', require('./routes/auditRoutes'));
 app.use('/api/waste', require('./routes/wasteRoutes'));
+app.use('/api/settings', require('./routes/settingsRoutes'));
 
 
 //articles and actions

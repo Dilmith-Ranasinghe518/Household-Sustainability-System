@@ -23,6 +23,11 @@ const SustainabilityAuditSchema = new mongoose.Schema({
         wasteSeparation: {
             type: Boolean,
             required: true
+        },
+        waterUsage: {
+            type: Number,
+            required: true,
+            min: 0
         }
     },
     social: {
@@ -58,6 +63,14 @@ const SustainabilityAuditSchema = new mongoose.Schema({
         required: true,
         min: 0,
         max: 100
+    },
+    environmentalScore: {
+        type: Number,
+        default: 0
+    },
+    overallSustainabilityPercentage: {
+        type: Number,
+        default: 0
     },
     date: {
         type: Date,

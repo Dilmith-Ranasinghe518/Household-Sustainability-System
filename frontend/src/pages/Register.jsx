@@ -32,8 +32,13 @@ const Register = () => {
         setError('');
         setIsLoading(true);
         try {
-            await api.post(API_ENDPOINTS.AUTH.REGISTER_INITIATE, { email });
-            setStep(2);
+            const res = await api.post(API_ENDPOINTS.AUTH.REGISTER_INITIATE, { email });
+            if (res.data.skipOtp) {
+                setRegisterToken(res.data.registerToken);
+                setStep(3);
+            } else {
+                setStep(2);
+            }
         } catch (err) {
             setError(err.response?.data?.msg || 'Failed to send OTP');
         } finally {
@@ -97,6 +102,7 @@ const Register = () => {
             {/* Progress Indicator */}
             <div className="flex justify-center mb-8 gap-2">
                 <div className={`h-2 w-1/3 rounded-full transition-all ${step >= 1 ? 'bg-primary-teal' : 'bg-gray-200'}`}></div>
+                {/* Condition: if we are at step 3 and we skipped step 2, we might want to hide it or just show it as filled */}
                 <div className={`h-2 w-1/3 rounded-full transition-all ${step >= 2 ? 'bg-primary-teal' : 'bg-gray-200'}`}></div>
                 <div className={`h-2 w-1/3 rounded-full transition-all ${step >= 3 ? 'bg-primary-teal' : 'bg-gray-200'}`}></div>
             </div>
