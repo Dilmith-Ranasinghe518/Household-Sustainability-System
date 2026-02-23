@@ -25,6 +25,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use("/api/gemini", geminiRoutes);
 
+app.use("/api/issues", require("./routes/supportTicketRoutes"));
 app.use("/api/disasters", require("./routes/disasterRoutes"));
 
 

@@ -14,7 +14,8 @@ import {
   FileText,
   ChevronLeft,
   ChevronRight,
-  AlertTriangle, // ✅ NEW icon for disasters
+  AlertTriangle,
+  AlertCircle, // ✅ NEW icon for issues
 } from 'lucide-react';
 
 const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
@@ -32,8 +33,10 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'My Audits', path: '/audits', icon: <FileText size={20} /> },
     { name: 'Waste Mgmt', path: '/waste', icon: <Recycle size={20} /> },
 
-    // ✅ NEW: user can view disasters
     { name: 'Disaster Alerts', path: '/disasters', icon: <AlertTriangle size={20} /> },
+
+    // ✅ NEW: User support center
+    { name: 'Support Center', path: '/issues', icon: <AlertCircle size={20} /> },
 
     { name: 'Energy', path: '#', icon: <Zap size={20} /> },
     { name: 'Water', path: '#', icon: <Droplets size={20} /> },
@@ -45,8 +48,10 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'Audit Logs', path: '/admin/audits', icon: <FileText size={20} /> },
     { name: 'Waste Requests', path: '/admin/waste', icon: <Recycle size={20} /> },
 
-    // ✅ NEW: admin can manage disasters
     { name: 'Disaster Mgmt', path: '/admin/disasters', icon: <AlertTriangle size={20} /> },
+
+    // ✅ NEW: Admin manage issues
+    { name: 'Manage Issues', path: '/admin/issues', icon: <AlertCircle size={20} /> },
 
     { name: 'Analytics', path: '#', icon: <BarChart3 size={20} /> },
     { name: 'Users', path: '#', icon: <User size={20} /> },

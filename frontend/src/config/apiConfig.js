@@ -1,4 +1,6 @@
-export const API_BASE_URL = "http://localhost:5000/api";
+export const API_BASE_URL = "https://household-sustainability-system.onrender.com/api";
+
+// export const API_BASE_URL = "http://localhost:5001/api";
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -16,8 +18,15 @@ export const API_ENDPOINTS = {
     USERS: "/admin/users", // GET, DELETE, PUT
   },
 
-  
   DISASTERS: "/disasters",
+
+  // ✅ NEW: Issues / Support Center (Power Usage Advice Tickets)
+  ISSUES: {
+    BASE: "/issues",          // POST (user), GET (admin)
+    MY: "/issues/my",         // GET (user)
+    BY_ID: "/issues",         // GET /:id, PUT /:id (admin), DELETE /:id (admin)
+    MESSAGES: "/issues",      // POST /:id/messages
+  },
 
   AUDIT: {
     BASE: "/audit",
@@ -34,4 +43,5 @@ export const API_ENDPOINTS = {
   ACTIONS: "/actions",
   ARTICLES: "/articles",
   GEMINI: "/gemini",
+  SETTINGS: "/settings",
 };
