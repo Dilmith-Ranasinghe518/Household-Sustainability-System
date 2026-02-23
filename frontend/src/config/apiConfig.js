@@ -1,6 +1,6 @@
-// export const API_BASE_URL = "https://household-sustainability-system.onrender.com/api";
+export const API_BASE_URL = "https://household-sustainability-system.onrender.com/api";
 
-export const API_BASE_URL = "http://localhost:5001/api";
+// export const API_BASE_URL = "http://localhost:5001/api";
 
 
 export const API_ENDPOINTS = {
