@@ -58,11 +58,11 @@ ${text}
     });
 
   } catch (error) {
-    console.error(error.response?.data || error.message);
+    console.error("FULL ERROR:", error.response?.data || error.message);
 
     return res.status(500).json({
       status: "Error",
-      message: "Failed to generate sustainability recommendations"
+      message: error.response?.data || error.message
     });
   }
 });
