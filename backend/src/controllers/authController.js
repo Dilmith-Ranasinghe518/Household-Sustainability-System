@@ -37,63 +37,40 @@ const RegistrationOTP = require('../models/RegistrationOTP');
 // };
 
 
+const logger = require("../utils/logger");
+
 exports.initiateRegister = async (req, res) => {
     try {
-        console.log("🔵 initiateRegister called");
-        console.log("📩 Request body:", req.body);
+        logger.info("Initiate register called");
+        logger.info(`Request body: ${JSON.stringify(req.body)}`);
 
         const { email } = req.body;
 
         if (!email) {
-            console.log("❌ Email missing in request");
+            logger.error("Email missing");
             return res.status(400).json({ msg: "Email is required" });
         }
 
-        console.log("🔍 Checking if user exists...");
-        let user = await User.findOne({ email });
-
-        if (user) {
-            console.log("⚠️ User already exists:", email);
-            return res.status(400).json({ msg: 'User already exists' });
-        }
-
         const otp = generateOTP();
-        console.log("🔐 Generated OTP:", otp);
+        logger.info(`Generated OTP: ${otp}`);
 
-        console.log("💾 Saving OTP to database...");
-        const otpRecord = await RegistrationOTP.findOneAndUpdate(
+        await RegistrationOTP.findOneAndUpdate(
             { email },
             { email, otp },
-            { upsert: true, new: true, setDefaultsOnInsert: true }
+            { upsert: true, new: true }
         );
 
-        console.log("✅ OTP saved:", otpRecord);
+        logger.info("OTP saved in database");
 
-        console.log("📤 Sending email...");
-        await sendEmail(
-            email,
-            'Verify your email',
-            `Your registration OTP is ${otp}. It expires in 10 minutes.`
-        );
+        await sendEmail(email, "Verify your email", `Your OTP is ${otp}`);
 
-        console.log("✅ Email function completed");
+        logger.info("Email function completed");
 
-        return res.json({
-            success: true,
-            msg: 'OTP sent to email',
-            email
-        });
+        return res.json({ success: true, msg: "OTP sent", email });
 
     } catch (err) {
-        console.error("🔥 FULL ERROR:", err);
-        console.error("🔥 ERROR MESSAGE:", err.message);
-        console.error("🔥 STACK:", err.stack);
-
-        return res.status(500).json({
-            success: false,
-            message: err.message,
-            stack: process.env.NODE_ENV === "development" ? err.stack : undefined
-        });
+        logger.error("FULL ERROR", err);
+        return res.status(500).json({ success: false, message: err.message });
     }
 };
 
