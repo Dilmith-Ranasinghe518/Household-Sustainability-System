@@ -1,31 +1,34 @@
 const nodemailer = require("nodemailer");
 
-// Gmail SMTP configuration (Render safe)
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-        rejectUnauthorized: false,
-    },
-});
+// Create transporter
+const createTransporter = () => {
+    return nodemailer.createTransport({
+        service: "gmail", // cleaner than host/port config
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS, // MUST be Google App Password
+        },
+    });
+};
 
-// Send OTP only
+// Send OTP email
 const sendOTPEmail = async (to, otp) => {
     try {
+        // Check env variables
         if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
             console.log("⚠️ EMAIL ENV NOT FOUND - MOCK MODE");
             console.log(`OTP for ${to}: ${otp}`);
-            return;
+            return { success: false, message: "Email service not configured" };
         }
+
+        const transporter = createTransporter();
+
+        // Verify connection (helps in Render debugging)
+        await transporter.verify();
 
         const mailOptions = {
             from: `"EcoPulse OTP Service" <${process.env.EMAIL_USER}>`,
-            to: to,
+            to,
             subject: "Your Verification OTP Code",
             text: `Your verification OTP code is: ${otp}
 
@@ -34,11 +37,16 @@ This code will expire in 5 minutes.
 If you did not request this, please ignore this email.`,
         };
 
-        await transporter.sendMail(mailOptions);
+        const info = await transporter.sendMail(mailOptions);
 
         console.log(`✅ OTP email sent to ${to}`);
+        console.log("Message ID:", info.messageId);
+
+        return { success: true };
+
     } catch (error) {
-        console.error("❌ OTP Email Error:", error.message);
+        console.error("❌ OTP Email Error:", error);
+        return { success: false, message: error.message };
     }
 };
 
