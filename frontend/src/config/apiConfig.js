@@ -1,7 +1,4 @@
-export const API_BASE_URL = "https://household-sustainability-system.onrender.com/api";
-
-// export const API_BASE_URL = "http://localhost:5001/api";
-
+export const API_BASE_URL = "http://localhost:5000/api";
 
 export const API_ENDPOINTS = {
     AUTH: {
@@ -14,13 +11,13 @@ export const API_ENDPOINTS = {
         USER_PROFILE: "/user/profile",
     },
 
-    ADMIN: {
-        DASHBOARD: "/admin/dashboard",
-        USERS: "/admin/users", // GET, DELETE, PUT
-    },
+  ADMIN: {
+    DASHBOARD: "/admin/dashboard",
+    USERS: "/admin/users", // GET, DELETE, PUT
+  },
 
-
-    DISASTERS: "/disasters",
+  
+  DISASTERS: "/disasters",
 
     AUDIT: {
         BASE: "/audit",
@@ -34,8 +31,7 @@ export const API_ENDPOINTS = {
         BY_ID: "/waste",
     },
 
-    ACTIONS: "/actions",
-    ARTICLES: "/articles",
-    GEMINI: "/gemini",
-    SETTINGS: "/settings",
+  ACTIONS: "/actions",
+  ARTICLES: "/articles",
+  GEMINI: "/gemini",
 };
