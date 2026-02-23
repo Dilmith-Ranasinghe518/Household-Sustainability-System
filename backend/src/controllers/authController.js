@@ -8,31 +8,92 @@ const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString()
 const RegistrationOTP = require('../models/RegistrationOTP');
 
 // Step 1: Initiate Registration (Send OTP)
+// exports.initiateRegister = async (req, res) => {
+//     try {
+//         const { email } = req.body;
+
+//         let user = await User.findOne({ email });
+//         if (user) {
+//             return res.status(400).json({ msg: 'User already exists' });
+//         }
+
+//         const otp = generateOTP();
+
+//         // Upsert OTP
+//         await RegistrationOTP.findOneAndUpdate(
+//             { email },
+//             { email, otp },
+//             { upsert: true, new: true, setDefaultsOnInsert: true }
+//         );
+
+//         await sendEmail(email, 'Verify your email', `Your registration OTP is ${otp}. It expires in 10 minutes.`);
+
+//         res.json({ msg: 'OTP sent to email', email });
+
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).send('Server error');
+//     }
+// };
+
+
 exports.initiateRegister = async (req, res) => {
     try {
+        console.log("🔵 initiateRegister called");
+        console.log("📩 Request body:", req.body);
+
         const { email } = req.body;
 
+        if (!email) {
+            console.log("❌ Email missing in request");
+            return res.status(400).json({ msg: "Email is required" });
+        }
+
+        console.log("🔍 Checking if user exists...");
         let user = await User.findOne({ email });
+
         if (user) {
+            console.log("⚠️ User already exists:", email);
             return res.status(400).json({ msg: 'User already exists' });
         }
 
         const otp = generateOTP();
+        console.log("🔐 Generated OTP:", otp);
 
-        // Upsert OTP
-        await RegistrationOTP.findOneAndUpdate(
+        console.log("💾 Saving OTP to database...");
+        const otpRecord = await RegistrationOTP.findOneAndUpdate(
             { email },
             { email, otp },
             { upsert: true, new: true, setDefaultsOnInsert: true }
         );
 
-        await sendEmail(email, 'Verify your email', `Your registration OTP is ${otp}. It expires in 10 minutes.`);
+        console.log("✅ OTP saved:", otpRecord);
 
-        res.json({ msg: 'OTP sent to email', email });
+        console.log("📤 Sending email...");
+        await sendEmail(
+            email,
+            'Verify your email',
+            `Your registration OTP is ${otp}. It expires in 10 minutes.`
+        );
+
+        console.log("✅ Email function completed");
+
+        return res.json({
+            success: true,
+            msg: 'OTP sent to email',
+            email
+        });
 
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
+        console.error("🔥 FULL ERROR:", err);
+        console.error("🔥 ERROR MESSAGE:", err.message);
+        console.error("🔥 STACK:", err.stack);
+
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+            stack: process.env.NODE_ENV === "development" ? err.stack : undefined
+        });
     }
 };
 
