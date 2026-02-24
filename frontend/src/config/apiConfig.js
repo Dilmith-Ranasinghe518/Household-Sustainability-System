@@ -36,4 +36,8 @@ export const API_ENDPOINTS = {
     GEMINI: "/gemini",
     WEATHER: "/weather",
     WEATHER_FORECAST: "/weather/forecast",
+    SETTINGS: "/settings",
+    ORDERS: "/orders",
+    PRODUCTS: "/products",
+    ISSUES: "/issues",
 };
