@@ -29,6 +29,8 @@ export const API_ENDPOINTS = {
         BASE: "/waste",
         ALL: "/waste/all",
         BY_ID: "/waste",
+        BINS: "/waste/bins",
+        MY_BIN: "/waste/my-bin",
     },
 
     ACTIONS: "/actions",

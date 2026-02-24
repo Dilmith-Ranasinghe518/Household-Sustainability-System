@@ -1,15 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import SmartBin from '../components/SmartBin';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
 import api from '../services/api';
 import { API_ENDPOINTS } from '../config/apiConfig';
-import { Truck, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Truck, AlertTriangle, CheckCircle, Clock, Recycle, MapPin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const UserWaste = () => {
     const { user } = useAuth();
     const [requests, setRequests] = useState([]);
+    const [bin, setBin] = useState(null);
     const [binLevel, setBinLevel] = useState(0);
     const [loading, setLoading] = useState(false);
+
+    const binIcon = new L.Icon({
+        iconUrl: 'https://img.icons8.com/material-rounded/96/000000/trash.png',
+        iconSize: [35, 35],
+        iconAnchor: [17, 35],
+        popupAnchor: [0, -30],
+    });
+
+    const pendingBinIcon = new L.Icon({
+        iconUrl: 'https://img.icons8.com/material-rounded/96/fa314a/trash.png',
+        iconSize: [35, 35],
+        iconAnchor: [17, 35],
+        popupAnchor: [0, -30],
+    });
 
     // Simulate bin level changes randomly for demonstration
     useEffect(() => {
@@ -36,8 +53,18 @@ const UserWaste = () => {
         }
     };
 
+    const fetchBin = async () => {
+        try {
+            const res = await api.get(API_ENDPOINTS.WASTE.MY_BIN);
+            setBin(res.data);
+        } catch (err) {
+            console.error('Error fetching bin:', err);
+        }
+    };
+
     useEffect(() => {
         fetchRequests();
+        fetchBin();
     }, []);
 
     const handleRequestPickup = async () => {
@@ -45,6 +72,7 @@ const UserWaste = () => {
         try {
             await api.post(API_ENDPOINTS.WASTE.BASE, { binLevel });
             fetchRequests();
+            fetchBin(); // Refresh map icon to red
             alert('Pickup requested successfully!');
         } catch (err) {
             console.error('Error requesting pickup:', err);
@@ -64,8 +92,40 @@ const UserWaste = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
                 {/* Smart Bin Section */}
                 <div className="bg-white rounded-[1.5rem] p-8 shadow-sm glass flex flex-col items-center justify-center text-center">
-                    <h2 className="text-xl font-semibold mb-6">Live Bin Status</h2>
-                    <SmartBin level={binLevel} />
+                    <div className="w-full flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-semibold">Live Bin Status</h2>
+                        {bin && (
+                            <span className="flex items-center gap-1.5 px-3 py-1 bg-teal-soft-bg text-primary-teal text-[11px] font-bold rounded-full border border-primary-teal/20">
+                                <Recycle size={12} /> {bin.name}
+                            </span>
+                        )}
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full border-b border-border pb-8 mb-8">
+                        <div className="flex flex-col items-center justify-center">
+                            <SmartBin level={binLevel} />
+                        </div>
+                        <div className="h-[250px] w-full rounded-2xl overflow-hidden border border-border shadow-inner">
+                            {bin ? (
+                                <MapContainer center={[bin.latitude, bin.longitude]} zoom={15} style={{ height: '100%', width: '100%' }}>
+                                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                    <Marker position={[bin.latitude, bin.longitude]} icon={bin.hasPendingRequest ? pendingBinIcon : binIcon}>
+                                        <Popup>
+                                            <div className="text-center">
+                                                <p className="font-bold">{bin.name}</p>
+                                                {bin.hasPendingRequest && <p className="text-[10px] text-red-500 font-bold animate-pulse">PICKUP PENDING</p>}
+                                            </div>
+                                        </Popup>
+                                    </Marker>
+                                </MapContainer>
+                            ) : (
+                                <div className="h-full w-full bg-off-white flex flex-col items-center justify-center text-text-muted p-4">
+                                    <MapPin size={32} className="mb-2 opacity-20" />
+                                    <p className="text-sm">No bin location assigned by admin.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
                     <div className="mt-8 w-full max-w-xs">
                         <div className="flex justify-between text-sm text-text-muted mb-2">

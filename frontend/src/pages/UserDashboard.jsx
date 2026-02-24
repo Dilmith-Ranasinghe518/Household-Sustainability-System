@@ -10,7 +10,7 @@ import {
     Plus,
     Calendar
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { API_ENDPOINTS } from '../config/apiConfig';
 import { motion } from 'framer-motion';
@@ -46,6 +46,19 @@ import WeatherWidget from '../components/WeatherWidget';
 
 const UserDashboard = () => {
     const { user } = useAuth();
+    const [bin, setBin] = useState(null);
+
+    useEffect(() => {
+        const fetchBin = async () => {
+            try {
+                const res = await api.get(API_ENDPOINTS.WASTE.MY_BIN);
+                setBin(res.data);
+            } catch (err) {
+                console.error('Error fetching bin:', err);
+            }
+        };
+        fetchBin();
+    }, []);
 
 
     const lineData = {
@@ -134,7 +147,14 @@ const UserDashboard = () => {
                         <WeatherWidget />
                         <div className="bg-white p-6 rounded-[1.5rem] shadow-sm glass flex-1">
                             <div className="mb-6">
-                                <h3 className="text-lg font-semibold mb-1">Resource Breakdown</h3>
+                                <div className="flex justify-between items-start mb-1">
+                                    <h3 className="text-lg font-semibold">Resource Breakdown</h3>
+                                    {bin && (
+                                        <span className="flex items-center gap-1.5 px-3 py-1 bg-teal-soft-bg text-primary-teal text-[11px] font-bold rounded-full border border-primary-teal/20">
+                                            <Recycle size={12} /> {bin.name}
+                                        </span>
+                                    )}
+                                </div>
                                 <p className="text-sm text-text-muted">Usage by category</p>
                             </div>
                             <div className="h-[200px]">
@@ -178,8 +198,8 @@ const UserDashboard = () => {
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
+            </section >
+        </div >
     );
 };
 
