@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout';
 import api from '../services/api';
@@ -26,6 +26,20 @@ const Register = () => {
         role: 'user',
         mobileNumber: ''
     });
+
+    const [settings, setSettings] = useState({ isRoleSelectionEnabled: false });
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await api.get(API_ENDPOINTS.SETTINGS);
+                setSettings(res.data);
+            } catch (err) {
+                console.error('Error fetching settings:', err);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     // Step 1: Initiate Registration
     const handleInitiate = async (e) => {
@@ -238,20 +252,22 @@ const Register = () => {
                         </div>
                     </div>
 
-                    <div className="mb-6">
-                        <label className="block text-sm font-semibold mb-1.5 text-forest-dark">Role</label>
-                        <div className="relative">
-                            <User className="absolute left-4 top-3.5 text-text-muted" size={20} />
-                            <select
-                                value={details.role}
-                                onChange={(e) => setDetails({ ...details, role: e.target.value })}
-                                className="w-full pl-12 pr-4 py-3 border border-border rounded-xl bg-white focus:outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 appearance-none"
-                            >
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                            </select>
+                    {(settings.isRoleSelectionEnabled || user?.role === 'admin') && (
+                        <div className="mb-6">
+                            <label className="block text-sm font-semibold mb-1.5 text-forest-dark">Role</label>
+                            <div className="relative">
+                                <User className="absolute left-4 top-3.5 text-text-muted" size={20} />
+                                <select
+                                    value={details.role}
+                                    onChange={(e) => setDetails({ ...details, role: e.target.value })}
+                                    className="w-full pl-12 pr-4 py-3 border border-border rounded-xl bg-white focus:outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10 appearance-none"
+                                >
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     <button
                         type="submit"
