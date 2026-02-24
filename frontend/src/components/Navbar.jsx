@@ -93,6 +93,13 @@ const Navbar = () => {
                                             </div>
                                             <div className="p-2">
                                                 <Link
+                                                    to="/profile"
+                                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm text-text-main hover:bg-off-white rounded-lg transition-colors"
+                                                    onClick={() => setShowProfileMenu(false)}
+                                                >
+                                                    <User size={16} /> Profile
+                                                </Link>
+                                                <Link
                                                     to={user?.role === 'admin' ? '/admin' : '/dashboard'}
                                                     className="flex items-center gap-2 w-full px-3 py-2 text-sm text-text-main hover:bg-off-white rounded-lg transition-colors"
                                                     onClick={() => setShowProfileMenu(false)}

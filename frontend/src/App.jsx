@@ -30,6 +30,7 @@ import UserIssues from './pages/UserIssues';
 import CreateIssue from './pages/CreateIssue';
 import IssueDetails from './pages/IssueDetails';
 import AdminIssues from './pages/AdminIssues';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
                   <Route path="/issues" element={<UserIssues />} />
                   <Route path="/issues/new" element={<CreateIssue />} />
                   <Route path="/issues/:id" element={<IssueDetails />} />
+                  <Route path="/profile" element={<Profile />} />
                 </Route>
               </Route>
 

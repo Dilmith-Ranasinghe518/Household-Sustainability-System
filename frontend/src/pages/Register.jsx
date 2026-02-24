@@ -4,7 +4,7 @@ import AuthLayout from '../components/AuthLayout';
 import api from '../services/api';
 import { API_ENDPOINTS } from '../config/apiConfig';
 import { useAuth } from '../context/AuthContext';
-import { User, Mail, Lock, AlertCircle, ArrowRight, CheckCircle, ShieldCheck } from 'lucide-react';
+import { User, Mail, Lock, AlertCircle, ArrowRight, CheckCircle, ShieldCheck, Phone } from 'lucide-react';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -23,7 +23,8 @@ const Register = () => {
         username: '',
         password: '',
         confirmPassword: '',
-        role: 'user'
+        role: 'user',
+        mobileNumber: ''
     });
 
     // Step 1: Initiate Registration
@@ -78,7 +79,8 @@ const Register = () => {
                 registerToken,
                 username: details.username,
                 password: details.password,
-                role: details.role
+                role: details.role,
+                mobileNumber: details.mobileNumber
             });
 
             // Auto Login
@@ -217,6 +219,20 @@ const Register = () => {
                                 onChange={(e) => setDetails({ ...details, confirmPassword: e.target.value })}
                                 required
                                 minLength={6}
+                                className="w-full pl-12 pr-4 py-3 border border-border rounded-xl bg-white focus:outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mb-5">
+                        <label className="block text-sm font-semibold mb-1.5 text-forest-dark">Mobile Number (Optional)</label>
+                        <div className="relative">
+                            <Phone className="absolute left-4 top-3.5 text-text-muted" size={20} />
+                            <input
+                                type="text"
+                                placeholder="e.g. +1234567890"
+                                value={details.mobileNumber}
+                                onChange={(e) => setDetails({ ...details, mobileNumber: e.target.value })}
                                 className="w-full pl-12 pr-4 py-3 border border-border rounded-xl bg-white focus:outline-none focus:border-primary-teal focus:ring-4 focus:ring-primary-teal/10"
                             />
                         </div>
