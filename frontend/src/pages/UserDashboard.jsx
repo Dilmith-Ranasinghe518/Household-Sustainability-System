@@ -42,6 +42,7 @@ ChartJS.register(
 );
 
 import { useAuth } from '../context/AuthContext';
+import WeatherWidget from '../components/WeatherWidget';
 
 const UserDashboard = () => {
     const { user } = useAuth();
@@ -129,13 +130,16 @@ const UserDashboard = () => {
                             <Line data={lineData} options={{ responsive: true, maintainAspectRatio: false }} />
                         </div>
                     </div>
-                    <div className="bg-white p-6 rounded-[1.5rem] shadow-sm glass">
-                        <div className="mb-6">
-                            <h3 className="text-lg font-semibold mb-1">Resource Breakdown</h3>
-                            <p className="text-sm text-text-muted">Usage by category</p>
-                        </div>
-                        <div className="h-[300px]">
-                            <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false }} />
+                    <div className="flex flex-col gap-6">
+                        <WeatherWidget />
+                        <div className="bg-white p-6 rounded-[1.5rem] shadow-sm glass flex-1">
+                            <div className="mb-6">
+                                <h3 className="text-lg font-semibold mb-1">Resource Breakdown</h3>
+                                <p className="text-sm text-text-muted">Usage by category</p>
+                            </div>
+                            <div className="h-[200px]">
+                                <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false }} />
+                            </div>
                         </div>
                     </div>
                 </div>
