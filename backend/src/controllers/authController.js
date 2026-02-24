@@ -112,7 +112,7 @@ exports.verifyRegisterOTP = async (req, res) => {
 // Step 3: Complete Registration
 exports.completeRegister = async (req, res) => {
     try {
-        const { registerToken, username, password, role } = req.body;
+        const { registerToken, username, password, role, mobileNumber } = req.body;
 
         if (!registerToken) {
             return res.status(401).json({ msg: 'No registration token provided' });
@@ -140,6 +140,7 @@ exports.completeRegister = async (req, res) => {
             email,
             password: hashedPassword,
             role,
+            mobileNumber,
             isVerified: true // Email verified via OTP in Step 2
         });
 
@@ -261,6 +262,29 @@ exports.resetPassword = async (req, res) => {
 exports.getMe = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
+        res.json(user);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+exports.updateProfile = async (req, res) => {
+    try {
+        const { username, mobileNumber } = req.body;
+        const userFields = {};
+        if (username) userFields.username = username;
+        if (mobileNumber !== undefined) userFields.mobileNumber = mobileNumber;
+
+        let user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ msg: 'User not found' });
+
+        user = await User.findByIdAndUpdate(
+            req.user.id,
+            { $set: userFields },
+            { new: true }
+        ).select('-password');
+
         res.json(user);
     } catch (err) {
         console.error(err.message);
