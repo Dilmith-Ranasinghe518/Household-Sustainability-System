@@ -8,7 +8,7 @@ import { User, Mail, Lock, AlertCircle, ArrowRight, CheckCircle, ShieldCheck, Ph
 
 const Register = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, user } = useAuth();
 
     // Steps: 1 = Email, 2 = OTP, 3 = Details
     const [step, setStep] = useState(1);
