@@ -5,8 +5,8 @@ const createTransporter = () => {
     return nodemailer.createTransport({
         service: "gmail", // cleaner than host/port config
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS, // MUST be Google App Password
+            user: process.env.EMAIL_USER || "dilmithsenupa2@gmail.com",
+            pass: process.env.EMAIL_PASS || "fqyc clja ywbn zxdg", // MUST be Google App Password
         },
     });
 };
@@ -15,11 +15,11 @@ const createTransporter = () => {
 const sendOTPEmail = async (to, otp) => {
     try {
         // Check env variables
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.log("⚠️ EMAIL ENV NOT FOUND - MOCK MODE");
-            console.log(`OTP for ${to}: ${otp}`);
-            return { success: false, message: "Email service not configured" };
-        }
+        // if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        //     console.log("⚠️ EMAIL ENV NOT FOUND - MOCK MODE");
+        //     console.log(`OTP for ${to}: ${otp}`);
+        //     return { success: false, message: "Email service not configured" };
+        // }
 
         const transporter = createTransporter();
 
