@@ -34,7 +34,7 @@ const AdminDashboard = () => {
     const [loadingUsers, setLoadingUsers] = useState(true);
     const [editingUser, setEditingUser] = useState(null);
     const [editFormData, setEditFormData] = useState({ username: '', email: '', role: '' });
-    const [settings, setSettings] = useState({ isRegistrationOtpEnabled: true });
+    const [settings, setSettings] = useState({ isRegistrationOtpEnabled: true, isRoleSelectionEnabled: false });
     const [loadingSettings, setLoadingSettings] = useState(true);
 
     const fetchUsers = async () => {
@@ -67,6 +67,18 @@ const AdminDashboard = () => {
             const res = await api.put(API_ENDPOINTS.SETTINGS, { isRegistrationOtpEnabled: newStatus });
             setSettings(res.data);
             alert(`Registration OTP ${newStatus ? 'enabled' : 'disabled'} successfully`);
+        } catch (err) {
+            console.error('Error updating settings:', err);
+            alert('Failed to update settings');
+        }
+    };
+
+    const handleToggleRoleSelection = async () => {
+        try {
+            const newStatus = !settings.isRoleSelectionEnabled;
+            const res = await api.put(API_ENDPOINTS.SETTINGS, { isRoleSelectionEnabled: newStatus });
+            setSettings(res.data);
+            alert(`Role selection ${newStatus ? 'enabled' : 'disabled'} successfully`);
         } catch (err) {
             console.error('Error updating settings:', err);
             alert('Failed to update settings');
@@ -268,19 +280,36 @@ const AdminDashboard = () => {
                         <SettingsIcon size={20} className="text-primary-teal" />
                         System Settings
                     </h3>
-                    <div className="flex items-center justify-between p-4 bg-off-white rounded-xl border border-border">
-                        <div>
-                            <strong className="block text-sm text-text-main font-bold">Email OTP for Registration</strong>
-                            <p className="text-xs text-text-muted mt-1">If disabled, users can complete registration immediately after entering their email.</p>
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center justify-between p-4 bg-off-white rounded-xl border border-border">
+                            <div>
+                                <strong className="block text-sm text-text-main font-bold">Email OTP for Registration</strong>
+                                <p className="text-xs text-text-muted mt-1">If disabled, users can complete registration immediately after entering their email.</p>
+                            </div>
+                            <button
+                                onClick={handleToggleOtp}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ring-2 ring-transparent ring-offset-2 ${settings.isRegistrationOtpEnabled ? 'bg-primary-teal' : 'bg-gray-300'}`}
+                            >
+                                <span
+                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.isRegistrationOtpEnabled ? 'translate-x-6' : 'translate-x-1'}`}
+                                />
+                            </button>
                         </div>
-                        <button
-                            onClick={handleToggleOtp}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ring-2 ring-transparent ring-offset-2 ${settings.isRegistrationOtpEnabled ? 'bg-primary-teal' : 'bg-gray-300'}`}
-                        >
-                            <span
-                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.isRegistrationOtpEnabled ? 'translate-x-6' : 'translate-x-1'}`}
-                            />
-                        </button>
+
+                        <div className="flex items-center justify-between p-4 bg-off-white rounded-xl border border-border">
+                            <div>
+                                <strong className="block text-sm text-text-main font-bold">Enable Role Selection</strong>
+                                <p className="text-xs text-text-muted mt-1">If enabled, users can select their role (User/Admin) during registration. Otherwise, default is 'user'.</p>
+                            </div>
+                            <button
+                                onClick={handleToggleRoleSelection}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ring-2 ring-transparent ring-offset-2 ${settings.isRoleSelectionEnabled ? 'bg-primary-teal' : 'bg-gray-300'}`}
+                            >
+                                <span
+                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.isRoleSelectionEnabled ? 'translate-x-6' : 'translate-x-1'}`}
+                                />
+                            </button>
+                        </div>
                     </div>
                 </div>
 

@@ -5,6 +5,10 @@ const SettingsSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    isRoleSelectionEnabled: {
+        type: Boolean,
+        default: false
+    },
     updatedAt: {
         type: Date,
         default: Date.now

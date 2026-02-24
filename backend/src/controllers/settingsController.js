@@ -18,7 +18,7 @@ exports.getSettings = async (req, res) => {
 // Update Settings
 exports.updateSettings = async (req, res) => {
     try {
-        const { isRegistrationOtpEnabled } = req.body;
+        const { isRegistrationOtpEnabled, isRoleSelectionEnabled } = req.body;
 
         let settings = await Settings.findOne();
         if (!settings) {
@@ -27,6 +27,10 @@ exports.updateSettings = async (req, res) => {
 
         if (typeof isRegistrationOtpEnabled !== 'undefined') {
             settings.isRegistrationOtpEnabled = isRegistrationOtpEnabled;
+        }
+
+        if (typeof isRoleSelectionEnabled !== 'undefined') {
+            settings.isRoleSelectionEnabled = isRoleSelectionEnabled;
         }
 
         settings.updatedAt = Date.now();
