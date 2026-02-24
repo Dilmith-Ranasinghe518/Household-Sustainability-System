@@ -6,11 +6,14 @@ const { admin } = require("../middleware/authMiddleware");
 const {
   createArticle,
   getArticles,
+  getArticleById,
   updateArticle,
   deleteArticle,
 } = require("../controllers/articleController");
 
 router.get("/", getArticles);
+
+router.get("/:id", getArticleById);
 
 router.post("/", [authMiddleware, admin], createArticle);
 
