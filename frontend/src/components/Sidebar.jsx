@@ -55,16 +55,16 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
 
     { name: 'Analytics', path: '#', icon: <BarChart3 size={20} /> },
     { name: 'Users', path: '#', icon: <User size={20} /> },
-    { name: 'Settings', path: '#', icon: <Settings size={20} /> },
+    { name: 'Score Mgmt', path: '/admin/scoring', icon: <Settings size={20} /> },
+    { name: 'Settings', path: '/settings', icon: <Settings size={20} /> },
   ];
 
   const menuItems = isAdmin ? adminMenuItems : userMenuItems;
 
   return (
     <aside
-      className={`fixed left-0 top-[88px] z-40 h-[calc(100vh-88px)] bg-forest-dark text-white flex flex-col transition-all duration-300 shadow-xl ${
-        isOpen ? 'w-[70px] md:w-[260px]' : 'w-[70px] md:w-[80px]'
-      }`}
+      className={`fixed left-0 top-[88px] z-40 h-[calc(100vh-88px)] bg-forest-dark text-white flex flex-col transition-all duration-300 shadow-xl ${isOpen ? 'w-[70px] md:w-[260px]' : 'w-[70px] md:w-[80px]'
+        }`}
     >
       {/* Toggle Button (Desktop Only) */}
       <button
@@ -79,18 +79,16 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
           <Link
             key={item.name}
             to={item.path}
-            className={`flex items-center gap-3 px-3 py-3 md:px-4 md:py-3.5 rounded-xl font-medium transition-all w-full overflow-hidden whitespace-nowrap ${
-              location.pathname === item.path
+            className={`flex items-center gap-3 px-3 py-3 md:px-4 md:py-3.5 rounded-xl font-medium transition-all w-full overflow-hidden whitespace-nowrap ${location.pathname === item.path
                 ? 'bg-primary-teal text-white shadow-lg shadow-primary-teal/20'
                 : 'text-white/70 hover:text-white hover:bg-white/5'
-            }`}
+              }`}
             title={item.name}
           >
             <div className="min-w-[20px]">{item.icon}</div>
             <span
-              className={`hidden md:block transition-opacity duration-300 ${
-                isOpen ? 'opacity-100' : 'opacity-0 w-0'
-              }`}
+              className={`hidden md:block transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0'
+                }`}
             >
               {item.name}
             </span>
@@ -107,9 +105,8 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
             <LogOut size={20} />
           </div>
           <span
-            className={`hidden md:block transition-opacity duration-300 ${
-              isOpen ? 'opacity-100' : 'opacity-0 w-0'
-            }`}
+            className={`hidden md:block transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0'
+              }`}
           >
             Logout
           </span>

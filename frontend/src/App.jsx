@@ -30,6 +30,7 @@ import UserIssues from './pages/UserIssues';
 import CreateIssue from './pages/CreateIssue';
 import IssueDetails from './pages/IssueDetails';
 import AdminIssues from './pages/AdminIssues';
+import AdminScoring from './pages/AdminScoring';
 import Profile from './pages/Profile';
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
 
                   {/* ✅ NEW: Admin Issues */}
                   <Route path="/admin/issues" element={<AdminIssues />} />
+                  <Route path="/admin/scoring" element={<AdminScoring />} />
                 </Route>
               </Route>
             </Routes>

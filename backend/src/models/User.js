@@ -29,6 +29,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    wasteScore: {
+        type: Number,
+        default: 0
+    },
     otp: {
         type: String
     },

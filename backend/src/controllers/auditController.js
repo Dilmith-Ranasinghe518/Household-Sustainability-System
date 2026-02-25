@@ -1,44 +1,55 @@
-const SustainabilityAudit = require('../models/SustainabilityAudit');
 const User = require('../models/User');
+const ScoringConfig = require('../models/ScoringConfig');
 
 // Helper function to calculate score
-const calculateScore = (data) => {
+const calculateScore = (data, config) => {
     let environmentalPoints = 0;
     let socialPoints = 0;
     let economicPoints = 0;
 
-    // Environmental (Max 50)
-    // Electricity Usage (Max 10)
-    if (data.environmental.electricityUsage < 150) environmentalPoints += 10;
-    else if (data.environmental.electricityUsage < 300) environmentalPoints += 5;
+    const envConfig = config.environmental;
+    const socConfig = config.social;
+    const ecoConfig = config.economic;
 
-    // Water Usage (Max 10)
-    if (data.environmental.waterUsage < 100) environmentalPoints += 10;
-    else if (data.environmental.waterUsage < 200) environmentalPoints += 5;
+    // Environmental
+    // Electricity Usage
+    if (data.environmental.electricityUsage < envConfig.electricityUsageThreshold1) environmentalPoints += envConfig.electricityUsagePoints1;
+    else if (data.environmental.electricityUsage < envConfig.electricityUsageThreshold2) environmentalPoints += envConfig.electricityUsagePoints2;
 
-    // Boolean questions (10 points each)
-    if (data.environmental.solarPanels) environmentalPoints += 10;
-    if (data.environmental.waterSavingTaps) environmentalPoints += 10;
-    if (data.environmental.wasteSeparation) environmentalPoints += 10;
+    // Water Usage
+    if (data.environmental.waterUsage < envConfig.waterUsageThreshold1) environmentalPoints += envConfig.waterUsagePoints1;
+    else if (data.environmental.waterUsage < envConfig.waterUsageThreshold2) environmentalPoints += envConfig.waterUsagePoints2;
 
-    // Social (Max 30)
-    if (data.social.communityParticipation) socialPoints += 10;
-    if (data.social.safeNeighborhood) socialPoints += 10;
-    if (data.social.publicTransportUsage) socialPoints += 10;
+    // Boolean questions
+    if (data.environmental.solarPanels) environmentalPoints += envConfig.solarPanelsPoints;
+    if (data.environmental.waterSavingTaps) environmentalPoints += envConfig.waterSavingTapsPoints;
+    if (data.environmental.wasteSeparation) environmentalPoints += envConfig.wasteSeparationPoints;
 
-    // Economic (Max 30)
-    if (data.economic.energyEfficientAppliances) economicPoints += 10;
-    if (data.economic.budgetTracking) economicPoints += 10;
-    if (data.economic.sustainableShopping) economicPoints += 10;
+    // Social
+    if (data.social.communityParticipation) socialPoints += socConfig.communityParticipationPoints;
+    if (data.social.safeNeighborhood) socialPoints += socConfig.safeNeighborhoodPoints;
+    if (data.social.publicTransportUsage) socialPoints += socConfig.publicTransportUsagePoints;
+
+    // Economic
+    if (data.economic.energyEfficientAppliances) economicPoints += ecoConfig.energyEfficientAppliancesPoints;
+    if (data.economic.budgetTracking) economicPoints += ecoConfig.budgetTrackingPoints;
+    if (data.economic.sustainableShopping) economicPoints += ecoConfig.sustainableShoppingPoints;
 
     const totalPoints = environmentalPoints + socialPoints + economicPoints;
-    const maxPoints = 110; // 50 (Env) + 30 (Soc) + 30 (Eco)
 
-    const environmentalScore = (environmentalPoints / 50) * 100;
+    // Calculate max possible points based on config
+    const maxEnvPoints = envConfig.electricityUsagePoints1 + envConfig.waterUsagePoints1 +
+        envConfig.solarPanelsPoints + envConfig.waterSavingTapsPoints + envConfig.wasteSeparationPoints;
+    const maxSocPoints = socConfig.communityParticipationPoints + socConfig.safeNeighborhoodPoints + socConfig.publicTransportUsagePoints;
+    const maxEcoPoints = ecoConfig.energyEfficientAppliancesPoints + ecoConfig.budgetTrackingPoints + ecoConfig.sustainableShoppingPoints;
+
+    const maxPoints = maxEnvPoints + maxSocPoints + maxEcoPoints;
+
+    const environmentalScore = (environmentalPoints / maxEnvPoints) * 100;
     const overallSustainabilityPercentage = (totalPoints / maxPoints) * 100;
 
     return {
-        score: Math.min(totalPoints, 100), // Keep legacy score for backward compatibility if needed, but capped at 100
+        score: Math.min(totalPoints, 100),
         environmentalScore: Math.round(environmentalScore * 100) / 100,
         overallSustainabilityPercentage: Math.round(overallSustainabilityPercentage * 100) / 100
     };
@@ -48,7 +59,13 @@ exports.createAudit = async (req, res) => {
     try {
         const { environmental, social, economic } = req.body;
 
-        const scores = calculateScore({ environmental, social, economic });
+        let config = await ScoringConfig.findOne();
+        if (!config) {
+            config = new ScoringConfig();
+            await config.save();
+        }
+
+        const scores = calculateScore({ environmental, social, economic }, config);
 
         const newAudit = new SustainabilityAudit({
             user: req.user.id,
@@ -111,7 +128,13 @@ exports.updateAudit = async (req, res) => {
             return res.status(401).json({ msg: 'Not authorized' });
         }
 
-        const scores = calculateScore({ environmental, social, economic });
+        let config = await ScoringConfig.findOne();
+        if (!config) {
+            config = new ScoringConfig();
+            await config.save();
+        }
+
+        const scores = calculateScore({ environmental, social, economic }, config);
 
         audit = await SustainabilityAudit.findByIdAndUpdate(
             req.params.id,

@@ -1,5 +1,6 @@
-const WasteRequest = require('../models/WasteRequest');
 const WasteBin = require('../models/WasteBin');
+const User = require('../models/User');
+const ScoringConfig = require('../models/ScoringConfig');
 
 // Waste Requests
 exports.createRequest = async (req, res) => {
@@ -47,8 +48,22 @@ exports.updateStatus = async (req, res) => {
             return res.status(404).json({ msg: 'Request not found' });
         }
 
+        const oldStatus = request.status;
         request.status = req.body.status;
         await request.save();
+
+        // Award points if completed
+        if (req.body.status === 'completed' && oldStatus !== 'completed') {
+            const config = await ScoringConfig.findOne() || new ScoringConfig();
+            const user = await User.findById(request.user);
+
+            if (user) {
+                user.wasteScore = (user.wasteScore || 0) + config.wastePickupPoints;
+                // Add to total sustainability score (capped at 100)
+                user.sustainabilityScore = Math.min(100, (user.sustainabilityScore || 0) + (config.wastePickupPoints / 10));
+                await user.save();
+            }
+        }
 
         res.json(request);
     } catch (err) {
