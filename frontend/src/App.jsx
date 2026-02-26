@@ -32,6 +32,7 @@ import IssueDetails from './pages/IssueDetails';
 import AdminIssues from './pages/AdminIssues';
 import AdminScoring from './pages/AdminScoring';
 import CollectorDashboard from './pages/CollectorDashboard';
+import WasteCalendar from './pages/WasteCalendar';
 import Profile from './pages/Profile';
 
 function App() {
@@ -64,7 +65,8 @@ function App() {
 
                   {/* ✅ NEW: Support Center routes */}
                   <Route path="/issues" element={<UserIssues />} />
-                  <Route path="/issues/new" element={<CreateIssue />} />
+                  <Route path="/calendar" element={<WasteCalendar />} />
+                  <Route path="/issues/create" element={<CreateIssue />} />
                   <Route path="/issues/:id" element={<IssueDetails />} />
                   <Route path="/profile" element={<Profile />} />
                 </Route>

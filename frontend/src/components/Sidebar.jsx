@@ -15,18 +15,26 @@ import {
   ChevronLeft,
   ChevronRight,
   AlertTriangle,
-  AlertCircle, // ✅ NEW icon for issues
+  AlertCircle,
+  Calendar as CalendarIcon
 } from 'lucide-react';
 import { ROLES } from '../utils/roles';
+import ConfirmModal from './ConfirmModal';
 
 const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout, user } = useAuth();
+  const [showLogoutConfirm, setShowLogoutConfirm] = React.useState(false);
 
   const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
     logout();
     navigate('/');
+    setShowLogoutConfirm(false);
   };
 
   const userMenuItems = [
@@ -35,6 +43,7 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'Waste Mgmt', path: '/waste', icon: <Recycle size={20} /> },
 
     { name: 'Disaster Alerts', path: '/disasters', icon: <AlertTriangle size={20} /> },
+    { name: 'Calendar', path: '/calendar', icon: <CalendarIcon size={20} /> },
 
     // ✅ NEW: User support center
     { name: 'Support Center', path: '/issues', icon: <AlertCircle size={20} /> },
@@ -50,6 +59,7 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'Waste Requests', path: '/admin/waste', icon: <Recycle size={20} /> },
 
     { name: 'Disaster Mgmt', path: '/admin/disasters', icon: <AlertTriangle size={20} /> },
+    { name: 'Collection Calendar', path: '/calendar', icon: <CalendarIcon size={20} /> },
     { name: 'Manage Issues', path: '/admin/issues', icon: <AlertCircle size={20} /> },
     { name: 'Analytics', path: '#', icon: <BarChart3 size={20} /> },
     { name: 'Users', path: '#', icon: <User size={20} /> },
@@ -60,6 +70,7 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
   // ✅ NEW: Collector-specific menu items
   const collectorMenuItems = [
     { name: 'Collector Home', path: '/collector/dashboard', icon: <LayoutDashboard size={20} /> },
+    { name: 'Collection Calendar', path: '/calendar', icon: <CalendarIcon size={20} /> },
   ];
 
   let menuItems = userMenuItems;
@@ -120,6 +131,16 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
           </span>
         </button>
       </div>
+
+      <ConfirmModal
+        isOpen={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={confirmLogout}
+        title="Confirm Logout"
+        message="Are you sure you want to log out of your account?"
+        confirmText="Logout"
+        type="danger"
+      />
     </aside>
   );
 };

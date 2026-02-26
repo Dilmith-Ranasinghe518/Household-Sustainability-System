@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Leaf, Menu, X, User, LogIn, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import ConfirmModal from './ConfirmModal';
 
 
 const Navbar = () => {
@@ -10,6 +11,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -22,9 +24,14 @@ const Navbar = () => {
     }, []);
 
     const handleLogout = () => {
+        setShowLogoutConfirm(true);
+        setShowProfileMenu(false);
+    };
+
+    const confirmLogout = () => {
         logout();
         navigate('/');
-        setShowProfileMenu(false);
+        setShowLogoutConfirm(false);
     };
 
     const navLinks = [
@@ -189,6 +196,16 @@ const Navbar = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            <ConfirmModal
+                isOpen={showLogoutConfirm}
+                onClose={() => setShowLogoutConfirm(false)}
+                onConfirm={confirmLogout}
+                title="Confirm Logout"
+                message="Are you sure you want to log out of your account?"
+                confirmText="Logout"
+                type="danger"
+            />
         </nav>
     );
 };

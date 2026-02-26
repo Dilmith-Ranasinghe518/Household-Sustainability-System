@@ -45,6 +45,27 @@ router.put('/bins/:id/status', auth, collector, wasteController.updateBinStatus)
 // @access  Private (User)
 router.get('/my-bin', auth, wasteController.getUserBin);
 
+// Calendar Routes
+// @route   GET api/waste/calendar
+// @desc    Get all collection schedules
+// @access  Private (All)
+router.get('/calendar', auth, wasteController.getSchedules);
+
+// @route   POST api/waste/calendar
+// @desc    Create a collection schedule
+// @access  Private (Admin/Collector)
+router.post('/calendar', auth, collector, wasteController.createSchedule);
+
+// @route   PUT api/waste/calendar/:id
+// @desc    Update a collection schedule
+// @access  Private (Admin/Collector)
+router.put('/calendar/:id', auth, collector, wasteController.updateSchedule);
+
+// @route   DELETE api/waste/calendar/:id
+// @desc    Delete a collection schedule
+// @access  Private (Admin/Collector)
+router.delete('/calendar/:id', auth, collector, wasteController.deleteSchedule);
+
 // @route   DELETE api/waste/bins/:id
 // @desc    Delete a waste bin (Admin only)
 // @access  Private (Admin)

@@ -33,6 +33,7 @@ export const API_ENDPOINTS = {
         BINS: "/waste/bins",
         MY_BIN: "/waste/my-bin",
         BIN_STATUS: "/waste/bins", // Will append /:id/status in code
+        CALENDAR: "/waste/calendar",
     },
 
     ACTIONS: "/actions",

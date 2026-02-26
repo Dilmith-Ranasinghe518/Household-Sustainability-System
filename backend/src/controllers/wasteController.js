@@ -1,5 +1,6 @@
 const WasteBin = require('../models/WasteBin');
 const WasteRequest = require('../models/WasteRequest');
+const WasteSchedule = require('../models/WasteSchedule');
 const User = require('../models/User');
 const ScoringConfig = require('../models/ScoringConfig');
 
@@ -164,6 +165,68 @@ exports.updateBinStatus = async (req, res) => {
         bin.status = status;
         await bin.save();
         res.json(bin);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+// Calendar / Schedule Management
+exports.getSchedules = async (req, res) => {
+    try {
+        const schedules = await WasteSchedule.find().sort({ date: 1 });
+        res.json(schedules);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+exports.createSchedule = async (req, res) => {
+    try {
+        const { title, description, date, type, area } = req.body;
+        const newSchedule = new WasteSchedule({
+            title,
+            description,
+            date,
+            type,
+            area,
+            createdBy: req.user.id
+        });
+        const schedule = await newSchedule.save();
+        res.json(schedule);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+exports.updateSchedule = async (req, res) => {
+    try {
+        const { title, description, date, type, area } = req.body;
+        let schedule = await WasteSchedule.findById(req.params.id);
+        if (!schedule) return res.status(404).json({ msg: 'Schedule not found' });
+
+        schedule.title = title || schedule.title;
+        schedule.description = description || schedule.description;
+        schedule.date = date || schedule.date;
+        schedule.type = type || schedule.type;
+        schedule.area = area || schedule.area;
+
+        await schedule.save();
+        res.json(schedule);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+exports.deleteSchedule = async (req, res) => {
+    try {
+        const schedule = await WasteSchedule.findById(req.params.id);
+        if (!schedule) return res.status(404).json({ msg: 'Schedule not found' });
+        await WasteSchedule.findByIdAndDelete(req.params.id);
+        res.json({ msg: 'Schedule removed' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
