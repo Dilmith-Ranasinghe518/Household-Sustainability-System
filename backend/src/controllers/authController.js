@@ -190,28 +190,53 @@ exports.verifyOTP = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+    console.log("Login attempt received for email:", req.body.email);
     try {
         const { email, password } = req.body;
-        let user = await User.findOne({ email });
-
-        if (!user) return res.status(400).json({ msg: 'Invalid Credentials' });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
-
-        if (!user.isVerified) {
-            // Resend OTP logic could be added here
-            return res.status(400).json({ msg: 'Please verify your email first', userId: user._id });
+        if (!email || !password) {
+            console.log("Missing credentials");
+            return res.status(400).json({ msg: 'Please provide email and password' });
         }
 
+        let user = await User.findOne({ email });
+        if (!user) {
+            console.log("User not found:", email);
+            return res.status(400).json({ msg: 'Invalid Credentials' });
+        }
+        console.log("User found, comparing password...");
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            console.log("Password mismatch for:", email);
+            return res.status(400).json({ msg: 'Invalid Credentials' });
+        }
+        console.log("Password matched, checking verification...");
+
+        if (!user.isVerified) {
+            console.log("User not verified:", email);
+            return res.status(400).json({ msg: 'Please verify your email first', userId: user._id });
+        }
+        console.log("User verified, generating token...");
+
         const payload = { user: { id: user.id, role: user.role } };
+        console.log("Payload created:", payload);
+
+        if (!process.env.JWT_SECRET) {
+            console.error("JWT_SECRET is missing from environment variables!");
+            throw new Error("JWT_SECRET is not defined");
+        }
+
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
-            if (err) throw err;
+            if (err) {
+                console.error("JWT Sign Error:", err);
+                return res.status(500).json({ msg: "Token generation failed" });
+            }
+            console.log("Token generated successfully");
             res.json({ token, user: { id: user.id, username: user.username, email: user.email, role: user.role } });
         });
 
     } catch (err) {
-        console.error(err.message);
+        console.error("UNHANDLED LOGIN EXCEPTION:", err);
         res.status(500).send('Server error');
     }
 };

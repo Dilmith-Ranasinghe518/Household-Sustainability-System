@@ -264,6 +264,7 @@ const Register = () => {
                                 >
                                     <option value="user">User</option>
                                     <option value="admin">Admin</option>
+                                    <option value="waste_collector">Waste Collector</option>
                                 </select>
                             </div>
                         </div>

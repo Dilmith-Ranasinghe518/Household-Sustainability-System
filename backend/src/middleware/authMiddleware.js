@@ -26,3 +26,8 @@ module.exports.admin = function (req, res, next) {
   if (req.user && req.user.role === Roles.ADMIN) return next();
   return res.status(403).json({ msg: "Access denied: Admins only" });
 };
+
+module.exports.collector = function (req, res, next) {
+  if (req.user && (req.user.role === Roles.WASTE_COLLECTOR || req.user.role === Roles.ADMIN)) return next();
+  return res.status(403).json({ msg: "Access denied: Waste Collectors only" });
+};

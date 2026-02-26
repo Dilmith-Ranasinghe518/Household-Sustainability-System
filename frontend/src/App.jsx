@@ -31,6 +31,7 @@ import CreateIssue from './pages/CreateIssue';
 import IssueDetails from './pages/IssueDetails';
 import AdminIssues from './pages/AdminIssues';
 import AdminScoring from './pages/AdminScoring';
+import CollectorDashboard from './pages/CollectorDashboard';
 import Profile from './pages/Profile';
 
 function App() {
@@ -82,6 +83,15 @@ function App() {
                   {/* ✅ NEW: Admin Issues */}
                   <Route path="/admin/issues" element={<AdminIssues />} />
                   <Route path="/admin/scoring" element={<AdminScoring />} />
+                </Route>
+              </Route>
+
+              {/* Collector Protected Routes */}
+              <Route element={<ProtectedRoute roles={[ROLES.COLLECTOR]} />}>
+                <Route element={<DashboardLayout />}>
+                  <Route path="/collector/dashboard" element={<CollectorDashboard />} />
+                  <Route path="/waste" element={<CollectorDashboard />} />
+                  <Route path="/profile" element={<Profile />} />
                 </Route>
               </Route>
             </Routes>

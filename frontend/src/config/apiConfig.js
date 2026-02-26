@@ -32,6 +32,7 @@ export const API_ENDPOINTS = {
         BY_ID: "/waste",
         BINS: "/waste/bins",
         MY_BIN: "/waste/my-bin",
+        BIN_STATUS: "/waste/bins", // Will append /:id/status in code
     },
 
     ACTIONS: "/actions",
@@ -42,8 +43,6 @@ export const API_ENDPOINTS = {
     SETTINGS: "/settings",
     ORDERS: "/orders",
     PRODUCTS: "/products",
-    // ISSUES: "/issues",
-
     ISSUES: {
         BASE: "/issues",
         MY: "/issues/my",

@@ -18,6 +18,11 @@ const WasteBinSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    status: {
+        type: String,
+        enum: ['empty', 'partially_full', 'full'],
+        default: 'empty'
+    },
     createdAt: {
         type: Date,
         default: Date.now

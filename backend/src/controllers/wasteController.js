@@ -1,4 +1,5 @@
 const WasteBin = require('../models/WasteBin');
+const WasteRequest = require('../models/WasteRequest');
 const User = require('../models/User');
 const ScoringConfig = require('../models/ScoringConfig');
 
@@ -145,6 +146,24 @@ exports.deleteBin = async (req, res) => {
 
         await WasteBin.findByIdAndDelete(req.params.id);
         res.json({ msg: 'Bin removed' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+exports.updateBinStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        let bin = await WasteBin.findById(req.params.id);
+
+        if (!bin) {
+            return res.status(404).json({ msg: 'Bin not found' });
+        }
+
+        bin.status = status;
+        await bin.save();
+        res.json(bin);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

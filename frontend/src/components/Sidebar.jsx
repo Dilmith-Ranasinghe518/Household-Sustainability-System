@@ -17,11 +17,12 @@ import {
   AlertTriangle,
   AlertCircle, // ✅ NEW icon for issues
 } from 'lucide-react';
+import { ROLES } from '../utils/roles';
 
 const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -49,17 +50,24 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'Waste Requests', path: '/admin/waste', icon: <Recycle size={20} /> },
 
     { name: 'Disaster Mgmt', path: '/admin/disasters', icon: <AlertTriangle size={20} /> },
-
-    // ✅ NEW: Admin manage issues
     { name: 'Manage Issues', path: '/admin/issues', icon: <AlertCircle size={20} /> },
-
     { name: 'Analytics', path: '#', icon: <BarChart3 size={20} /> },
     { name: 'Users', path: '#', icon: <User size={20} /> },
-    { name: 'Score Mgmt', path: '/admin/scoring', icon: <Settings size={20} /> },
+    { name: 'Score Mgmt', path: '/admin/scoring', icon: <Settings size={20} /> }, // Changed icon to Settings
     { name: 'Settings', path: '/settings', icon: <Settings size={20} /> },
   ];
 
-  const menuItems = isAdmin ? adminMenuItems : userMenuItems;
+  // ✅ NEW: Collector-specific menu items
+  const collectorMenuItems = [
+    { name: 'Collector Home', path: '/collector/dashboard', icon: <LayoutDashboard size={20} /> },
+  ];
+
+  let menuItems = userMenuItems;
+  if (user?.role === ROLES.ADMIN) {
+    menuItems = adminMenuItems;
+  } else if (user?.role === ROLES.COLLECTOR) {
+    menuItems = collectorMenuItems;
+  }
 
   return (
     <aside
@@ -80,8 +88,8 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
             key={item.name}
             to={item.path}
             className={`flex items-center gap-3 px-3 py-3 md:px-4 md:py-3.5 rounded-xl font-medium transition-all w-full overflow-hidden whitespace-nowrap ${location.pathname === item.path
-                ? 'bg-primary-teal text-white shadow-lg shadow-primary-teal/20'
-                : 'text-white/70 hover:text-white hover:bg-white/5'
+              ? 'bg-primary-teal text-white shadow-lg shadow-primary-teal/20'
+              : 'text-white/70 hover:text-white hover:bg-white/5'
               }`}
             title={item.name}
           >
