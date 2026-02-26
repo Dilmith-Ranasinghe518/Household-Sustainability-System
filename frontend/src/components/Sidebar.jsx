@@ -93,7 +93,7 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
         {isOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
       </button>
 
-      <nav className="flex-1 py-6 px-3 flex flex-col gap-2 items-center md:items-stretch">
+      <nav className="flex-1 py-6 px-3 flex flex-col gap-2 items-center md:items-stretch overflow-y-auto scrollbar-hide">
         {menuItems.map((item) => (
           <Link
             key={item.name}

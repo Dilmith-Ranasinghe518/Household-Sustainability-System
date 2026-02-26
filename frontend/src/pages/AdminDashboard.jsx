@@ -36,6 +36,7 @@ const AdminDashboard = () => {
     const [editFormData, setEditFormData] = useState({ username: '', email: '', role: '' });
     const [settings, setSettings] = useState({ isRegistrationOtpEnabled: true, isRoleSelectionEnabled: false });
     const [loadingSettings, setLoadingSettings] = useState(true);
+    const [activeRole, setActiveRole] = useState('all');
 
     const fetchUsers = async () => {
         setLoadingUsers(true);
@@ -228,8 +229,25 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="bg-white rounded-[1.5rem] p-6 shadow-sm glass">
-                    <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-lg font-semibold">User Management</h3>
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                        <div>
+                            <h3 className="text-lg font-semibold">User Management</h3>
+                            <p className="text-xs text-text-muted mt-1">Manage system access and permissions</p>
+                        </div>
+                        <div className="flex items-center gap-2 bg-off-white p-1 rounded-xl border border-border mt-2 md:mt-0">
+                            {['all', 'user', 'admin', 'waste_collector'].map((role) => (
+                                <button
+                                    key={role}
+                                    onClick={() => setActiveRole(role)}
+                                    className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${activeRole === role
+                                        ? 'bg-white text-primary-teal shadow-sm border border-border/50'
+                                        : 'text-text-muted hover:text-text-main'
+                                        }`}
+                                >
+                                    {role.charAt(0).toUpperCase() + role.slice(1).replace('_', ' ')}
+                                </button>
+                            ))}
+                        </div>
                         <button onClick={fetchUsers} className="flex items-center gap-2 px-4 py-2 bg-off-white border border-border rounded-xl font-medium text-sm text-text-main hover:bg-gray-100 transition-colors">Refresh List</button>
                     </div>
                     {loadingUsers ? (
@@ -246,28 +264,30 @@ const AdminDashboard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {users.map((u) => (
-                                        <tr key={u._id}>
-                                            <td className="p-4 border-b border-border">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-10 h-10 bg-teal-soft-bg text-primary-teal rounded-full flex items-center justify-center font-bold">{u.username.charAt(0).toUpperCase()}</div>
-                                                    <strong className="block text-sm text-text-main">{u.username}</strong>
-                                                </div>
-                                            </td>
-                                            <td className="p-4 border-b border-border">
-                                                <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${u.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>{u.role}</span>
-                                            </td>
-                                            <td className="p-4 border-b border-border text-sm text-text-muted">
-                                                {u.email}
-                                            </td>
-                                            <td className="p-4 border-b border-border">
-                                                <div className="flex gap-2">
-                                                    <button onClick={() => startEditUser(u)} className="text-blue-500 hover:text-blue-700 font-medium text-sm">Edit</button>
-                                                    <button onClick={() => handleDeleteUser(u._id)} className="text-red-500 hover:text-red-700 font-medium text-sm">Delete</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {users
+                                        .filter(u => activeRole === 'all' || u.role === activeRole)
+                                        .map((u) => (
+                                            <tr key={u._id}>
+                                                <td className="p-4 border-b border-border">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 bg-teal-soft-bg text-primary-teal rounded-full flex items-center justify-center font-bold">{u.username.charAt(0).toUpperCase()}</div>
+                                                        <strong className="block text-sm text-text-main">{u.username}</strong>
+                                                    </div>
+                                                </td>
+                                                <td className="p-4 border-b border-border">
+                                                    <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${u.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>{u.role}</span>
+                                                </td>
+                                                <td className="p-4 border-b border-border text-sm text-text-muted">
+                                                    {u.email}
+                                                </td>
+                                                <td className="p-4 border-b border-border">
+                                                    <div className="flex gap-2">
+                                                        <button onClick={() => startEditUser(u)} className="text-blue-500 hover:text-blue-700 font-medium text-sm">Edit</button>
+                                                        <button onClick={() => handleDeleteUser(u._id)} className="text-red-500 hover:text-red-700 font-medium text-sm">Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
                                 </tbody>
                             </table>
                         </div>
