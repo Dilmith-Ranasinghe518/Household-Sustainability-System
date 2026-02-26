@@ -8,6 +8,11 @@ async function calculateCarbon(category) {
     const item = emissionCategories[category];
     if (!item) return null;
 
+    if (item.useFallback) {
+      console.log("Using manual fallback for category:", category);
+      return manualCarbonFallback[category] || 5;
+    }
+
     const response = await axios.post(
       "https://api.climatiq.io/data/v1/estimate",
       {

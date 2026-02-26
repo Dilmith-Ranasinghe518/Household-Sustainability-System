@@ -12,7 +12,7 @@ const {
   getMyProducts
 } = require("../controllers/productController");
 
-// Auth required for write
+// Auth required
 router.post("/", authMiddleware, createProduct);
 router.put("/:id", authMiddleware, updateProduct);
 router.delete("/:id", authMiddleware, deleteProduct);

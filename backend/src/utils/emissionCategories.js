@@ -34,6 +34,10 @@ const emissionCategories = {
   books: {
     weight: 0.5,
     activityId: "paper_products-type_copy_paper" 
+  },
+  other: {
+    weight: 2,
+    useFallback: true
   }
 };
 
