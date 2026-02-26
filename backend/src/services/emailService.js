@@ -1,45 +1,42 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
-// Gmail SMTP configuration (Render safe)
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-        rejectUnauthorized: false,
-    },
+        pass: process.env.EMAIL_PASS
+    }
 });
 
-// Send OTP only
-const sendOTPEmail = async (to, otp) => {
+const sendEmail = async (to, subject, text, html=null) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        text,
+        html
+    };
+
     try {
         if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.log("⚠️ EMAIL ENV NOT FOUND - MOCK MODE");
-            console.log(`OTP for ${to}: ${otp}`);
+            console.log('---------------------------------------------------');
+            console.log(`[MOCK EMAIL] To: ${to}`);
+            console.log(`[MOCK EMAIL] Subject: ${subject}`);
+            console.log(`[MOCK EMAIL] Body: ${text}`);
+            console.log('---------------------------------------------------');
             return;
         }
-
-        const mailOptions = {
-            from: `"EcoPulse OTP Service" <${process.env.EMAIL_USER}>`,
-            to: to,
-            subject: "Your Verification OTP Code",
-            text: `Your verification OTP code is: ${otp}
-
-This code will expire in 5 minutes.
-
-If you did not request this, please ignore this email.`,
-        };
-
         await transporter.sendMail(mailOptions);
-
-        console.log(`✅ OTP email sent to ${to}`);
+        console.log(`Email sent to ${to}`);
     } catch (error) {
-        console.error("❌ OTP Email Error:", error.message);
+        console.error('Error sending email:', error);
+        // Fallback logging for development
+        console.log('---------------------------------------------------');
+        console.log(`[FAILED EMAIL LOG] To: ${to}`);
+        console.log(`[FAILED EMAIL LOG] Subject: ${subject}`);
+        console.log(`[FAILED EMAIL LOG] Body: ${text}`);
+        console.log('---------------------------------------------------');
     }
 };
 
-module.exports = sendOTPEmail;
+module.exports = sendEmail;
