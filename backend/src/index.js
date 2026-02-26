@@ -1,4 +1,4 @@
-console.log("🔥 SERVER STARTED - NEW BUILD ACTIVE");
+require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
@@ -9,20 +9,26 @@ const { processExpiredOrders } = require("./services/orderExpiryService");
 
 const app = express();
 
-// Connect Database
+// 1. CORS Middleware (FIRST)
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://household-sustainability-system.vercel.app'
+];
+if (process.env.CLIENT_URL) {
+    allowedOrigins.push(process.env.CLIENT_URL);
+}
+
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+}));
+
+// 2. Connect Database
 connectDB();
 const geminiRoutes = require("./routes/gemini");
 
-// Init Middleware
+// 3. Init Other Middleware
 app.use(express.json({ extended: false }));
-app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        process.env.CLIENT_URL,
-        'https://household-sustainability-system.vercel.app'
-    ],
-    credentials: true
-}));
 
 // Define Routes
 app.use('/api/auth', require('./routes/authRoutes'));
