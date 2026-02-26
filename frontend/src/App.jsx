@@ -16,6 +16,7 @@ import VerifyOTP from './pages/VerifyOTP';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import './styles/global.css';
+import { ToastContainer } from "react-toastify";
 
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -35,12 +36,18 @@ import CollectorDashboard from './pages/CollectorDashboard';
 import WasteCalendar from './pages/WasteCalendar';
 import Profile from './pages/Profile';
 
+import Marketplace from './pages/Marketplace';
+import ProductDetails from './pages/ProductDetails';
+
 function App() {
   return (
     <AuthProvider>
       <Router>
         <div className="flex flex-col min-h-screen">
           <Navbar />
+          <ToastContainer 
+            position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnHover theme="colored"
+          />
           <div className="flex-grow pt-[88px]">
             <Routes>
               {/* Public Routes */}
@@ -69,6 +76,9 @@ function App() {
                   <Route path="/issues/create" element={<CreateIssue />} />
                   <Route path="/issues/:id" element={<IssueDetails />} />
                   <Route path="/profile" element={<Profile />} />
+
+                  <Route path="/marketplace" element={<Marketplace />} />
+                  <Route path="/marketplace/:id" element={<ProductDetails />} />
                 </Route>
               </Route>
 
