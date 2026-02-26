@@ -1,53 +1,42 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
-// Create transporter
-const createTransporter = () => {
-    return nodemailer.createTransport({
-        service: "gmail", // cleaner than host/port config
-        auth: {
-            user: process.env.EMAIL_USER || "dilmithsenupa2@gmail.com",
-            pass: process.env.EMAIL_PASS || "fqyc clja ywbn zxdg", // MUST be Google App Password
-        },
-    });
-};
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
-// Send OTP email
-const sendOTPEmail = async (to, otp) => {
+const sendEmail = async (to, subject, text, html=null) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        text,
+        html
+    };
+
     try {
-        // Check env variables
-        // if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        //     console.log("⚠️ EMAIL ENV NOT FOUND - MOCK MODE");
-        //     console.log(`OTP for ${to}: ${otp}`);
-        //     return { success: false, message: "Email service not configured" };
-        // }
-
-        const transporter = createTransporter();
-
-        // Verify connection (helps in Render debugging)
-        await transporter.verify();
-
-        const mailOptions = {
-            from: `"EcoPulse OTP Service" <${process.env.EMAIL_USER}>`,
-            to,
-            subject: "Your Verification OTP Code",
-            text: `Your verification OTP code is: ${otp}
-
-This code will expire in 5 minutes.
-
-If you did not request this, please ignore this email.`,
-        };
-
-        const info = await transporter.sendMail(mailOptions);
-
-        console.log(`✅ OTP email sent to ${to}`);
-        console.log("Message ID:", info.messageId);
-
-        return { success: true };
-
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.log('---------------------------------------------------');
+            console.log(`[MOCK EMAIL] To: ${to}`);
+            console.log(`[MOCK EMAIL] Subject: ${subject}`);
+            console.log(`[MOCK EMAIL] Body: ${text}`);
+            console.log('---------------------------------------------------');
+            return;
+        }
+        await transporter.sendMail(mailOptions);
+        console.log(`Email sent to ${to}`);
     } catch (error) {
-        console.error("❌ OTP Email Error:", error);
-        return { success: false, message: error.message };
+        console.error('Error sending email:', error);
+        // Fallback logging for development
+        console.log('---------------------------------------------------');
+        console.log(`[FAILED EMAIL LOG] To: ${to}`);
+        console.log(`[FAILED EMAIL LOG] Subject: ${subject}`);
+        console.log(`[FAILED EMAIL LOG] Body: ${text}`);
+        console.log('---------------------------------------------------');
     }
 };
 
-module.exports = sendOTPEmail;
+module.exports = sendEmail;
