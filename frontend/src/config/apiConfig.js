@@ -42,5 +42,12 @@ export const API_ENDPOINTS = {
     SETTINGS: "/settings",
     ORDERS: "/orders",
     PRODUCTS: "/products",
-    ISSUES: "/issues",
+    // ISSUES: "/issues",
+
+    ISSUES: {
+        BASE: "/issues",
+        MY: "/issues/my",
+        BY_ID: "/issues",
+        MESSAGES: "/issues",
+    },
 };
