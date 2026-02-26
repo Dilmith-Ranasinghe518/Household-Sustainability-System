@@ -46,7 +46,7 @@ exports.createProduct = async (req, res) => {
 exports.getProducts = async (req, res) => {
   try {
     const products = await Product.find({ status: "Available" })
-      .populate("seller", "username email");
+      .populate("seller", "username email mobileNumber");
 
     return res.json({
       message: "Available products fetched successfully.",
@@ -66,7 +66,7 @@ exports.getProducts = async (req, res) => {
 // Get Single Product
 exports.getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate("seller", "username email");
+    const product = await Product.findById(req.params.id).populate("seller", "username email mobileNumber");
 
     if (!product) {
       return res.status(404).json({
