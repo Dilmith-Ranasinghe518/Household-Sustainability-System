@@ -16,7 +16,8 @@ import {
   ChevronRight,
   AlertTriangle,
   AlertCircle,
-  Calendar as CalendarIcon
+  Calendar as CalendarIcon,
+  Store 
 } from 'lucide-react';
 import { ROLES } from '../utils/roles';
 import ConfirmModal from './ConfirmModal';
@@ -45,12 +46,14 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'Disaster Alerts', path: '/disasters', icon: <AlertTriangle size={20} /> },
     { name: 'Calendar', path: '/calendar', icon: <CalendarIcon size={20} /> },
 
+    { name: 'Marketplace', path: '/marketplace', icon: <Store size={20} /> },
+
     // ✅ NEW: User support center
     { name: 'Support Center', path: '/issues', icon: <AlertCircle size={20} /> },
 
     { name: 'Energy', path: '#', icon: <Zap size={20} /> },
     { name: 'Water', path: '#', icon: <Droplets size={20} /> },
-    { name: 'Profile', path: '#', icon: <User size={20} /> },
+    { name: 'Profile', path: '/profile', icon: <User size={20} /> },
   ];
 
   const adminMenuItems = [

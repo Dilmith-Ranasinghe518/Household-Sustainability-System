@@ -42,8 +42,20 @@ export const API_ENDPOINTS = {
     WEATHER: "/weather",
     WEATHER_FORECAST: "/weather/forecast",
     SETTINGS: "/settings",
-    ORDERS: "/orders",
-    PRODUCTS: "/products",
+
+    ORDERS: {
+        BASE: "/orders",
+        MY: "/orders/my",
+        REPORT: "/orders/report",
+        ORDER_STATUS: "/orders/"
+    },
+
+    PRODUCTS: {
+        BASE: "/products",
+        MY: "/products/my",
+        BY_ID: "/products/",
+    },
+    
     ISSUES: {
         BASE: "/issues",
         MY: "/issues/my",
