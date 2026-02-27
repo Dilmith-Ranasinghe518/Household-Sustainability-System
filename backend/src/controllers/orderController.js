@@ -174,7 +174,9 @@ exports.getMyOrders = async (req, res) => {
         { seller: req.user.id }
       ]
     })
-    .populate("product")
+    .populate("product", "title price status")
+    .populate("buyer", "username email mobileNumber")
+    .populate("seller", "username email mobileNumber")
     .sort({ createdAt: -1 });
 
     return res.json({
@@ -233,6 +235,35 @@ exports.getOrdersReport = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Failed to generate order report.",
+      error: error.message
+    });
+  }
+};
+
+// Get All Orders (Admin)
+exports.getAllOrdersAdmin = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Access denied. Admins only."
+      });
+    }
+
+    const orders = await Order.find()
+      .populate("product", "title price status")
+      .populate("buyer", "username email mobileNumber")
+      .populate("seller", "username email mobileNumber")
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      message: "All orders fetched successfully.",
+      count: orders.length,
+      orders
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to retrieve orders.",
       error: error.message
     });
   }

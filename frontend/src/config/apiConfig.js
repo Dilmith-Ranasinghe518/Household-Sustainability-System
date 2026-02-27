@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://household-sustainability-system.onrender.com/api";
+export const API_BASE_URL = "http://localhost:5001/api";
 
 export const API_ENDPOINTS = {
     AUTH: {
@@ -47,13 +47,15 @@ export const API_ENDPOINTS = {
         BASE: "/orders",
         MY: "/orders/my",
         REPORT: "/orders/report",
-        ORDER_STATUS: "/orders/"
+        ORDER_STATUS: "/orders/",
+        ADMIN: "/orders/admin"
     },
 
     PRODUCTS: {
         BASE: "/products",
         MY: "/products/my",
         BY_ID: "/products/",
+        ADMIN: "/products/admin"
     },
     
     ISSUES: {

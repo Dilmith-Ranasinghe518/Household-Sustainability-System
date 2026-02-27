@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const { calculateCarbon } = require("../services/carbonService");
+const Roles = require("../utils/roles");
 
 // Create Product
 exports.createProduct = async (req, res) => {
@@ -62,6 +63,25 @@ exports.getProducts = async (req, res) => {
   }
 };
 
+// Get All Products (Admin)
+exports.getAllProductsAdmin = async (req, res) => {
+  try {
+    const products = await Product.find()
+      .populate("seller", "username email");
+
+    return res.json({
+      message: "All products fetched successfully.",
+      count: products.length,
+      products
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to retrieve products.",
+      error: error.message
+    });
+  }
+};
 
 // Get Single Product
 exports.getProductById = async (req, res) => {
@@ -99,7 +119,10 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
-    if (product.seller.toString() !== req.user.id) {
+    if (
+      product.seller.toString() !== req.user.id &&
+      req.user.role !== Roles.ADMIN
+    ) {
       return res.status(403).json({
         message: "You are not authorized to update this product."
       });
@@ -151,6 +174,12 @@ exports.deleteProduct = async (req, res) => {
     if (product.seller.toString() !== req.user.id) {
       return res.status(403).json({
         message: "You are not authorized to delete this product."
+      });
+    }
+
+    if (product.status !== "Available") {
+      return res.status(400).json({
+        message: "Cannot delete reserved or sold product."
       });
     }
 

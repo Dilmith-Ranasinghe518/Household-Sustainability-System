@@ -9,7 +9,8 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
-  getMyProducts
+  getMyProducts,
+  getAllProductsAdmin
 } = require("../controllers/productController");
 
 // Auth required
@@ -17,6 +18,7 @@ router.post("/", authMiddleware, createProduct);
 router.put("/:id", authMiddleware, updateProduct);
 router.delete("/:id", authMiddleware, deleteProduct);
 router.get("/my", authMiddleware, getMyProducts);
+router.get("/admin/", authMiddleware, getAllProductsAdmin);
 
 // Public read
 router.get("/", getProducts);
