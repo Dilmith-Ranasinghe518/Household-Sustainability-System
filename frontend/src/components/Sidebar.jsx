@@ -17,7 +17,8 @@ import {
   AlertTriangle,
   AlertCircle,
   Calendar as CalendarIcon,
-  Store 
+  Store, 
+  ShoppingBag
 } from 'lucide-react';
 import { ROLES } from '../utils/roles';
 import ConfirmModal from './ConfirmModal';
@@ -43,6 +44,8 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'My Audits', path: '/audits', icon: <FileText size={20} /> },
     { name: 'Waste Mgmt', path: '/waste', icon: <Recycle size={20} /> },
 
+    { name: 'My Marketplace', path: '/my-marketplace', icon: <ShoppingBag size={20} /> },
+
     { name: 'Disaster Alerts', path: '/disasters', icon: <AlertTriangle size={20} /> },
     { name: 'Calendar', path: '/calendar', icon: <CalendarIcon size={20} /> },
 
@@ -64,6 +67,9 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'Disaster Mgmt', path: '/admin/disasters', icon: <AlertTriangle size={20} /> },
     { name: 'Collection Calendar', path: '/calendar', icon: <CalendarIcon size={20} /> },
     { name: 'Manage Issues', path: '/admin/issues', icon: <AlertCircle size={20} /> },
+
+    { name: 'Marketplace Mgmt', path: '/admin/marketplace', icon: <Store size={20} /> },
+
     { name: 'Analytics', path: '#', icon: <BarChart3 size={20} /> },
     { name: 'Users', path: '#', icon: <User size={20} /> },
     { name: 'Score Mgmt', path: '/admin/scoring', icon: <Settings size={20} /> }, // Changed icon to Settings

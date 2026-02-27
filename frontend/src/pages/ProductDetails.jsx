@@ -59,7 +59,7 @@ const ProductDetails = () => {
         setLoading(true);
 
         const res = await api.post(API_ENDPOINTS.ORDERS.BASE, {
-        productId: product._id
+          productId: product._id
         });
 
         toast.success(res.data.message);

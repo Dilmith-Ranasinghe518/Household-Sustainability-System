@@ -23,8 +23,6 @@ const Marketplace = () => {
         try {
             const res = await api.get(API_ENDPOINTS.PRODUCTS.BASE);
 
-            console.log("Full response:", res.data);
-
             const availableProducts = res.data.products; 
 
             setProducts(availableProducts);

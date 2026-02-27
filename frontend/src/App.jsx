@@ -38,6 +38,8 @@ import Profile from './pages/Profile';
 
 import Marketplace from './pages/Marketplace';
 import ProductDetails from './pages/ProductDetails';
+import AdminMarketplace from './pages/AdminMarketplace';
+import UserMarketplace from './pages/UserMarketplace';
 
 function App() {
   return (
@@ -79,6 +81,7 @@ function App() {
 
                   <Route path="/marketplace" element={<Marketplace />} />
                   <Route path="/marketplace/:id" element={<ProductDetails />} />
+                  <Route path="/my-marketplace" element={<UserMarketplace />} />
                 </Route>
               </Route>
 
@@ -95,6 +98,8 @@ function App() {
                   {/* ✅ NEW: Admin Issues */}
                   <Route path="/admin/issues" element={<AdminIssues />} />
                   <Route path="/admin/scoring" element={<AdminScoring />} />
+
+                  <Route path="/admin/marketplace" element={<AdminMarketplace />} />
                 </Route>
               </Route>
 
