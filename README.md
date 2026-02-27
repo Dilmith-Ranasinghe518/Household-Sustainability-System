@@ -138,7 +138,7 @@ npm start
 Create `.env` file inside backend:
 
 ```
-PORT=5500
+PORT=5000
 MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_secret
 CLIENT_URL=http://localhost:5173
@@ -147,7 +147,7 @@ GEMINI_API_KEY=your_key
 
 Backend runs at:
 ```
-http://localhost:5500/api
+http://localhost:5000/api
 ```
 
 ---
@@ -177,7 +177,7 @@ https://household-sustainability-system.onrender.com/api
 
 Local:
 ```
-http://localhost:5500/api
+http://localhost:5000/api
 ```
 
 ---
@@ -314,6 +314,307 @@ http://localhost:5500/api
 | GET | /weather | Get weather data |
 
 ---
+
+# 📘 API Usage Guide
+
+This document explains:
+
+- HTTP Methods used
+- Authentication requirements
+- Request format
+- Response format
+- Example requests & responses
+
+Base URL (Production):
+https://household-sustainability-system.onrender.com/api
+
+Base URL (Local):
+http://localhost:5000/api
+
+------------------------------------------------------------
+
+# 📌 HTTP Methods Used
+
+GET
+- Used to retrieve data
+- Does NOT modify data
+
+POST
+- Used to create new data
+
+PUT
+- Used to update existing data
+
+DELETE
+- Used to remove data
+
+------------------------------------------------------------
+
+# 🔐 Authentication Requirements
+
+Most protected endpoints require JWT authentication.
+
+After login, the server returns a JWT token.
+
+All protected requests must include this header:
+
+Authorization: Bearer <JWT_TOKEN>
+
+Example:
+
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+Admin-only endpoints require:
+- Valid JWT
+- role = "admin"
+
+------------------------------------------------------------
+
+# 📄 Request Format
+
+All requests use JSON format.
+
+Headers:
+
+Content-Type: application/json
+
+Example Request Body:
+
+{
+  "title": "High electricity bill",
+  "monthlyBillLKR": 6777,
+  "monthlyKwh": 321
+}
+
+------------------------------------------------------------
+
+# 📦 Response Format
+
+Success Response Example:
+
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": {}
+}
+
+Error Response Example:
+
+{
+  "success": false,
+  "message": "Error message"
+}
+
+Note:
+Some endpoints return direct objects or arrays instead of wrapped "success/data".
+
+------------------------------------------------------------
+
+# 🔑 AUTHENTICATION EXAMPLE
+
+## Login
+
+POST /api/auth/login
+
+Request:
+
+{
+  "email": "user@gmail.com",
+  "password": "123456"
+}
+
+Response:
+
+{
+  "success": true,
+  "token": "jwt_token_here"
+}
+
+------------------------------------------------------------
+
+# ⚡ ISSUE MANAGEMENT EXAMPLE
+
+## Create Support Ticket
+
+POST /api/issues
+Authorization: Bearer <JWT_TOKEN>
+
+Request:
+
+{
+  "title": "High electricity bill",
+  "category": "High Bill",
+  "monthlyBillLKR": 6777,
+  "monthlyKwh": 321,
+  "text": "My bill increased suddenly."
+}
+
+Response:
+
+{
+  "_id": "66aa123",
+  "title": "High electricity bill",
+  "status": "new",
+  "priority": "low"
+}
+
+------------------------------------------------------------
+
+# 🌪 DISASTER MANAGEMENT EXAMPLE
+
+## Create Disaster (Admin Only)
+
+POST /api/disasters
+Authorization: Bearer <ADMIN_TOKEN>
+
+Request:
+
+{
+  "title": "Flood Warning",
+  "type": "Flood",
+  "severity": "high",
+  "status": "active"
+}
+
+Response:
+
+{
+  "_id": "77bb123",
+  "title": "Flood Warning",
+  "severity": "high",
+  "status": "active"
+}
+
+------------------------------------------------------------
+
+# 🛒 MARKETPLACE EXAMPLE
+
+## Create Product
+
+POST /api/products
+Authorization: Bearer <JWT_TOKEN>
+
+Request:
+
+{
+  "name": "Reusable Bottle",
+  "price": 2500,
+  "stock": 10
+}
+
+Response:
+
+{
+  "_id": "99dd123",
+  "name": "Reusable Bottle",
+  "price": 2500
+}
+
+------------------------------------------------------------
+
+# ♻️ WASTE MANAGEMENT EXAMPLE
+
+## Create Waste Entry
+
+POST /api/waste
+Authorization: Bearer <JWT_TOKEN>
+
+Request:
+
+{
+  "type": "Plastic",
+  "quantity": 5
+}
+
+Response:
+
+{
+  "_id": "88cc123",
+  "type": "Plastic",
+  "quantity": 5
+}
+
+------------------------------------------------------------
+
+# 📦 ORDER EXAMPLE
+
+## Create Order
+
+POST /api/orders
+Authorization: Bearer <JWT_TOKEN>
+
+Request:
+
+{
+  "productId": "99dd123",
+  "quantity": 2
+}
+
+Response:
+
+{
+  "_id": "aaee123",
+  "status": "pending",
+  "quantity": 2
+}
+
+------------------------------------------------------------
+
+# 📝 ARTICLE EXAMPLE
+
+## Create Article (Admin)
+
+POST /api/articles
+Authorization: Bearer <ADMIN_TOKEN>
+
+Request:
+
+{
+  "title": "Save Energy",
+  "content": "Reduce AC usage",
+  "isPublished": true
+}
+
+Response:
+
+{
+  "success": true,
+  "message": "Article created successfully"
+}
+
+------------------------------------------------------------
+
+# 🤖 GEMINI AI EXAMPLE
+
+POST /api/gemini
+Authorization: Bearer <JWT_TOKEN>
+
+Request:
+
+{
+  "prompt": "Give energy saving tips"
+}
+
+Response:
+
+{
+  "success": true,
+  "answer": "Try using LED bulbs and reduce standby power."
+}
+
+------------------------------------------------------------
+
+# 🌦 WEATHER API EXAMPLE
+
+GET /api/weather?city=Colombo
+
+Response:
+
+{
+  "city": "Colombo",
+  "temp": 29,
+  "condition": "Cloudy"
+}
 
 # 🚀 Future Improvements
 - Complete full frontend UI polish
