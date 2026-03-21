@@ -40,6 +40,7 @@ import Marketplace from './pages/Marketplace';
 import ProductDetails from './pages/ProductDetails';
 import AdminMarketplace from './pages/AdminMarketplace';
 import UserMarketplace from './pages/UserMarketplace';
+import Chatbot from './components/Chatbot';
 
 function App() {
   return (
@@ -113,6 +114,7 @@ function App() {
               </Route>
             </Routes>
           </div>
+          <Chatbot />
         </div>
       </Router>
     </AuthProvider>
