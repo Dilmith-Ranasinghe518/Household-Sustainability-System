@@ -4,6 +4,7 @@ import { Leaf, Menu, X, User, LogIn, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from './ConfirmModal';
+import logoImg from '../assets/logo.jpeg';
 
 
 const Navbar = () => {
@@ -48,11 +49,9 @@ const Navbar = () => {
     return (
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-3 bg-white/80 backdrop-blur-md border-b border-white/30 shadow-sm' : 'py-5 bg-transparent'}`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-                <Link to="/" className="flex items-center gap-3 group">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary-teal to-forest-dark rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-teal/30 transition-transform group-hover:scale-105">
-                        <Leaf size={24} />
-                    </div>
-                    <span className="text-2xl font-bold text-forest-dark tracking-tight">Sustaincity</span>
+                <Link to="/" className="flex items-center gap-3 group border-none">
+                    <img src={logoImg} alt="Sustaincity Logo" className="h-10 w-auto object-cover rounded-xl shadow-md transition-transform group-hover:scale-105" />
+                    <span className="text-2xl font-bold text-forest-dark tracking-tight">EcoPulse</span>
                 </Link>
 
                 {/* Desktop Nav */}
