@@ -33,21 +33,30 @@ const calculateScores = (action) => {
 };
 
 // CREATE
+
 exports.createAction = async (req, res) => {
   try {
+    console.log("FILES:", req.files);
+console.log("BODY:", req.body);
     const action = new Action({
       title: req.body.title,
       description: req.body.description,
       category: req.body.category,
-      images: req.files && req.files.length > 0 ? req.files.map(f => f.path) : (req.body.images || []),
+      images: req.files && req.files.length > 0 
+      ? req.files.map(f => f.path)
+      : [],
       createdBy: req.user.id,
     });
 
     await action.save();
     res.status(201).json(action);
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
+  // } catch (err) {
+  //   res.status(500).json({ msg: err.message });
+  // }
+  }catch (err) {
+  console.error("ERROR:", err); // 🔥 IMPORTANT
+  res.status(500).json({ msg: err.message });
+}
 };
 
 // GET ALL
