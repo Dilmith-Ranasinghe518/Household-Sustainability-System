@@ -39,7 +39,7 @@ exports.createAction = async (req, res) => {
       title: req.body.title,
       description: req.body.description,
       category: req.body.category,
-      images: req.body.images || [],
+      images: req.files && req.files.length > 0 ? req.files.map(f => f.path) : (req.body.images || []),
       createdBy: req.user.id,
     });
 
@@ -79,9 +79,14 @@ exports.updateAction = async (req, res) => {
     if (action.createdBy.toString() !== req.user.id)
       return res.status(403).json({ msg: "Only owner can edit" });
 
+    const updateData = { ...req.body };
+    if (req.files && req.files.length > 0) {
+      updateData.images = req.files.map(f => f.path);
+    }
+
     const updated = await Action.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true }
     );
 

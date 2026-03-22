@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 const { admin } = require("../middleware/authMiddleware");
+const upload = require("../middleware/upload");
 
 const {
   createAction,
@@ -17,8 +18,8 @@ const {
 } = require("../controllers/actionController");
 
 router.get("/", getActions);
-router.post("/", authMiddleware, createAction);
-router.put("/:id", authMiddleware, updateAction);
+router.post("/", authMiddleware, upload.array("images", 5), createAction);
+router.put("/:id", authMiddleware, upload.array("images", 5), updateAction);
 router.delete("/:id", authMiddleware, deleteAction);
 
 router.put("/like/:id", authMiddleware, likeAction);
