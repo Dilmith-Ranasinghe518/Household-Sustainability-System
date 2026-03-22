@@ -71,7 +71,7 @@ exports.initiateRegister = async (req, res) => {
             { upsert: true, new: true }
         );
 
-        await sendEmail(email, "Verify your email", `Your OTP is ${otp}`);
+        sendEmail(email, "Verify your email", `Your OTP is ${otp}`);
 
         return res.json({ success: true, msg: "OTP sent", email });
 
@@ -252,7 +252,7 @@ exports.forgotPassword = async (req, res) => {
         user.otpExpires = Date.now() + 10 * 60 * 1000;
         await user.save();
 
-        await sendEmail(email, 'Reset Password', `Your password reset OTP is ${otp}`);
+        sendEmail(email, 'Reset Password', `Your password reset OTP is ${otp}`);
 
         res.json({ msg: 'OTP sent to email', userId: user._id });
     } catch (err) {

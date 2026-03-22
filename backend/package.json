@@ -5,7 +5,12 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "jest && npx playwright test",
+    "test:unit": "jest",
+    "test:integration": "npx playwright test tests/integration",
+    "test:performance": "npx playwright test tests/performance",
+    "test:artillery": "artillery run artillery/load-test.yaml"
   },
   "dependencies": {
     "axios": "^1.13.5",
@@ -23,6 +28,9 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "artillery": "^2.0.30",
+    "jest": "^30.2.0",
     "nodemon": "^3.0.1"
   },
   "engines": {
