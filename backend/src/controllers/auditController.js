@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const ScoringConfig = require('../models/ScoringConfig');
+const SustainabilityAudit = require('../models/SustainabilityAudit');
 
 // Helper function to calculate score
 const calculateScore = (data, config) => {
@@ -45,8 +46,8 @@ const calculateScore = (data, config) => {
 
     const maxPoints = maxEnvPoints + maxSocPoints + maxEcoPoints;
 
-    const environmentalScore = (environmentalPoints / maxEnvPoints) * 100;
-    const overallSustainabilityPercentage = (totalPoints / maxPoints) * 100;
+    const environmentalScore = maxEnvPoints > 0 ? (environmentalPoints / maxEnvPoints) * 100 : 0;
+    const overallSustainabilityPercentage = maxPoints > 0 ? (totalPoints / maxPoints) * 100 : 0;
 
     return {
         score: Math.min(totalPoints, 100),
@@ -58,6 +59,10 @@ const calculateScore = (data, config) => {
 exports.createAudit = async (req, res) => {
     try {
         const { environmental, social, economic } = req.body;
+
+        if (!environmental || !social || !economic) {
+            return res.status(400).json({ msg: 'Please provide environmental, social, and economic data' });
+        }
 
         let config = await ScoringConfig.findOne();
         if (!config) {
@@ -84,8 +89,11 @@ exports.createAudit = async (req, res) => {
 
         res.json(audit);
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
+        console.error("Audit Creation Error:", err.message);
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ msg: err.message, errors: err.errors });
+        }
+        res.status(500).send('Server Error: ' + err.message);
     }
 };
 
@@ -128,6 +136,10 @@ exports.updateAudit = async (req, res) => {
             return res.status(401).json({ msg: 'Not authorized' });
         }
 
+        if (!environmental || !social || !economic) {
+            return res.status(400).json({ msg: 'Please provide environmental, social, and economic data for update' });
+        }
+
         let config = await ScoringConfig.findOne();
         if (!config) {
             config = new ScoringConfig();
@@ -148,7 +160,7 @@ exports.updateAudit = async (req, res) => {
                     overallSustainabilityPercentage: scores.overallSustainabilityPercentage
                 }
             },
-            { new: true }
+            { new: true, runValidators: true }
         );
 
         // Update User's sustainability score
@@ -156,8 +168,11 @@ exports.updateAudit = async (req, res) => {
 
         res.json(audit);
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
+        console.error("Audit Update Error:", err.message);
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ msg: err.message, errors: err.errors });
+        }
+        res.status(500).send('Server Error: ' + err.message);
     }
 };
 
