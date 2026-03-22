@@ -25,6 +25,7 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
   });
   const [preview, setPreview] = useState("");
   const [imgError, setImgError] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     if (product) {
@@ -38,9 +39,11 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
         status:      product.status      || "Available",
       });
       setPreview(product.imageUrl || "");
+      setImageFile(null);
     } else {
       setFormData({ title: "", description: "", price: "", category: "", condition: "", imageUrl: "", status: "Available" });
       setPreview("");
+      setImageFile(null);
     }
     setImgError(false);
   }, [product]);
@@ -51,7 +54,26 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
     if (name === "imageUrl") { setPreview(value); setImgError(false); }
   };
 
-  const handleSubmit = (e) => { e.preventDefault(); onSubmit(formData); };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreview(URL.createObjectURL(file));
+      setImgError(false);
+    }
+  };
+
+  const handleSubmit = (e) => { 
+    e.preventDefault();
+    const data = new FormData();
+    Object.keys(formData).forEach(key => {
+      data.append(key, formData[key]);
+    });
+    if (imageFile) {
+      data.append("image", imageFile);
+    }
+    onSubmit(data); 
+  };
 
   if (!isOpen) return null;
 
@@ -165,10 +187,10 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
                     )}
                   </div>
                   <div className="px-3 py-3 bg-gray-50 border-t border-gray-100">
-                    <Field label="Image URL" icon={ImageIcon}>
+                    <Field label="Product Image" icon={ImageIcon}>
                       <input
-                        name="imageUrl" value={formData.imageUrl}
-                        onChange={handleChange} placeholder="https://..."
+                        type="file" accept="image/*"
+                        onChange={handleFileChange}
                         className={inputClass}
                       />
                     </Field>

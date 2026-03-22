@@ -26,6 +26,7 @@ describe('Product Controller Unit Tests (Jest)', () => {
 
         test('should create product and calculate carbon', async () => {
             req.body = { title: 'Test Product', category: 'laptop' };
+            req.file = { path: 'https://cloudinary.com/test.png' };
             calculateCarbon.mockResolvedValue(1.8);
             Product.prototype.save = jest.fn().mockResolvedValue(true);
 

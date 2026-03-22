@@ -5,7 +5,11 @@ const Roles = require("../utils/roles");
 // Create Product
 exports.createProduct = async (req, res) => {
   try {
-    const { title, description, imageUrl, price, category, condition } = req.body;
+    const { title, description, price, category, condition } = req.body;
+    let imageUrl = req.body.imageUrl;
+    if (req.file) {
+      imageUrl = req.file.path;
+    }
 
     if (!title || !category) {
       return res.status(400).json({
@@ -140,6 +144,10 @@ exports.updateProduct = async (req, res) => {
     if (category && category !== product.category) {
       const newCo2 = await calculateCarbon(category);
       product.co2Saved = newCo2;
+    }
+
+    if (req.file) {
+      req.body.imageUrl = req.file.path;
     }
 
     Object.assign(product, req.body);
