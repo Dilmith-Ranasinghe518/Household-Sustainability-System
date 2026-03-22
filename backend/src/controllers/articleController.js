@@ -43,7 +43,8 @@ const Article = require("../models/Article");
 // 🟢 CREATE ARTICLE (ADMIN ONLY)
 exports.createArticle = async (req, res) => {
   try {
-    const { title, content, category, image, isPublished } = req.body;
+    const { title, content, category, isPublished } = req.body;
+    const image = req.file ? req.file.path : req.body.image;
 
     const article = new Article({
       title,
@@ -120,9 +121,14 @@ exports.getArticleById = async (req, res) => {
 // 🟢 UPDATE ARTICLE (ADMIN ONLY)
 exports.updateArticle = async (req, res) => {
   try {
+    const updateData = { ...req.body };
+    if (req.file) {
+      updateData.image = req.file.path;
+    }
+
     const updatedArticle = await Article.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 
