@@ -25,6 +25,7 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
   });
   const [preview, setPreview] = useState("");
   const [imgError, setImgError] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     if (product) {
@@ -38,9 +39,11 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
         status:      product.status      || "Available",
       });
       setPreview(product.imageUrl || "");
+      setImageFile(null);
     } else {
       setFormData({ title: "", description: "", price: "", category: "", condition: "", imageUrl: "", status: "Available" });
       setPreview("");
+      setImageFile(null);
     }
     setImgError(false);
   }, [product]);
@@ -51,7 +54,26 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
     if (name === "imageUrl") { setPreview(value); setImgError(false); }
   };
 
-  const handleSubmit = (e) => { e.preventDefault(); onSubmit(formData); };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreview(URL.createObjectURL(file));
+      setImgError(false);
+    }
+  };
+
+  const handleSubmit = (e) => { 
+    e.preventDefault();
+    const data = new FormData();
+    Object.keys(formData).forEach(key => {
+      data.append(key, formData[key]);
+    });
+    if (imageFile) {
+      data.append("image", imageFile);
+    }
+    onSubmit(data); 
+  };
 
   if (!isOpen) return null;
 
@@ -165,12 +187,25 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
                     )}
                   </div>
                   <div className="px-3 py-3 bg-gray-50 border-t border-gray-100">
-                    <Field label="Image URL" icon={ImageIcon}>
-                      <input
-                        name="imageUrl" value={formData.imageUrl}
-                        onChange={handleChange} placeholder="https://..."
-                        className={inputClass}
-                      />
+                    <Field label="Product Image" icon={ImageIcon}>
+                      <div className="flex items-center gap-3">
+                        <label className="flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-500 text-white text-sm font-medium cursor-pointer hover:bg-teal-600 transition-all shadow-sm">
+                          <ImageIcon size={16} />
+                          {imageFile ? "Change Image" : "Select Image"}
+                          
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </label>
+
+                        <span className="text-xs text-gray-500 truncate max-w-[150px]">
+                          {imageFile ? imageFile.name : "No file selected"}
+                        </span>
+
+                      </div>
                     </Field>
                   </div>
                 </div>

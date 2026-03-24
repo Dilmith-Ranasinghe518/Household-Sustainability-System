@@ -112,10 +112,11 @@ const ProductManagement = () => {
   const handleSubmit = async (formData) => {
     try {
       let res;
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
       if (editingProduct?._id) {
-        res = await api.put(`${API_ENDPOINTS.PRODUCTS.BASE}/${editingProduct._id}`, formData);
+        res = await api.put(`${API_ENDPOINTS.PRODUCTS.BASE}/${editingProduct._id}`, formData, config);
       } else {
-        res = await api.post(API_ENDPOINTS.PRODUCTS.BASE, formData);
+        res = await api.post(API_ENDPOINTS.PRODUCTS.BASE, formData, config);
       }
       toast.success(res.data.message);
       setIsFormOpen(false);
