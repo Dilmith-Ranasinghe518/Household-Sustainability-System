@@ -188,11 +188,24 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
                   </div>
                   <div className="px-3 py-3 bg-gray-50 border-t border-gray-100">
                     <Field label="Product Image" icon={ImageIcon}>
-                      <input
-                        type="file" accept="image/*"
-                        onChange={handleFileChange}
-                        className={inputClass}
-                      />
+                      <div className="flex items-center gap-3">
+                        <label className="flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-500 text-white text-sm font-medium cursor-pointer hover:bg-teal-600 transition-all shadow-sm">
+                          <ImageIcon size={16} />
+                          {imageFile ? "Change Image" : "Select Image"}
+                          
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </label>
+
+                        <span className="text-xs text-gray-500 truncate max-w-[150px]">
+                          {imageFile ? imageFile.name : "No file selected"}
+                        </span>
+
+                      </div>
                     </Field>
                   </div>
                 </div>

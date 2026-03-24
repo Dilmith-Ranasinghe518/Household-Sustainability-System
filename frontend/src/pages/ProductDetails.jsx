@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Leaf, Phone } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Leaf, Phone, ArrowLeft } from "lucide-react";
 import api from "../services/api";
 import { API_ENDPOINTS } from "../config/apiConfig";
 import placeholderImage from "../assets/no-image.jpg";
@@ -10,6 +10,7 @@ import ConfirmModal from "../components/ConfirmModal";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -80,6 +81,14 @@ const ProductDetails = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
+
+      <button 
+        onClick={() => navigate(-1)} 
+        className="flex items-center gap-2 text-gray-600 hover:text-teal-600 font-medium mb-6 transition-colors"
+      >
+        <ArrowLeft size={20} />
+        Back to Marketplace
+      </button>
 
       <div className="grid md:grid-cols-2 gap-12">
 
