@@ -6,7 +6,7 @@ function baseTemplate(title, content) {
     <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 8px;">
       
       <h2 style="color: #2e7d32; margin-bottom: 10px;">
-        Sustaincity - Household Sustainability Marketplace
+        EcoPulse - Household Sustainability Marketplace
       </h2>
       
       <h3 style="color: #333;">${title}</h3>
@@ -18,7 +18,7 @@ function baseTemplate(title, content) {
       <hr style="margin: 20px 0;" />
 
       <p style="font-size: 12px; color: #888;">
-        You are receiving this email because you are part of Sustaincity.
+        You are receiving this email because you are part of EcoPulse.
       </p>
 
     </div>
