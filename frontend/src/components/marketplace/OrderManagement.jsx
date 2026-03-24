@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { RefreshCw, Clock, CheckCircle, XCircle, ShoppingCart, AlertCircle, Search } from "lucide-react";
+import { RefreshCw, Clock, CheckCircle, XCircle, ShoppingCart, AlertCircle, Search, Download } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { toast } from "react-toastify";
 import ReactPaginate from "react-paginate";
 import api from "../../services/api";
@@ -10,12 +12,12 @@ const ITEMS_PER_PAGE = 8;
 
 const StatusBadge = ({ status }) => {
   const styles = {
-    Pending:   "bg-yellow-50 text-yellow-700",
+    Pending: "bg-yellow-50 text-yellow-700",
     Confirmed: "bg-teal-50 text-teal-700",
     Cancelled: "bg-red-50 text-red-600",
   };
   const dots = {
-    Pending:   "bg-yellow-400",
+    Pending: "bg-yellow-400",
     Confirmed: "bg-teal-400",
     Cancelled: "bg-red-400",
   };
@@ -48,13 +50,13 @@ const getRemainingDays = (expiresAt) => {
 const inputClass = "px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-700 bg-white outline-none focus:border-teal-400 transition-all";
 
 const OrderManagement = () => {
-  const [orders, setOrders]               = useState([]);
-  const [loading, setLoading]             = useState(true);
-  const [currentPage, setCurrentPage]     = useState(0);
-  const [modalData, setModalData]         = useState(null);
-  const [statusFilter, setStatusFilter]   = useState("");
-  const [dateFrom, setDateFrom]           = useState("");
-  const [dateTo, setDateTo]               = useState("");
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [modalData, setModalData] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -69,6 +71,73 @@ const OrderManagement = () => {
     }
   };
 
+  const generateReport = async () => {
+    try {
+      const res = await api.get(API_ENDPOINTS.ORDERS.REPORT);
+      const { summary, orders: reportOrders } = res.data;
+
+      const doc = new jsPDF();
+
+      // Title
+      doc.setFontSize(18);
+      doc.setTextColor(15, 118, 110);
+      doc.text("EcoPulse Marketplace Orders Report", 14, 22);
+
+      doc.setFontSize(11);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+
+      doc.setFontSize(12);
+      doc.setTextColor(40);
+      doc.text("Order Summary", 14, 40);
+
+      const summaryData = [
+        ["Total Orders", summary.total],
+        ["Confirmed", summary.confirmed],
+        ["Pending", summary.pending],
+        ["Cancelled", summary.cancelled],
+        ["Completion Rate", summary.completionRate]
+      ];
+
+      autoTable(doc, {
+        startY: 45,
+        head: [["Metric", "Value"]],
+        body: summaryData,
+        theme: "grid",
+        headStyles: { fillColor: [15, 118, 110] },
+        styles: { fontSize: 10 },
+        margin: { left: 14, right: 14 }
+      });
+
+      doc.text("Recent Orders", 14, doc.lastAutoTable.finalY + 10);
+
+      const tableData = reportOrders.map(o => [
+        o._id ? o._id.substring(0, 8) + "..." : "N/A",
+        o.product?.title || "N/A",
+        o.buyer?.username || "N/A",
+        o.seller?.username || "N/A",
+        o.status || "N/A",
+        o.createdAt ? new Date(o.createdAt).toLocaleDateString() : "N/A"
+      ]);
+
+      autoTable(doc, {
+        startY: doc.lastAutoTable.finalY + 15,
+        head: [["ID", "Product", "Buyer", "Seller", "Status", "Date"]],
+        body: tableData,
+        theme: "striped",
+        headStyles: { fillColor: [15, 118, 110] },
+        styles: { fontSize: 9 }
+      });
+
+      doc.save(`orders-report-${new Date().toISOString().split('T')[0]}.pdf`);
+      toast.success(res.data.message || "Report downloaded successfully");
+
+    } catch (err) {
+      console.error("Report generation error:", err);
+      toast.error(err.response?.data?.message || err.message || "Failed to generate report.");
+    }
+  };
+
   useEffect(() => { fetchOrders(); }, []);
 
   const filteredOrders = useMemo(() => {
@@ -76,16 +145,16 @@ const OrderManagement = () => {
       const matchesStatus = statusFilter ? o.status === statusFilter : true;
       const expiry = o.expiresAt ? new Date(o.expiresAt) : null;
       const matchesFrom = dateFrom ? (expiry && expiry >= new Date(dateFrom)) : true;
-      const matchesTo   = dateTo   ? (expiry && expiry <= new Date(dateTo + "T23:59:59")) : true;
+      const matchesTo = dateTo ? (expiry && expiry <= new Date(dateTo + "T23:59:59")) : true;
       return matchesStatus && matchesFrom && matchesTo;
     });
   }, [orders, statusFilter, dateFrom, dateTo]);
 
-  const pageCount    = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
-  const offset       = currentPage * ITEMS_PER_PAGE;
+  const pageCount = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
+  const offset = currentPage * ITEMS_PER_PAGE;
   const currentItems = useMemo(() => filteredOrders.slice(offset, offset + ITEMS_PER_PAGE), [filteredOrders, offset]);
 
-  const pendingCount   = orders.filter(o => o.status === "Pending").length;
+  const pendingCount = orders.filter(o => o.status === "Pending").length;
   const confirmedCount = orders.filter(o => o.status === "Confirmed").length;
   const cancelledCount = orders.filter(o => o.status === "Cancelled").length;
 
@@ -119,20 +188,28 @@ const OrderManagement = () => {
           <h2 className="text-2xl font-bold text-gray-800">Orders</h2>
           <p className="text-sm text-gray-400 mt-0.5">Manage marketplace orders and confirmations.</p>
         </div>
-        <button
-          onClick={fetchOrders}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 text-teal-700 bg-white hover:bg-teal-50 transition-all shadow-sm self-start"
-        >
-          <RefreshCw size={15} /> Refresh
-        </button>
+        <div className="flex gap-2 self-start">
+          <button
+            onClick={generateReport}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 transition-all shadow-sm"
+          >
+            <Download size={15} /> Generate Report
+          </button>
+          <button
+            onClick={fetchOrders}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 text-teal-700 bg-white hover:bg-teal-50 transition-all shadow-sm"
+          >
+            <RefreshCw size={15} /> Refresh
+          </button>
+        </div>
       </header>
 
       {/* STAT CARDS */}
       <div className="flex flex-wrap gap-3">
-        <StatCard icon={ShoppingCart} label="Total Orders" value={orders.length}   iconClass="text-teal-500" />
-        <StatCard icon={AlertCircle}  label="Pending"       value={pendingCount}   iconClass="text-yellow-400" />
-        <StatCard icon={CheckCircle}  label="Confirmed"     value={confirmedCount} iconClass="text-teal-400" />
-        <StatCard icon={XCircle}      label="Cancelled"     value={cancelledCount} iconClass="text-red-400" />
+        <StatCard icon={ShoppingCart} label="Total Orders" value={orders.length} iconClass="text-teal-500" />
+        <StatCard icon={AlertCircle} label="Pending" value={pendingCount} iconClass="text-yellow-400" />
+        <StatCard icon={CheckCircle} label="Confirmed" value={confirmedCount} iconClass="text-teal-400" />
+        <StatCard icon={XCircle} label="Cancelled" value={cancelledCount} iconClass="text-red-400" />
       </div>
 
       {/* FILTERS */}
