@@ -62,7 +62,7 @@ const Home = () => {
       title: "Carbon Footprint",
       desc: "Calculate and offset your household emissions.",
       image:
-        "https://images.unsplash.com/photo-1497436072909-f5e4be4f1112?auto=format&fit=crop&w=900&q=80",
+        "https://plus.unsplash.com/premium_photo-1733317270278-772ee47c86d7?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       icon: <Users />,
