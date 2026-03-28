@@ -19,6 +19,8 @@ import {
   CheckCircle2,
   BarChart3,
   TreePine,
+  Shield,
+  Check,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -62,7 +64,7 @@ const Home = () => {
       title: "Carbon Footprint",
       desc: "Calculate and offset your household emissions.",
       image:
-        "https://plus.unsplash.com/premium_photo-1733317270278-772ee47c86d7?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://plus.unsplash.com/premium_photo-1733317270278-772ee47c86d7?q=80&w=2071&auto=format&fit=crop",
     },
     {
       icon: <Users />,
@@ -149,8 +151,15 @@ const Home = () => {
     },
   ];
 
+  const trustPoints = [
+    "Smart household insights",
+    "Low-friction onboarding",
+    "Clear weekly progress tracking",
+    "Community-powered sustainability goals",
+  ];
+
   return (
-    <div className="overflow-x-hidden bg-off-white">
+    <div className="overflow-x-hidden bg-off-white text-forest-dark">
       <Navbar />
 
       {/* HERO SECTION - unchanged */}
@@ -250,8 +259,32 @@ const Home = () => {
         </div>
       </section>
 
+      {/* FLOATING STRIP */}
+      <section className="relative -mt-12 z-20">
+        <div className="container mx-auto px-6">
+          <div className="rounded-[2rem] border border-white/60 bg-white/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] p-6 md:p-8 grid grid-cols-1 md:grid-cols-4 gap-5">
+            {[
+              { icon: <Shield />, title: "Trusted Platform", text: "Built for reliable sustainability tracking" },
+              { icon: <BarChart3 />, title: "Actionable Insights", text: "See progress in a simple and visual way" },
+              { icon: <TreePine />, title: "Eco-first Goals", text: "Turn small actions into long-term impact" },
+              { icon: <Users />, title: "Community Driven", text: "Compete, share, and improve together" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-teal-soft-bg text-primary-teal flex items-center justify-center shrink-0">
+                  {React.cloneElement(item.icon, { size: 22 })}
+                </div>
+                <div>
+                  <h4 className="font-extrabold text-forest-dark mb-1">{item.title}</h4>
+                  <p className="text-sm text-text-muted leading-relaxed">{item.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* FEATURES */}
-      <section className="relative py-[130px] bg-gradient-to-b from-white to-[#eef8f5]">
+      <section className="relative py-[130px] bg-gradient-to-b from-[#f8fcfb] to-[#eef8f5]">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-14 left-10 w-56 h-56 rounded-full bg-primary-teal/10 blur-3xl" />
           <div className="absolute bottom-10 right-10 w-72 h-72 rounded-full bg-warm-yellow/10 blur-3xl" />
@@ -259,7 +292,7 @@ const Home = () => {
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="text-center max-w-[780px] mx-auto mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-soft-bg text-forest-dark font-semibold text-sm mb-5">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-border text-forest-dark font-semibold text-sm mb-5 shadow-sm">
               <Sparkles size={16} className="text-primary-teal" />
               Core Features
             </span>
@@ -285,13 +318,13 @@ const Home = () => {
                 transition={{ delay: index * 0.08 }}
                 className="group overflow-hidden rounded-[2rem] bg-white border border-white/60 shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_24px_60px_rgba(0,0,0,0.12)]"
               >
-                <div className="relative h-52 overflow-hidden">
+                <div className="relative h-56 overflow-hidden">
                   <img
                     src={feature.image}
                     alt={feature.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/40 via-forest-dark/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/50 via-forest-dark/10 to-transparent" />
                   <div className="absolute top-5 left-5 w-14 h-14 bg-white/85 backdrop-blur rounded-2xl text-primary-teal flex items-center justify-center shadow-md">
                     {React.cloneElement(feature.icon, { size: 26 })}
                   </div>
@@ -306,12 +339,17 @@ const Home = () => {
                     {feature.desc}
                   </p>
 
-                  <div className="inline-flex items-center gap-2 text-primary-teal font-semibold text-sm">
-                    Discover feature
-                    <ArrowRight
-                      size={16}
-                      className="transition-transform group-hover:translate-x-1"
-                    />
+                  <div className="flex items-center justify-between">
+                    <div className="inline-flex items-center gap-2 text-primary-teal font-semibold text-sm">
+                      Discover feature
+                      <ArrowRight
+                        size={16}
+                        className="transition-transform group-hover:translate-x-1"
+                      />
+                    </div>
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#eef8f5] text-primary-teal">
+                      Smart tool
+                    </span>
                   </div>
                 </div>
               </motion.div>
@@ -322,6 +360,7 @@ const Home = () => {
 
       {/* HOW IT WORKS + IMAGE */}
       <section className="relative py-[125px] bg-[#f6fbf9]">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-teal/30 to-transparent" />
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
             <motion.div
@@ -373,6 +412,17 @@ const Home = () => {
                   </motion.div>
                 ))}
               </div>
+
+              <div className="mt-8 grid grid-cols-2 gap-4">
+                <div className="rounded-2xl bg-white border border-border p-5 shadow-sm">
+                  <div className="text-2xl font-extrabold text-forest-dark">3 min</div>
+                  <p className="text-sm text-text-muted mt-1">average setup time</p>
+                </div>
+                <div className="rounded-2xl bg-white border border-border p-5 shadow-sm">
+                  <div className="text-2xl font-extrabold text-forest-dark">92%</div>
+                  <p className="text-sm text-text-muted mt-1">users stay engaged weekly</p>
+                </div>
+              </div>
             </motion.div>
 
             <motion.div
@@ -394,6 +444,16 @@ const Home = () => {
 
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/55 via-forest-dark/10 to-transparent" />
 
+                <div className="absolute top-6 left-6 rounded-2xl bg-white/80 backdrop-blur-md border border-white/70 p-4 shadow-md max-w-[220px]">
+                  <div className="flex items-center gap-2 text-primary-teal mb-2">
+                    <ShieldCheck size={18} />
+                    <span className="text-sm font-bold">Protected Data</span>
+                  </div>
+                  <p className="text-sm text-text-muted leading-relaxed">
+                    Your home insights stay private and secure.
+                  </p>
+                </div>
+
                 <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
                   <div className="rounded-2xl bg-white/80 backdrop-blur border border-white/70 p-4">
                     <div className="flex items-center gap-2 text-primary-teal mb-2">
@@ -403,7 +463,9 @@ const Home = () => {
                     <div className="text-2xl font-extrabold text-forest-dark">
                       +23%
                     </div>
-                    <div className="text-sm text-text-muted">better than last month</div>
+                    <div className="text-sm text-text-muted">
+                      better than last month
+                    </div>
                   </div>
 
                   <div className="rounded-2xl bg-white/80 backdrop-blur border border-white/70 p-4">
@@ -451,6 +513,17 @@ const Home = () => {
                 Complete challenges, improve your sustainability score, and
                 unlock certificates you can proudly share with your community.
               </p>
+
+              <div className="space-y-3 mb-8">
+                {trustPoints.map((point, i) => (
+                  <div key={i} className="flex items-center gap-3 text-forest-dark">
+                    <div className="w-7 h-7 rounded-full bg-teal-soft-bg text-primary-teal flex items-center justify-center">
+                      <Check size={16} />
+                    </div>
+                    <span className="font-medium">{point}</span>
+                  </div>
+                ))}
+              </div>
 
               <div className="flex flex-wrap gap-4 mb-8">
                 {[
@@ -504,6 +577,7 @@ const Home = () => {
 
       {/* TESTIMONIALS */}
       <section className="relative py-[125px] bg-gradient-to-b from-[#eff8f4] to-[#f9fcfb]">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-teal/30 to-transparent" />
         <div className="container mx-auto px-6">
           <div className="text-center max-w-[760px] mx-auto mb-16">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-border text-forest-dark font-semibold text-sm mb-5 shadow-sm">
