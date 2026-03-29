@@ -21,6 +21,7 @@ import {
   TreePine,
   Shield,
   Check,
+  ChevronDown,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -35,6 +36,7 @@ const Home = () => {
 
   const SLIDE_INTERVAL_MS = 4500;
   const [activeIndex, setActiveIndex] = useState(0);
+  const [openFaq, setOpenFaq] = useState(0);
 
   useEffect(() => {
     if (!HERO_IMAGES?.length) return;
@@ -156,6 +158,52 @@ const Home = () => {
     "Low-friction onboarding",
     "Clear weekly progress tracking",
     "Community-powered sustainability goals",
+  ];
+
+  const whyChoose = [
+    {
+      icon: <Shield />,
+      title: "Reliable Tracking",
+      desc: "Follow your sustainability progress using simple dashboards and measurable indicators.",
+    },
+    {
+      icon: <TreePine />,
+      title: "Meaningful Impact",
+      desc: "Every action contributes toward lower waste, lower energy usage, and greener living.",
+    },
+    {
+      icon: <Users />,
+      title: "Built for Communities",
+      desc: "Encourage friendly competition and shared goals across neighborhoods and households.",
+    },
+    {
+      icon: <BarChart3 />,
+      title: "Clear Insights",
+      desc: "Understand what is improving, what needs attention, and where you can do better.",
+    },
+  ];
+
+  const faqs = [
+    {
+      question: "How does Sustaincity help my household?",
+      answer:
+        "Sustaincity helps you track energy usage, waste habits, and carbon footprint while giving useful insights and community-based motivation.",
+    },
+    {
+      question: "Can I use it even if I am just getting started with sustainability?",
+      answer:
+        "Yes. The platform is designed for beginners as well as experienced eco-conscious households, with simple steps and progress tracking.",
+    },
+    {
+      question: "Does it support community challenges?",
+      answer:
+        "Yes. You can participate in shared challenges, compare progress, and encourage better habits together with others.",
+    },
+    {
+      question: "Is my household data safe?",
+      answer:
+        "Yes. Sustaincity focuses on privacy-first design and keeps household information protected while still providing useful analytics.",
+    },
   ];
 
   return (
@@ -485,6 +533,44 @@ const Home = () => {
         </div>
       </section>
 
+      {/* WHY SUSTAINCITY */}
+      <section className="relative py-[120px] bg-gradient-to-b from-white to-[#f6fbf9]">
+        <div className="container mx-auto px-6">
+          <div className="text-center max-w-[760px] mx-auto mb-16">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-soft-bg text-forest-dark font-semibold text-sm mb-5">
+              <Sparkles size={16} className="text-primary-teal" />
+              Why Sustaincity
+            </span>
+            <h2 className="text-[2.6rem] font-extrabold mb-4 text-forest-dark">
+              More than a tracker — a smarter way to{" "}
+              <span className="text-primary-teal">live sustainably</span>
+            </h2>
+            <p className="text-lg text-text-muted leading-relaxed">
+              Designed to turn everyday habits into visible progress and long-term impact.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {whyChoose.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="rounded-[2rem] bg-white border border-border p-8 shadow-[0_12px_35px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.10)] transition-all"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-teal-soft-bg text-primary-teal flex items-center justify-center mb-5">
+                  {React.cloneElement(item.icon, { size: 24 })}
+                </div>
+                <h3 className="text-xl font-extrabold text-forest-dark mb-3">{item.title}</h3>
+                <p className="text-text-muted leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* TRUST / CERTIFICATES */}
       <section className="relative py-[125px] bg-white">
         <div className="absolute inset-0 pointer-events-none">
@@ -651,6 +737,53 @@ const Home = () => {
                   </span>
                 </div>
               </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-[120px] bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center max-w-[760px] mx-auto mb-16">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-soft-bg text-forest-dark font-semibold text-sm mb-5">
+              <CheckCircle2 size={16} className="text-primary-teal" />
+              Frequently Asked Questions
+            </span>
+            <h2 className="text-[2.6rem] font-extrabold mb-4 text-forest-dark">
+              Everything you may want to know
+            </h2>
+            <p className="text-lg text-text-muted leading-relaxed">
+              Quick answers about how Sustaincity works and how it supports better living.
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto space-y-4">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="rounded-[1.8rem] border border-border bg-[#f9fcfb] shadow-sm overflow-hidden"
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(openFaq === index ? -1 : index)}
+                  className="w-full flex items-center justify-between text-left px-6 py-5"
+                >
+                  <span className="text-lg font-bold text-forest-dark">{faq.question}</span>
+                  <ChevronDown
+                    className={`transition-transform ${
+                      openFaq === index ? "rotate-180" : ""
+                    }`}
+                    size={20}
+                  />
+                </button>
+
+                {openFaq === index && (
+                  <div className="px-6 pb-6 text-text-muted leading-relaxed">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
