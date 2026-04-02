@@ -328,22 +328,24 @@ const OrderManagement = () => {
                   </td>
 
                   <td className="p-3">
-                    {order.status === "Pending" && (
-                      <div className="flex gap-1.5">
+                    <div className="flex gap-1.5 flex-wrap">
+                      {order.status === "Pending" && (
                         <button
                           onClick={() => setModalData({ id: order._id, action: "confirm" })}
                           className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 transition-all"
                         >
                           <CheckCircle size={12} /> Confirm
                         </button>
+                      )}
+                      {(order.status === "Pending" || order.status === "Confirmed") && (
                         <button
                           onClick={() => setModalData({ id: order._id, action: "cancel" })}
                           className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-red-500 bg-red-50 hover:bg-red-100 transition-all"
                         >
                           <XCircle size={12} /> Cancel
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
