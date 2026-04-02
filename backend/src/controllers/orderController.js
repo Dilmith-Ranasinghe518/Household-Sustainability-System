@@ -79,9 +79,9 @@ exports.confirmOrder = async (req, res) => {
       });
     }
 
-    if (order.product.seller.toString() !== req.user.id) {
+    if (order.product.seller.toString() !== req.user.id && req.user.role !== "admin") {
         return res.status(403).json({
-            message: "Only the seller can confirm this order."
+            message: "Only the seller or an admin can confirm this order."
         });
     }
 
@@ -131,16 +131,17 @@ exports.cancelOrder = async (req, res) => {
 
     const isBuyer = order.buyer.toString() === req.user.id;
     const isSeller = order.product.seller.toString() === req.user.id;
+    const isAdmin = req.user.role === "admin";
 
-    if (!isBuyer && !isSeller) {
+    if (!isBuyer && !isSeller && !isAdmin) {
       return res.status(403).json({
         message: "You are not authorized to cancel this order."
       });
     }
 
-    if (order.status !== "Pending") {
+    if (order.status !== "Pending" && order.status !== "Confirmed") {
         return res.status(400).json({
-            message: "Only pending orders can be cancelled."
+            message: "Only pending or confirmed orders can be cancelled."
         });
     }
 
