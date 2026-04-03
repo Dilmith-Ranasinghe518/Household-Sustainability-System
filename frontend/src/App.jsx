@@ -42,6 +42,13 @@ import AdminMarketplace from './pages/AdminMarketplace';
 import UserMarketplace from './pages/UserMarketplace';
 import Chatbot from './components/Chatbot';
 
+// import UserActions from './pages/UserActions';
+
+// ✅ Articles pages
+import UserArticles from './pages/UserArticles';
+import AdminArticles from './pages/AdminArticles';
+import ArticleDetails from './pages/ArticleDetails';
+
 function App() {
   return (
     <AuthProvider>
@@ -80,6 +87,13 @@ function App() {
                   <Route path="/issues/:id" element={<IssueDetails />} />
                   <Route path="/profile" element={<Profile />} />
 
+                  {/* ✅ Actions / Community */}
+                  {/* <Route path="/actions" element={<UserActions />} /> */}
+
+                  {/* ✅ Articles */}
+                  <Route path="/articles" element={<UserArticles />} />
+                  <Route path="/articles/:id" element={<ArticleDetails />} />
+
                   <Route path="/marketplace" element={<Marketplace />} />
                   <Route path="/marketplace/:id" element={<ProductDetails />} />
                   <Route path="/my-marketplace" element={<UserMarketplace />} />
@@ -99,6 +113,12 @@ function App() {
                   {/* ✅ NEW: Admin Issues */}
                   <Route path="/admin/issues" element={<AdminIssues />} />
                   <Route path="/admin/scoring" element={<AdminScoring />} />
+
+                  {/* Admin Actions (Flagged) maybe? We can do it later, but UserActions works for admin too. */}
+                  {/* <Route path="/admin/actions" element={<UserActions />} /> */}
+
+                  {/* Admin Articles */}
+                  <Route path="/admin/articles" element={<AdminArticles />} />
 
                   <Route path="/admin/marketplace" element={<AdminMarketplace />} />
                 </Route>
