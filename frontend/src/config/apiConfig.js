@@ -55,7 +55,8 @@ export const API_ENDPOINTS = {
         BASE: "/products",
         MY: "/products/my",
         BY_ID: "/products/",
-        ADMIN: "/products/admin"
+        ADMIN: "/products/admin",
+        NEARBY: "/products/nearby"
     },
     
     ISSUES: {

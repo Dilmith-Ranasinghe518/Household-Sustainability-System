@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Leaf, Phone, ArrowLeft } from "lucide-react";
+import { Leaf, Phone, ArrowLeft, LocateFixed } from "lucide-react";
 import api from "../services/api";
 import { API_ENDPOINTS } from "../config/apiConfig";
 import placeholderImage from "../assets/no-image.jpg";
@@ -149,6 +149,14 @@ const ProductDetails = () => {
               <span className="font-medium text-gray-700">
                 {product.condition}
               </span>
+            </div>
+          )}
+
+          {/* Location */}
+          {product.locationName && (
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <LocateFixed size={15} className="text-teal-500 shrink-0" />
+              <span className="font-medium text-gray-700">{product.locationName}</span>
             </div>
           )}
 

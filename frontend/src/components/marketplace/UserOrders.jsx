@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import {
   RefreshCw,
   ShoppingCart,
-  Package
+  Package,
+  Phone
 } from "lucide-react";
 import { toast } from "react-toastify";
 import ReactPaginate from "react-paginate";
@@ -35,6 +36,13 @@ const getRemainingDays = (expiresAt) => {
   const diff = new Date(expiresAt) - new Date();
   const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
   return days > 0 ? `${days}d left` : "Expired";
+};
+
+const formatWhatsAppNumber = (number) => {
+  if (!number) return null;
+  let cleaned = number.replace(/\s+/g, "");
+  if (cleaned.startsWith("0")) return "94" + cleaned.substring(1);
+  return cleaned;
 };
 
 const UserOrders = () => {
@@ -131,16 +139,33 @@ const UserOrders = () => {
                     const person =
                     role === "buyer" ? order.seller : order.buyer;
 
+                    const waNumber = role === "buyer" ? formatWhatsAppNumber(person?.mobileNumber) : null;
+                    const waMessage = waNumber
+                      ? encodeURIComponent(`Hi, I placed a request for "${order.product?.title}" on EcoPulse. Can we arrange the pickup?`)
+                      : null;
+                    const waUrl = waNumber ? `https://wa.me/${waNumber}?text=${waMessage}` : null;
+
                     return (
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-0.5">
                         <span className="font-medium text-gray-800">
                         {person?.username}
                         </span>
 
                         {person?.mobileNumber ? (
-                        <span className="text-xs text-gray-400">
-                            {person.mobileNumber}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-gray-400">{person.mobileNumber}</span>
+                          {waUrl && (
+                            <a
+                              href={waUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#25D366] text-white text-xs font-semibold hover:bg-green-500 transition-all"
+                              title="Chat on WhatsApp"
+                            >
+                              <Phone size={11} /> WhatsApp
+                            </a>
+                          )}
+                        </div>
                         ) : person?.email ? (
                         <span className="text-xs text-gray-400">
                             {person.email}

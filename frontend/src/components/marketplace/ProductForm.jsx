@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { X, ImageIcon, Tag, DollarSign, Layers, Sparkles, FileText, Activity, CheckCircle2 } from "lucide-react";
+import { X, ImageIcon, Tag, DollarSign, Layers, Sparkles, FileText, Activity, CheckCircle2, LocateFixed, Loader2 } from "lucide-react";
 import { CATEGORY_LABELS } from "../../utils/categoryLabels";
 import placeholderImage from "../../assets/no-image.jpg";
 
@@ -22,28 +22,58 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
   const [formData, setFormData] = useState({
     title: "", description: "", price: "",
     category: "", condition: "", imageUrl: "", status: "Available",
+    lat: "", lng: "", locationName: "",
   });
   const [preview, setPreview] = useState("");
   const [imgError, setImgError] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [locationStatus, setLocationStatus] = useState("idle"); // idle | loading | resolved | denied
 
   useEffect(() => {
     if (product) {
       setFormData({
-        title:       product.title       || "",
-        description: product.description || "",
-        price:       product.price       || "",
-        category:    product.category    || "",
-        condition:   product.condition   || "",
-        imageUrl:    product.imageUrl    || "",
-        status:      product.status      || "Available",
+        title:        product.title        || "",
+        description:  product.description  || "",
+        price:        product.price        || "",
+        category:     product.category     || "",
+        condition:    product.condition    || "",
+        imageUrl:     product.imageUrl     || "",
+        status:       product.status       || "Available",
+        lat:          "",
+        lng:          "",
+        locationName: product.locationName  || "",
       });
       setPreview(product.imageUrl || "");
       setImageFile(null);
+      setLocationStatus(product.locationName ? "resolved" : "idle");
     } else {
-      setFormData({ title: "", description: "", price: "", category: "", condition: "", imageUrl: "", status: "Available" });
+      setFormData({ title: "", description: "", price: "", category: "", condition: "", imageUrl: "", status: "Available", lat: "", lng: "", locationName: "" });
       setPreview("");
       setImageFile(null);
+      setLocationStatus("loading");
+      // Auto-capture geolocation for new products
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            const { latitude, longitude } = pos.coords;
+            try {
+              const res = await fetch(
+                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+              );
+              const data = await res.json();
+              const city = data.city || data.locality || data.principalSubdivision || "Unknown";
+              setFormData(prev => ({ ...prev, lat: latitude, lng: longitude, locationName: city }));
+              setLocationStatus("resolved");
+            } catch {
+              setFormData(prev => ({ ...prev, lat: latitude, lng: longitude, locationName: "" }));
+              setLocationStatus("resolved");
+            }
+          },
+          () => setLocationStatus("denied")
+        );
+      } else {
+        setLocationStatus("denied");
+      }
     }
     setImgError(false);
   }, [product]);
@@ -67,7 +97,7 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
     e.preventDefault();
     const data = new FormData();
     Object.keys(formData).forEach(key => {
-      data.append(key, formData[key]);
+      if (formData[key] !== "") data.append(key, formData[key]);
     });
     if (imageFile) {
       data.append("image", imageFile);
@@ -158,6 +188,29 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
                     </select>
                   </Field>
                 )}
+
+                {/* Location chip */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-teal-700 uppercase tracking-wider">
+                    <LocateFixed size={12} className="text-teal-500" /> Location
+                  </label>
+                  {locationStatus === "loading" && (
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-teal-50 border border-teal-100 text-xs text-teal-600">
+                      <Loader2 size={13} className="animate-spin" /> Detecting location…
+                    </div>
+                  )}
+                  {locationStatus === "resolved" && (
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-teal-50 border border-teal-100 text-xs font-medium text-teal-700">
+                      <LocateFixed size={13} />
+                      {formData.locationName || "Location captured"}
+                    </div>
+                  )}
+                  {locationStatus === "denied" && (
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-400">
+                      <LocateFixed size={13} /> Location not available
+                    </div>
+                  )}
+                </div>
 
               </div>
 

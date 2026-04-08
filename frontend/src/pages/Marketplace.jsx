@@ -5,6 +5,22 @@ import ProductCard from "../components/marketplace/ProductCard";
 import { toast } from "react-toastify";
 import ConfirmModal from "../components/ConfirmModal";
 import ReactPaginate from "react-paginate";
+import { LocateFixed, X } from "lucide-react";
+
+// Haversine distance in km
+const haversineKm = (lat1, lng1, lat2, lng2) => {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+};
+
+const NEARBY_RADIUS_KM = 25;
 
 const ITEMS_PER_PAGE = 9;
 
@@ -21,6 +37,8 @@ const Marketplace = () => {
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
+    const [nearbyActive, setNearbyActive] = useState(false);
+    const [buyerCoords, setBuyerCoords] = useState(null); // { lat, lng }
 
 
     const fetchProducts = async () => {
@@ -58,10 +76,18 @@ const Marketplace = () => {
             filtered = filtered.filter((p) => p.category === category);
         }
 
+        if (nearbyActive && buyerCoords) {
+            filtered = filtered.filter((p) => {
+                if (!p.location?.coordinates?.length) return false;
+                const [pLng, pLat] = p.location.coordinates;
+                return haversineKm(buyerCoords.lat, buyerCoords.lng, pLat, pLng) <= NEARBY_RADIUS_KM;
+            });
+        }
+
         setFilteredProducts(filtered);
         setCurrentPage(0);
 
-    }, [search, category, products]);
+    }, [search, category, products, nearbyActive, buyerCoords]);
 
     const pageCount = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
     const offset = currentPage * ITEMS_PER_PAGE;
@@ -70,6 +96,28 @@ const Marketplace = () => {
     const handleRequestClick = (productId) => {
         setSelectedProductId(productId);
         setIsConfirmOpen(true);
+    };
+
+    const handleNearbyToggle = () => {
+        if (nearbyActive) {
+            setNearbyActive(false);
+            return;
+        }
+        if (buyerCoords) {
+            setNearbyActive(true);
+            return;
+        }
+        if (!navigator.geolocation) {
+            toast.error("Geolocation is not supported by your browser.");
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                setBuyerCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+                setNearbyActive(true);
+            },
+            () => toast.warning("Location access denied. Enable it to use the Nearby filter.")
+        );
     };
 
   const placeOrder = async () => {
@@ -127,7 +175,30 @@ const Marketplace = () => {
                 </option>
             ))}
         </select>
+
+        <button
+          onClick={handleNearbyToggle}
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-semibold transition-all ${
+            nearbyActive
+              ? "bg-teal-500 text-white border-teal-500 shadow-md"
+              : "border-border text-gray-600 hover:border-teal-400 hover:text-teal-600"
+          }`}
+        >
+          <LocateFixed size={16} />
+          Nearby
+        </button>
       </div>
+
+      {/* Nearby active pill */}
+      {nearbyActive && (
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-teal-50 border border-teal-200 text-sm text-teal-700 font-medium w-fit">
+          <LocateFixed size={14} className="text-teal-500" />
+          Showing results within {NEARBY_RADIUS_KM} km of you
+          <button onClick={() => setNearbyActive(false)} className="ml-1 text-teal-400 hover:text-teal-700 transition-colors">
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
       {/* Product Grid */}
       {filteredProducts.length === 0 ? (
