@@ -20,8 +20,16 @@ const productSchema = new mongoose.Schema({
         default: "Available"
     },
 
-    co2Saved: Number
-    
+    co2Saved: Number,
+
+    location: {
+        type: { type: String, enum: ["Point"], default: "Point" },
+        coordinates: { type: [Number] }  // [lng, lat]
+    },
+    locationName: { type: String }  // e.g. "Matara"
+
 }, { timestamps: true });
+
+productSchema.index({ location: "2dsphere" });
 
 module.exports = mongoose.model("Product", productSchema);

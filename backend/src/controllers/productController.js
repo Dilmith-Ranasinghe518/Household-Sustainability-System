@@ -5,7 +5,7 @@ const Roles = require("../utils/roles");
 // Create Product
 exports.createProduct = async (req, res) => {
   try {
-    const { title, description, price, category, condition } = req.body;
+    const { title, description, price, category, condition, lat, lng, locationName } = req.body;
     let imageUrl = req.body.imageUrl;
     if (req.file) {
       imageUrl = req.file.path;
@@ -28,7 +28,9 @@ exports.createProduct = async (req, res) => {
       condition,
       seller: req.user.id,
       co2Saved,
-      status: "Available"
+      status: "Available",
+      ...(lat && lng ? { location: { type: "Point", coordinates: [parseFloat(lng), parseFloat(lat)] } } : {}),
+      ...(locationName ? { locationName } : {})
     });
 
     await product.save();
