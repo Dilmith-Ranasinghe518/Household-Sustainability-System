@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_BASE =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+  import.meta.env.VITE_API_BASE_URL || "https://household-sustainability-system.onrender.com/api";
 
 const ACTION_API = `${API_BASE}/actions`;
 
