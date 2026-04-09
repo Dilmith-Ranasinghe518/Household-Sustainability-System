@@ -210,18 +210,16 @@ const ActionCard = ({
             </span>
             </button>
 
-        <button
-          onClick={handleReport}
-          title="Report"
-          className="flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 transition active:scale-90 bg-slate-100 hover:bg-slate-200"
-        >
-          <AlertTriangle
-            size={20}
-            strokeWidth={2}
-            className="text-slate-500"
-          />
-        </button>
-
+          {!isOwner && (
+            <button
+              onClick={handleReport}
+              title="Report"
+              className="flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 transition active:scale-90 bg-slate-100 hover:bg-slate-200"
+            >
+              <AlertTriangle size={20} strokeWidth={2} className="text-slate-500" />
+            </button>
+          )}
+          
           {isOwner ? (
             <>
               <button
