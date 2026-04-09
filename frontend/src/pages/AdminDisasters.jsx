@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Plus, RefreshCw, Search } from "lucide-react";
+import { Plus, RefreshCw, Search, Download } from "lucide-react";
 import api from "../services/api";
 import { API_ENDPOINTS } from "../config/apiConfig";
 import DisasterTable from "../components/disasters/DisasterTable";
@@ -7,7 +7,10 @@ import DisasterFormModal from "../components/disasters/DisasterFormModal";
 
 const AdminDisasters = () => {
   const [disasters, setDisasters] = useState([]);
+  const [liveFema, setLiveFema] = useState([]);
+
   const [loading, setLoading] = useState(true);
+  const [loadingFema, setLoadingFema] = useState(true);
 
   const [openModal, setOpenModal] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -21,6 +24,9 @@ const AdminDisasters = () => {
   const statuses = ["active","monitoring","resolved"];
   const severities = ["low","medium","high","critical"];
 
+  // ========================
+  // FETCH MANUAL DISASTERS
+  // ========================
   const fetchDisasters = async () => {
     setLoading(true);
     try {
@@ -33,18 +39,40 @@ const AdminDisasters = () => {
       const res = await api.get(API_ENDPOINTS.DISASTERS, { params });
       setDisasters(res.data || []);
     } catch (e) {
-      console.error("Fetch disasters failed:", e);
+      console.error(e);
       alert("Failed to load disasters");
     } finally {
       setLoading(false);
     }
   };
 
+  // ========================
+  // FETCH FEMA DATA
+  // ========================
+  const fetchFema = async () => {
+    setLoadingFema(true);
+    try {
+      const res = await api.get(API_ENDPOINTS.DISASTER_EXTERNAL.LIVE_FEMA);
+      setLiveFema(res.data || []);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to load FEMA alerts");
+    } finally {
+      setLoadingFema(false);
+    }
+  };
+
+  // ========================
+  // INITIAL LOAD
+  // ========================
   useEffect(() => {
     fetchDisasters();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchFema();
   }, []);
 
+  // ========================
+  // CRUD FUNCTIONS
+  // ========================
   const onCreate = () => {
     setEditing(null);
     setOpenModal(true);
@@ -61,8 +89,7 @@ const AdminDisasters = () => {
       await api.delete(`${API_ENDPOINTS.DISASTERS}/${id}`);
       setDisasters((prev) => prev.filter((d) => d._id !== id));
     } catch (e) {
-      console.error("Delete failed:", e);
-      alert("Failed to delete");
+      alert("Delete failed");
     }
   };
 
@@ -70,16 +97,33 @@ const AdminDisasters = () => {
     try {
       if (editing?._id) {
         const res = await api.put(`${API_ENDPOINTS.DISASTERS}/${editing._id}`, payload);
-        setDisasters((prev) => prev.map((d) => (d._id === editing._id ? res.data : d)));
+        setDisasters((prev) =>
+          prev.map((d) => (d._id === editing._id ? res.data : d))
+        );
       } else {
         const res = await api.post(API_ENDPOINTS.DISASTERS, payload);
         setDisasters((prev) => [res.data, ...prev]);
       }
       setOpenModal(false);
       setEditing(null);
+    } catch {
+      alert("Save failed");
+    }
+  };
+
+  // ========================
+  // IMPORT FEMA
+  // ========================
+  const importFema = async (item) => {
+    try {
+      const res = await api.post(API_ENDPOINTS.DISASTER_EXTERNAL.IMPORT_FEMA, {
+        externalId: item.externalId,
+      });
+
+      setDisasters((prev) => [res.data, ...prev]);
+      alert("Imported successfully");
     } catch (e) {
-      console.error("Save failed:", e);
-      alert("Failed to save");
+      alert("Import failed");
     }
   };
 
@@ -87,74 +131,98 @@ const AdminDisasters = () => {
 
   return (
     <div className="flex flex-col gap-6">
+
+      {/* HEADER */}
       <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold mb-1">Disaster Management</h1>
-          <p className="text-text-muted">Create, update and track disaster alerts (admin only).</p>
+          <p className="text-text-muted">
+            Manage disasters + live FEMA alerts
+          </p>
         </div>
 
         <div className="flex gap-2">
           <button
-            onClick={fetchDisasters}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-border rounded-xl font-medium text-sm shadow-sm hover:bg-off-white"
+            onClick={() => { fetchDisasters(); fetchFema(); }}
+            className="flex items-center gap-2 px-4 py-2 bg-white border rounded-xl"
           >
             <RefreshCw size={16} /> Refresh
           </button>
 
           <button
             onClick={onCreate}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-teal text-white rounded-xl font-semibold text-sm shadow-sm hover:opacity-95"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-teal text-white rounded-xl"
           >
             <Plus size={16} /> New Disaster
           </button>
         </div>
       </header>
 
-      {/* Filters */}
-      <div className="bg-white rounded-2xl p-4 shadow-sm glass flex flex-col lg:flex-row gap-3 lg:items-center">
-        <div className="flex items-center gap-2 px-3 py-2 border border-border rounded-xl bg-off-white flex-1">
-          <Search size={18} className="text-text-muted" />
+     {/* ================= FEMA SECTION ================= */}
+<div className="bg-white p-5 rounded-2xl shadow">
+  <h2 className="text-xl font-bold mb-4">Live FEMA Alerts</h2>
+
+  {loadingFema ? (
+    <p>Loading FEMA alerts...</p>
+  ) : (
+    <div className="max-h-[320px] overflow-y-auto pr-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {liveFema.map((item) => (
+          <div key={item.externalId} className="border p-4 rounded-xl">
+            <h3 className="font-bold">{item.title}</h3>
+            <p className="text-sm">{item.type}</p>
+            <p className="text-sm">{item.locationName}</p>
+
+            <button
+              onClick={() => importFema(item)}
+              className="mt-3 flex items-center gap-2 px-3 py-1 bg-green-600 text-white rounded"
+            >
+              <Download size={14} /> Import
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
+      {/* ================= FILTERS ================= */}
+      <div className="bg-white p-4 rounded-2xl flex flex-col lg:flex-row gap-3">
+        <div className="flex items-center gap-2 flex-1">
+          <Search size={18} />
           <input
-            className="w-full bg-transparent outline-none text-sm"
-            placeholder="Search by title..."
+            className="w-full outline-none"
+            placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button
-            onClick={fetchDisasters}
-            className="text-sm font-semibold text-primary-teal"
-          >
-            Apply
-          </button>
+          <button onClick={fetchDisasters}>Apply</button>
         </div>
 
-        <select className="px-3 py-2 border border-border rounded-xl text-sm" value={type} onChange={(e)=>setType(e.target.value)}>
+        <select value={type} onChange={(e)=>setType(e.target.value)}>
           <option value="">All Types</option>
-          {types.map(t => <option key={t} value={t}>{t}</option>)}
+          {types.map(t => <option key={t}>{t}</option>)}
         </select>
 
-        <select className="px-3 py-2 border border-border rounded-xl text-sm" value={severity} onChange={(e)=>setSeverity(e.target.value)}>
-          <option value="">All Severities</option>
-          {severities.map(s => <option key={s} value={s}>{s}</option>)}
+        <select value={severity} onChange={(e)=>setSeverity(e.target.value)}>
+          <option value="">All Severity</option>
+          {severities.map(s => <option key={s}>{s}</option>)}
         </select>
 
-        <select className="px-3 py-2 border border-border rounded-xl text-sm" value={status} onChange={(e)=>setStatus(e.target.value)}>
+        <select value={status} onChange={(e)=>setStatus(e.target.value)}>
           <option value="">All Status</option>
-          {statuses.map(s => <option key={s} value={s}>{s}</option>)}
+          {statuses.map(s => <option key={s}>{s}</option>)}
         </select>
 
-        <button
-          onClick={fetchDisasters}
-          className="px-4 py-2 bg-off-white border border-border rounded-xl font-medium text-sm hover:bg-gray-100"
-        >
+        <button onClick={fetchDisasters}>
           Apply Filters ({filteredCount})
         </button>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-2xl p-4 shadow-sm glass">
+      {/* ================= TABLE ================= */}
+      <div className="bg-white p-4 rounded-2xl">
         {loading ? (
-          <div className="text-center py-10 text-text-muted">Loading disasters...</div>
+          <p>Loading disasters...</p>
         ) : (
           <DisasterTable
             rows={disasters}
@@ -164,6 +232,7 @@ const AdminDisasters = () => {
         )}
       </div>
 
+      {/* ================= MODAL ================= */}
       <DisasterFormModal
         open={openModal}
         onClose={() => { setOpenModal(false); setEditing(null); }}

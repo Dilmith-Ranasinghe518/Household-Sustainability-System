@@ -7,19 +7,20 @@ const { admin } = require("../middleware/authMiddleware");
 const {
   createDisaster,
   getDisasters,
-  getDisasterById,
   updateDisaster,
   deleteDisaster,
+  getLiveFemaDisasters,
+  importFemaDisaster,
 } = require("../controllers/disasterController");
 
+// 🔥 FEMA
+router.get("/live-fema", getLiveFemaDisasters);
+router.post("/import-fema", authMiddleware, admin, importFemaDisaster);
 
+// CRUD
 router.get("/", authMiddleware, getDisasters);
-router.get("/:id", authMiddleware, getDisasterById);
-
-// keep admin only for create/update/delete
 router.post("/", authMiddleware, admin, createDisaster);
 router.put("/:id", authMiddleware, admin, updateDisaster);
 router.delete("/:id", authMiddleware, admin, deleteDisaster);
-
 
 module.exports = router;
