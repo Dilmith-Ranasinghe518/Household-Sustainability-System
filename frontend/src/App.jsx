@@ -42,7 +42,8 @@ import AdminMarketplace from './pages/AdminMarketplace';
 import UserMarketplace from './pages/UserMarketplace';
 import Chatbot from './components/Chatbot';
 
-// import UserActions from './pages/UserActions';
+import UserActions from './pages/UserActions';
+import AdminActions from './pages/AdminActions';
 
 // ✅ Articles pages
 import UserArticles from './pages/UserArticles';
@@ -88,7 +89,7 @@ function App() {
                   <Route path="/profile" element={<Profile />} />
 
                   {/* ✅ Actions / Community */}
-                  {/* <Route path="/actions" element={<UserActions />} /> */}
+                  <Route path="/actions" element={<UserActions />} />
 
                   {/* ✅ Articles */}
                   <Route path="/articles" element={<UserArticles />} />
@@ -114,8 +115,8 @@ function App() {
                   <Route path="/admin/issues" element={<AdminIssues />} />
                   <Route path="/admin/scoring" element={<AdminScoring />} />
 
-                  {/* Admin Actions (Flagged) maybe? We can do it later, but UserActions works for admin too. */}
-                  {/* <Route path="/admin/actions" element={<UserActions />} /> */}
+                  {/* Admin Actions (Flagged) */}
+                  <Route path="/admin/actions" element={<AdminActions />} />
 
                   {/* Admin Articles */}
                   <Route path="/admin/articles" element={<AdminArticles />} />

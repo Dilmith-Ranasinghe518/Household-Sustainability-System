@@ -34,29 +34,57 @@ const calculateScores = (action) => {
 
 // CREATE
 
+// exports.createAction = async (req, res) => {
+//   try {
+//     console.log("FILES:", req.files);
+// console.log("BODY:", req.body);
+//     const action = new Action({
+//       title: req.body.title,
+//       description: req.body.description,
+//       category: req.body.category,
+//       images: req.files && req.files.length > 0 
+//       ? req.files.map(f => f.path)
+//       : [],
+//       createdBy: req.user.id,
+//     });
+
+//     await action.save();
+//     res.status(201).json(action);
+//   // } catch (err) {
+//   //   res.status(500).json({ msg: err.message });
+//   // }
+//   }catch (err) {
+//   console.error("ERROR:", err); // 🔥 IMPORTANT
+//   res.status(500).json({ msg: err.message });
+// }
+// };
+
 exports.createAction = async (req, res) => {
   try {
-    console.log("FILES:", req.files);
-console.log("BODY:", req.body);
     const action = new Action({
       title: req.body.title,
       description: req.body.description,
       category: req.body.category,
-      images: req.files && req.files.length > 0 
-      ? req.files.map(f => f.path)
-      : [],
+      images: req.files && req.files.length > 0
+        ? req.files.map((f) => f.path)
+        : [],
       createdBy: req.user.id,
     });
 
     await action.save();
-    res.status(201).json(action);
-  // } catch (err) {
-  //   res.status(500).json({ msg: err.message });
-  // }
-  }catch (err) {
-  console.error("ERROR:", err); // 🔥 IMPORTANT
-  res.status(500).json({ msg: err.message });
-}
+
+    const created = await Action.findById(action._id)
+      .populate("createdBy", "username")
+      .populate("comments.user", "username");
+
+    res.status(201).json({
+      ...created._doc,
+      ...calculateScores(created),
+    });
+  } catch (err) {
+    console.error("ERROR:", err);
+    res.status(500).json({ msg: err.message });
+  }
 };
 
 // GET ALL
@@ -64,6 +92,7 @@ exports.getActions = async (req, res) => {
   try {
     const actions = await Action.find()
       .populate("createdBy", "username")
+      .populate("comments.user", "username")
       .sort({ createdAt: -1 });
 
     const formatted = actions.map((action) => ({
@@ -89,17 +118,35 @@ exports.updateAction = async (req, res) => {
       return res.status(403).json({ msg: "Only owner can edit" });
 
     const updateData = { ...req.body };
+
+    // 🔥 KEEP EXISTING IMAGES (from frontend)
+    if (req.body.existingImages) {
+      updateData.images = JSON.parse(req.body.existingImages);
+    } else {
+      updateData.images = [];
+    }
+
+    // 🔥 ADD NEW IMAGES (Cloudinary)
     if (req.files && req.files.length > 0) {
-      updateData.images = req.files.map(f => f.path);
+      updateData.images = [
+        ...updateData.images,
+        ...req.files.map(f => f.path),
+      ];
     }
 
     const updated = await Action.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true }
-    );
+    )
+      .populate("createdBy", "username")
+      .populate("comments.user", "username");
 
-    res.json(updated);
+    res.json({
+      ...updated._doc,
+      ...calculateScores(updated),
+    });
+
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -143,7 +190,17 @@ exports.likeAction = async (req, res) => {
     action.likes.unshift({ user: req.user.id });
     await action.save();
 
-    res.json({ msg: "Liked" });
+
+// 🔥 GET UPDATED ACTION WITH USERNAMES
+const updated = await Action.findById(req.params.id)
+  .populate("createdBy", "username")
+  .populate("comments.user", "username");
+
+// 🔥 RETURN WITH CALCULATED SCORE
+res.json({
+  ...updated._doc,
+  ...calculateScores(updated),
+});
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -159,7 +216,14 @@ exports.unlikeAction = async (req, res) => {
     );
 
     await action.save();
-    res.json({ msg: "Unliked" });
+    const updated = await Action.findById(req.params.id)
+  .populate("createdBy", "username")
+  .populate("comments.user", "username");
+
+res.json({
+  ...updated._doc,
+  ...calculateScores(updated),
+});
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -176,7 +240,14 @@ exports.commentAction = async (req, res) => {
     });
 
     await action.save();
-    res.json({ msg: "Comment added" });
+   const updated = await Action.findById(req.params.id)
+  .populate("createdBy", "username")
+  .populate("comments.user", "username");
+
+res.json({
+  ...updated._doc,
+  ...calculateScores(updated),
+});
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -206,7 +277,14 @@ exports.deleteComment = async (req, res) => {
     );
 
     await action.save();
-    res.json({ msg: "Comment deleted" });
+   const updated = await Action.findById(req.params.id)
+  .populate("createdBy", "username")
+  .populate("comments.user", "username");
+
+res.json({
+  ...updated._doc,
+  ...calculateScores(updated),
+});
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
@@ -245,7 +323,9 @@ exports.reportAction = async (req, res) => {
 exports.getFlaggedActions = async (req, res) => {
   try {
     const actions = await Action.find({ isFlagged: true })
-      .populate("createdBy", "username");
+      .populate("createdBy", "username")
+      .populate("comments.user", "username")
+      .populate("reports.user", "username");// 🔥 IMPORTANT
 
     const formatted = actions.map((action) => ({
       ...action._doc,
