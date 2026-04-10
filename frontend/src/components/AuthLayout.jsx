@@ -12,7 +12,7 @@ const AuthLayout = ({ children, title, subtitle, linkText, linkPath, linkActionT
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-forest-dark/90 to-primary-teal/70 flex flex-col justify-between p-12 text-white">
                     <Link to="/" className="flex items-center gap-3 text-white text-2xl font-bold">
                         <Leaf size={32} />
-                        <span>Sustaincity</span>
+                        <span>EcoPulse</span>
                     </Link>
                     <div className="max-w-[500px]">
                         <h2 className="text-3xl font-semibold leading-tight mb-4 text-white">"The greatest threat to our planet is the belief that someone else will save it."</h2>

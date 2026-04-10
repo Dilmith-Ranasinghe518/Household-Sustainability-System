@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import { addComment, removeComment } from "../../services/actionService";
 
 const getCommentUserId = (comment) => comment?.user?._id || comment?.user || "";
@@ -9,6 +11,8 @@ const ActionComments = ({
   token,
   onUpdateSingle,
 }) => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
@@ -21,6 +25,10 @@ const ActionComments = ({
   }, [action.comments, showAll]);
 
   const handleComment = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     const value = text.trim();
     if (!value) return;
 

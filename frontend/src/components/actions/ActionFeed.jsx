@@ -13,7 +13,7 @@ const getCreatedById = (action) =>
   action?.createdBy?._id || action?.createdBy || "";
 
 const ActionFeed = () => {
-  const { token, user } = useAuth();
+  const { token, user, isAuthenticated } = useAuth();
 
   const [actions, setActions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -142,16 +142,18 @@ const ActionFeed = () => {
                 Community Feed
               </button>
 
-              <button
-                onClick={() => setActiveTab("mine")}
-                className={`w-full rounded-2xl px-4 py-3 text-left text-sm font-medium transition ${
-                  activeTab === "mine"
-                    ? "bg-emerald-600 text-white shadow"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                My Actions
-              </button>
+              {isAuthenticated && (
+                <button
+                  onClick={() => setActiveTab("mine")}
+                  className={`w-full rounded-2xl px-4 py-3 text-left text-sm font-medium transition ${
+                    activeTab === "mine"
+                      ? "bg-emerald-600 text-white shadow"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  }`}
+                >
+                  My Actions
+                </button>
+              )}
             </div>
           </div>
 
@@ -180,20 +182,22 @@ const ActionFeed = () => {
             >
               Community
             </button>
-            <button
-              onClick={() => setActiveTab("mine")}
-              className={`flex-1 rounded-xl px-4 py-2 text-sm font-medium ${
-                activeTab === "mine"
-                  ? "bg-emerald-600 text-white"
-                  : "bg-slate-100 text-slate-700"
-              }`}
-            >
-              My Actions
-            </button>
+            {isAuthenticated && (
+              <button
+                onClick={() => setActiveTab("mine")}
+                className={`flex-1 rounded-xl px-4 py-2 text-sm font-medium ${
+                  activeTab === "mine"
+                    ? "bg-emerald-600 text-white"
+                    : "bg-slate-100 text-slate-700"
+                }`}
+              >
+                My Actions
+              </button>
+            )}
           </div>
         </div>
 
-        <ActionComposer onSubmit={handleCreate} submitting={submitting} />
+        {isAuthenticated && <ActionComposer onSubmit={handleCreate} submitting={submitting} />}
 
         {error ? (
           <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">

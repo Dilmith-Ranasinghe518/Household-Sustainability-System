@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import { API_ENDPOINTS } from "../config/apiConfig";
 import ProductCard from "../components/marketplace/ProductCard";
@@ -25,6 +27,8 @@ const NEARBY_RADIUS_KM = 25;
 const ITEMS_PER_PAGE = 9;
 
 const Marketplace = () => {
+    const { isAuthenticated } = useAuth();
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [search, setSearch] = useState("");
@@ -94,6 +98,10 @@ const Marketplace = () => {
     const currentItems = filteredProducts.slice(offset, offset + ITEMS_PER_PAGE);
 
     const handleRequestClick = (productId) => {
+        if (!isAuthenticated) {
+            navigate("/login");
+            return;
+        }
         setSelectedProductId(productId);
         setIsConfirmOpen(true);
     };

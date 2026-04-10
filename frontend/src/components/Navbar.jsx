@@ -37,8 +37,9 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
-        // Only show Dashboard link if logged in, or maybe always?
-        // For now adhering to previous list but maybe conditional is better
+        { name: 'Marketplace', path: '/marketplace' },
+        { name: 'Community', path: '/actions' },
+        { name: 'Articles', path: '/articles' },
         { name: 'Dashboard', path: '/dashboard' },
     ];
 
@@ -50,7 +51,7 @@ const Navbar = () => {
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-3 bg-white/80 backdrop-blur-md border-b border-white/30 shadow-sm' : 'py-5 bg-transparent'}`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link to="/" className="flex items-center gap-3 group border-none">
-                    <img src={logoImg} alt="Sustaincity Logo" className="h-10 w-auto object-cover rounded-xl shadow-md transition-transform group-hover:scale-105" />
+                    <img src={logoImg} alt="EcoPulse Logo" className="h-10 w-auto object-cover rounded-xl shadow-md transition-transform group-hover:scale-105" />
                     <span className="text-2xl font-bold text-forest-dark tracking-tight">EcoPulse</span>
                 </Link>
 

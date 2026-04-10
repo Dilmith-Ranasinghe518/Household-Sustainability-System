@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { Leaf, Phone, ArrowLeft, LocateFixed } from "lucide-react";
 import api from "../services/api";
 import { API_ENDPOINTS } from "../config/apiConfig";
@@ -11,6 +12,7 @@ import ConfirmModal from "../components/ConfirmModal";
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -173,7 +175,17 @@ const ProductDetails = () => {
             </a>
           )}
 
-          <RequestButton fullWidth loading={loading} onClick={() => setIsConfirmOpen(true)}>
+          <RequestButton 
+            fullWidth 
+            loading={loading} 
+            onClick={() => {
+              if (!isAuthenticated) {
+                navigate("/login");
+                return;
+              }
+              setIsConfirmOpen(true);
+            }}
+          >
             Request This Item
           </RequestButton>
 

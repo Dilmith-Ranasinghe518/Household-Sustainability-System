@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import { likeAction, reportAction, unlikeAction } from "../../services/actionService";
 import ActionComments from "./ActionComments";
 import ActionEditModal from "./ActionEditModal";
@@ -36,6 +38,8 @@ const ActionCard = ({
   onDelete,
   onSaveEdit,
 }) => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [editOpen, setEditOpen] = useState(false);
   const [liking, setLiking] = useState(false);
   const [reporting, setReporting] = useState(false);
@@ -55,6 +59,10 @@ const ActionCard = ({
   }, [action.likes, currentUserId]);
 
   const handleLikeToggle = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     try {
       setLiking(true);
       const updated = isLiked
@@ -70,6 +78,10 @@ const ActionCard = ({
   };
 
   const handleReport = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     const reason = window.prompt("Enter report reason:");
     if (!reason || !reason.trim()) return;
 
@@ -201,7 +213,13 @@ const ActionCard = ({
             </button>
 
             <button
-            onClick={() => setShowComments(!showComments)}
+            onClick={() => {
+              if (!isAuthenticated) {
+                navigate("/login");
+                return;
+              }
+              setShowComments(!showComments);
+            }}
             className="flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 transition active:scale-90 bg-slate-100 hover:bg-slate-200"
             >
             <MessageCircle size={20} className="text-gray-600" />

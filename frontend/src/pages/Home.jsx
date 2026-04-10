@@ -24,6 +24,9 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { getAllActions } from "../services/actionService";
+import api from "../services/api";
+import { API_ENDPOINTS } from "../config/apiConfig";
 
 const Home = () => {
   const HERO_IMAGES = useMemo(
@@ -37,6 +40,28 @@ const Home = () => {
   const SLIDE_INTERVAL_MS = 4500;
   const [activeIndex, setActiveIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
+  const [latestActions, setLatestActions] = useState([]);
+  const [featuredArticles, setFeaturedArticles] = useState([]);
+  const [loadingContent, setLoadingContent] = useState(true);
+
+  useEffect(() => {
+    const fetchHighlights = async () => {
+      try {
+        setLoadingContent(true);
+        const [actionsData, articlesData] = await Promise.all([
+          getAllActions(),
+          api.get(API_ENDPOINTS.ARTICLES)
+        ]);
+        setLatestActions((Array.isArray(actionsData) ? actionsData : []).slice(0, 3));
+        setFeaturedArticles((articlesData.data.articles || []).slice(0, 3));
+      } catch (error) {
+        console.error("Error fetching home highlights:", error);
+      } finally {
+        setLoadingContent(false);
+      }
+    };
+    fetchHighlights();
+  }, []);
 
   useEffect(() => {
     if (!HERO_IMAGES?.length) return;
@@ -89,7 +114,7 @@ const Home = () => {
       name: "Nethmi Perera",
       role: "Homeowner • Colombo",
       quote:
-        "Sustaincity made it easy to understand my electricity usage. We reduced our bill and feel proud about our CO₂ savings.",
+        "EcoPulse made it easy to understand my electricity usage. We reduced our bill and feel proud about our CO₂ savings.",
       score: "Saved 18.2 kg CO₂",
       avatar:
         "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
@@ -185,9 +210,9 @@ const Home = () => {
 
   const faqs = [
     {
-      question: "How does Sustaincity help my household?",
+      question: "How does EcoPulse help my household?",
       answer:
-        "Sustaincity helps you track energy usage, waste habits, and carbon footprint while giving useful insights and community-based motivation.",
+        "EcoPulse helps you track energy usage, waste habits, and carbon footprint while giving useful insights and community-based motivation.",
     },
     {
       question: "Can I use it even if I am just getting started with sustainability?",
@@ -202,7 +227,7 @@ const Home = () => {
     {
       question: "Is my household data safe?",
       answer:
-        "Yes. Sustaincity focuses on privacy-first design and keeps household information protected while still providing useful analytics.",
+        "Yes. EcoPulse focuses on privacy-first design and keeps household information protected while still providing useful analytics.",
     },
   ];
 
@@ -237,11 +262,10 @@ const Home = () => {
                 key={i}
                 onClick={() => setActiveIndex(i)}
                 aria-label={`Go to slide ${i + 1}`}
-                className={`h-2.5 rounded-full transition-all ${
-                  i === activeIndex
-                    ? "w-8 bg-white"
-                    : "w-2.5 bg-white/50 hover:bg-white/70"
-                }`}
+                className={`h-2.5 rounded-full transition-all ${i === activeIndex
+                  ? "w-8 bg-white"
+                  : "w-2.5 bg-white/50 hover:bg-white/70"
+                  }`}
               />
             ))}
           </div>
@@ -256,7 +280,7 @@ const Home = () => {
             >
               <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/15 border border-white/20 text-white font-semibold text-sm uppercase tracking-wide mb-6 backdrop-blur">
                 <Plane size={16} className="text-warm-yellow" />
-                Welcome to Sustaincity
+                Welcome to EcoPulse
               </span>
 
               <h1 className="text-[3.6rem] leading-[1.05] mb-5 text-white font-extrabold">
@@ -539,7 +563,7 @@ const Home = () => {
           <div className="text-center max-w-[760px] mx-auto mb-16">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-soft-bg text-forest-dark font-semibold text-sm mb-5">
               <Sparkles size={16} className="text-primary-teal" />
-              Why Sustaincity
+              Why EcoPulse
             </span>
             <h2 className="text-[2.6rem] font-extrabold mb-4 text-forest-dark">
               More than a tracker — a smarter way to{" "}
@@ -677,7 +701,7 @@ const Home = () => {
             </h2>
 
             <p className="text-lg text-text-muted">
-              Real feedback from people using Sustaincity to reduce waste and
+              Real feedback from people using EcoPulse to reduce waste and
               emissions.
             </p>
           </div>
@@ -742,6 +766,121 @@ const Home = () => {
         </div>
       </section>
 
+      {/* COMMUNITY HIGHLIGHTS */}
+      <section className="py-[100px] bg-white">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-700 font-semibold text-sm mb-4">
+                <Users size={16} /> Community Highlights
+              </span>
+              <h2 className="text-[2.6rem] font-extrabold text-forest-dark leading-tight">
+                See what the <span className="text-emerald-600">Eco-Community</span> is up to
+              </h2>
+            </div>
+            <Link to="/actions" className="group flex items-center gap-2 text-emerald-600 font-bold hover:text-emerald-700 transition-colors">
+              View All Actions <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {loadingContent ? (
+              [1, 2, 3].map(i => (
+                <div key={i} className="h-64 rounded-3xl bg-slate-100 animate-pulse"></div>
+              ))
+            ) : latestActions.length > 0 ? (
+              latestActions.map((action, idx) => (
+                <motion.div
+                  key={action._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-[#f9fcfb] rounded-3xl p-6 border border-border/50 hover:shadow-xl transition-all h-full flex flex-col"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                      {(action.createdBy?.username || "U")[0].toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm text-forest-dark">{action.createdBy?.username || "User"}</p>
+                      <p className="text-xs text-text-muted">{action.category}</p>
+                    </div>
+                  </div>
+                  <h3 className="font-bold text-lg mb-2 line-clamp-1">{action.title}</h3>
+                  <p className="text-sm text-text-muted line-clamp-3 mb-4 flex-1">{action.description}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-border/30">
+                    <span className="text-emerald-600 font-bold text-sm">Score: {action.totalScore || 0}</span>
+                    <div className="flex items-center gap-3 text-text-muted text-xs">
+                      <span>❤️ {action.likes?.length || 0}</span>
+                      <span>💬 {action.comments?.length || 0}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full py-12 text-center text-text-muted">No recent actions found.</div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURED ARTICLES */}
+      <section className="py-[100px] bg-gradient-to-b from-white to-[#f0f9f6]">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-teal/10 text-primary-teal font-semibold text-sm mb-4">
+                <Leaf size={16} /> Eco Insights
+              </span>
+              <h2 className="text-[2.6rem] font-extrabold text-forest-dark leading-tight">
+                Latest from our <span className="text-primary-teal">Articles Collection</span>
+              </h2>
+            </div>
+            <Link to="/articles" className="group flex items-center gap-2 text-primary-teal font-bold hover:text-teal-700 transition-colors">
+              Explore All Articles <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {loadingContent ? (
+              [1, 2, 3].map(i => (
+                <div key={i} className="h-64 rounded-3xl bg-slate-100 animate-pulse"></div>
+              ))
+            ) : featuredArticles.length > 0 ? (
+              featuredArticles.map((article, idx) => (
+                <motion.div
+                  key={article._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="group bg-white rounded-3xl overflow-hidden border border-border/50 hover:shadow-2xl transition-all flex flex-col h-full"
+                >
+                  <div className="h-48 overflow-hidden relative">
+                    {article.image && (
+                      <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                    )}
+                    <div className="absolute top-4 left-4 bg-white/90 px-3 py-1 rounded-full text-[10px] font-bold text-primary-teal uppercase">
+                      {article.category}
+                    </div>
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="font-extrabold text-xl mb-3 line-clamp-2 min-h-[56px] group-hover:text-primary-teal transition-colors">{article.title}</h3>
+                    <p className="text-sm text-text-muted line-clamp-3 mb-6 flex-1">{article.content.replace(/<[^>]*>?/gm, '')}</p>
+                    <Link to={`/articles/${article._id}`} className="inline-flex items-center gap-2 text-primary-teal font-bold text-sm group/btn">
+                      Read Article <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full py-12 text-center text-text-muted">No recent articles found.</div>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="py-[120px] bg-white">
         <div className="container mx-auto px-6">
@@ -754,7 +893,7 @@ const Home = () => {
               Everything you may want to know
             </h2>
             <p className="text-lg text-text-muted leading-relaxed">
-              Quick answers about how Sustaincity works and how it supports better living.
+              Quick answers about how EcoPulse works and how it supports better living.
             </p>
           </div>
 
@@ -771,9 +910,8 @@ const Home = () => {
                 >
                   <span className="text-lg font-bold text-forest-dark">{faq.question}</span>
                   <ChevronDown
-                    className={`transition-transform ${
-                      openFaq === index ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform ${openFaq === index ? "rotate-180" : ""
+                      }`}
                     size={20}
                   />
                 </button>

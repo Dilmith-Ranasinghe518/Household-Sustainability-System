@@ -69,6 +69,11 @@ function App() {
                 <Route path="/verify-otp" element={<VerifyOTP />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/marketplace" element={<Marketplace />} />
+                <Route path="/marketplace/:id" element={<ProductDetails />} />
+                <Route path="/actions" element={<UserActions />} />
+                <Route path="/articles" element={<UserArticles />} />
+                <Route path="/articles/:id" element={<ArticleDetails />} />
               </Route>
 
               {/* User Protected Routes */}
@@ -88,15 +93,6 @@ function App() {
                   <Route path="/issues/:id" element={<IssueDetails />} />
                   <Route path="/profile" element={<Profile />} />
 
-                  {/* ✅ Actions / Community */}
-                  <Route path="/actions" element={<UserActions />} />
-
-                  {/* ✅ Articles */}
-                  <Route path="/articles" element={<UserArticles />} />
-                  <Route path="/articles/:id" element={<ArticleDetails />} />
-
-                  <Route path="/marketplace" element={<Marketplace />} />
-                  <Route path="/marketplace/:id" element={<ProductDetails />} />
                   <Route path="/my-marketplace" element={<UserMarketplace />} />
                 </Route>
               </Route>
