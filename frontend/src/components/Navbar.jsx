@@ -4,7 +4,7 @@ import { Leaf, Menu, X, User, LogIn, LogOut, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from './ConfirmModal';
-import logoImg from '../assets/logo.jpeg';
+import logoImg from '../assets/logo.png';
 
 
 const Navbar = () => {
