@@ -3,6 +3,8 @@ import { Plus, Edit2, Trash2 } from 'lucide-react';
 import api from '../services/api';
 import { API_ENDPOINTS } from '../config/apiConfig';
 import AuditForm from '../components/AuditForm';
+import ScoreLoadingOverlay from '../components/ScoreLoadingOverlay';
+import AuditSuccessModal from '../components/AuditSuccessModal';
 import { useAuth } from '../context/AuthContext';
 
 const UserAudits = () => {
@@ -10,6 +12,9 @@ const UserAudits = () => {
     const [audits, setAudits] = useState([]);
     const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
     const [editingAudit, setEditingAudit] = useState(null);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [lastScores, setLastScores] = useState({ score: 0, envScore: 0 });
 
     const fetchAudits = async () => {
         try {
@@ -26,14 +31,33 @@ const UserAudits = () => {
 
     const handleSaveAudit = async (formData) => {
         try {
+            let res;
             if (editingAudit) {
-                await api.put(`${API_ENDPOINTS.AUDIT.BY_ID}/${editingAudit._id}`, formData);
+                res = await api.put(`${API_ENDPOINTS.AUDIT.BY_ID}/${editingAudit._id}`, formData);
             } else {
-                await api.post(API_ENDPOINTS.AUDIT.BASE, formData);
+                res = await api.post(API_ENDPOINTS.AUDIT.BASE, formData);
             }
-            fetchAudits();
-            setIsAuditModalOpen(false);
-            setEditingAudit(null);
+            
+            // Show loading if it's a new audit
+            if (!editingAudit) {
+                setIsGenerating(true);
+                setIsAuditModalOpen(false);
+                
+                // Simulate generation delay
+                setTimeout(() => {
+                    setIsGenerating(false);
+                    setLastScores({
+                        score: res.data.overallSustainabilityPercentage,
+                        envScore: res.data.environmentalScore
+                    });
+                    setShowSuccess(true);
+                    fetchAudits();
+                }, 3000);
+            } else {
+                fetchAudits();
+                setIsAuditModalOpen(false);
+                setEditingAudit(null);
+            }
         } catch (err) {
             console.error('Error saving audit:', err);
             alert('Failed to save audit');
@@ -150,6 +174,15 @@ const UserAudits = () => {
                 onClose={() => setIsAuditModalOpen(false)}
                 onSubmit={handleSaveAudit}
                 initialData={editingAudit}
+            />
+
+            <ScoreLoadingOverlay isOpen={isGenerating} />
+            
+            <AuditSuccessModal 
+                isOpen={showSuccess}
+                onClose={() => setShowSuccess(false)}
+                score={lastScores.score}
+                environmentalScore={lastScores.envScore}
             />
         </div>
     );
