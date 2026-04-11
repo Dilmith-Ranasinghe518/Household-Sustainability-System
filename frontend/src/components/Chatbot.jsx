@@ -78,10 +78,14 @@ const Chatbot = () => {
             transition={{ duration: 0.3, ease: 'easeOut' }}
             className="absolute bottom-16 right-0 w-[350px] sm:w-[400px] h-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-green-100"
           >
-            {/* Header */}
             <div className="shrink-0 bg-gradient-to-r from-green-500 to-emerald-600 p-4 flex justify-between items-center text-white shadow-md z-10">
               <div className="flex items-center space-x-2">
-                <Bot className="w-6 h-6 animate-pulse" />
+                <motion.div
+                  animate={isLoading ? { rotate: 360 } : { y: [0, -2, 0] }}
+                  transition={isLoading ? { repeat: Infinity, duration: 2, ease: "linear" } : { repeat: Infinity, duration: 3 }}
+                >
+                  <Bot className="w-6 h-6" />
+                </motion.div>
                 <div>
                   <h3 className="font-bold text-lg">EcoAssistant</h3>
                   <p className="text-xs text-green-100">AI Sustainability Expert</p>
@@ -207,39 +211,61 @@ const Chatbot = () => {
         )}
       </AnimatePresence>
 
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={toggleChat}
-        className={`${
-          isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
-        } text-white p-4 rounded-full shadow-2xl transition-colors focus:outline-none flex items-center justify-center`}
-        title="AI Sustainability Assistant"
-      >
-        <AnimatePresence mode="wait">
-          {isOpen ? (
+      <div className="relative">
+        <AnimatePresence>
+          {!isOpen && (
             <motion.div
-              key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <X className="w-6 h-6" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="open"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <MessageCircle className="w-6 h-6" />
-            </motion.div>
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
+              exit={{ opacity: 0 }}
+              transition={{ repeat: Infinity, duration: 3 }}
+              className="absolute inset-0 bg-green-400 rounded-full blur-xl z-[-1]"
+            />
           )}
         </AnimatePresence>
-      </motion.button>
+        
+        <motion.button
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
+          animate={!isOpen ? { y: [0, -8, 0] } : {}}
+          transition={!isOpen ? { repeat: Infinity, duration: 4, ease: "easeInOut" } : {}}
+          onClick={toggleChat}
+          className={`${
+            isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
+          } text-white p-4 rounded-full shadow-2xl transition-colors focus:outline-none flex items-center justify-center relative z-10`}
+          title="AI Sustainability Assistant"
+        >
+          <AnimatePresence mode="wait">
+            {isOpen ? (
+              <motion.div
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <X className="w-6 h-6" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="open"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex items-center justify-center"
+              >
+                <motion.div
+                  animate={{ rotate: [0, -10, 10, 0] }}
+                  transition={{ repeat: Infinity, duration: 5, repeatDelay: 2 }}
+                >
+                  <Bot className="w-6 h-6" />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
+      </div>
     </div>
   );
 };
