@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import api from "../services/api";
 import { API_ENDPOINTS } from "../config/apiConfig";
 import MessageThread from "../components/issues/MessageThread";
@@ -13,13 +13,21 @@ const IssueDetails = () => {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
 
+  const isCreateRoute = id === "new" || id === "create";
+
   const fetchOne = async () => {
+    if (!id || isCreateRoute) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await api.get(`${API_ENDPOINTS.ISSUES.BY_ID}/${id}`);
       setTicket(res.data);
     } catch (e) {
       console.error(e);
+      setTicket(null);
       alert("Failed to load ticket");
     } finally {
       setLoading(false);
@@ -32,10 +40,14 @@ const IssueDetails = () => {
   }, [id]);
 
   const sendMessage = async () => {
-    if (!text.trim()) return;
+    if (!text.trim() || !id || isCreateRoute) return;
+
     setSending(true);
     try {
-      const res = await api.post(`${API_ENDPOINTS.ISSUES.MESSAGES}/${id}/messages`, { text });
+      const res = await api.post(
+        `${API_ENDPOINTS.ISSUES.MESSAGES}/${id}/messages`,
+        { text }
+      );
       setTicket(res.data);
       setText("");
     } catch (e) {
@@ -46,8 +58,17 @@ const IssueDetails = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-10 text-text-muted">Loading...</div>;
-  if (!ticket) return <div className="text-center py-10 text-text-muted">Ticket not found.</div>;
+  if (isCreateRoute) {
+    return <Navigate to="/issues/new" replace />;
+  }
+
+  if (loading) {
+    return <div className="text-center py-10 text-text-muted">Loading...</div>;
+  }
+
+  if (!ticket) {
+    return <div className="text-center py-10 text-text-muted">Ticket not found.</div>;
+  }
 
   return (
     <div className="flex flex-col gap-6 max-w-4xl">
@@ -57,6 +78,7 @@ const IssueDetails = () => {
             <h1 className="text-2xl font-bold">{ticket.title}</h1>
             <p className="text-sm text-text-muted mt-1">{ticket.category}</p>
           </div>
+
           <div className="flex flex-col items-end gap-2">
             <StatusBadge status={ticket.status} />
             <PriorityBadge priority={ticket.priority} />
@@ -65,18 +87,30 @@ const IssueDetails = () => {
 
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-text-main">
           <div className="text-text-muted">
-            Created: <span className="text-text-main font-medium">{new Date(ticket.createdAt).toLocaleString()}</span>
+            Created:{" "}
+            <span className="text-text-main font-medium">
+              {new Date(ticket.createdAt).toLocaleString()}
+            </span>
           </div>
+
           <div className="text-text-muted">
-            Updated: <span className="text-text-main font-medium">{new Date(ticket.updatedAt).toLocaleString()}</span>
+            Updated:{" "}
+            <span className="text-text-main font-medium">
+              {new Date(ticket.updatedAt).toLocaleString()}
+            </span>
           </div>
 
           {(ticket.periodFrom || ticket.periodTo) && (
             <div className="md:col-span-2 text-text-muted">
               Period:{" "}
               <span className="text-text-main font-medium">
-                {ticket.periodFrom ? new Date(ticket.periodFrom).toLocaleDateString() : "—"} to{" "}
-                {ticket.periodTo ? new Date(ticket.periodTo).toLocaleDateString() : "—"}
+                {ticket.periodFrom
+                  ? new Date(ticket.periodFrom).toLocaleDateString()
+                  : "—"}{" "}
+                to{" "}
+                {ticket.periodTo
+                  ? new Date(ticket.periodTo).toLocaleDateString()
+                  : "—"}
               </span>
             </div>
           )}
@@ -95,6 +129,7 @@ const IssueDetails = () => {
 
       <div className="bg-white rounded-2xl p-6 shadow-sm glass border border-border">
         <h2 className="text-lg font-semibold mb-4">Conversation</h2>
+
         <MessageThread messages={ticket.messages || []} />
 
         <div className="mt-5 flex flex-col gap-3">
@@ -104,6 +139,7 @@ const IssueDetails = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
+
           <div className="flex justify-end">
             <button
               disabled={sending}

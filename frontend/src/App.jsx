@@ -1,54 +1,54 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import PublicLayout from './layouts/PublicLayout';
-import DashboardLayout from './layouts/DashboardLayout';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import UserDashboard from './pages/UserDashboard';
-import AdminDashboard from './pages/AdminDashboard';
-import UserAudits from './pages/UserAudits';
-import AdminAudits from './pages/AdminAudits';
-import UserWaste from './pages/UserWaste';
-import AdminWaste from './pages/AdminWaste';
-import VerifyOTP from './pages/VerifyOTP';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import './styles/global.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import PublicLayout from "./layouts/PublicLayout";
+import DashboardLayout from "./layouts/DashboardLayout";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import UserDashboard from "./pages/UserDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import UserAudits from "./pages/UserAudits";
+import AdminAudits from "./pages/AdminAudits";
+import UserWaste from "./pages/UserWaste";
+import AdminWaste from "./pages/AdminWaste";
+import VerifyOTP from "./pages/VerifyOTP";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import "./styles/global.css";
 import { ToastContainer } from "react-toastify";
 
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import { ROLES } from './utils/roles';
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { ROLES } from "./utils/roles";
 
-// ✅ Disaster pages
-import UserDisasters from './pages/UserDisasters';
-import AdminDisasters from './pages/AdminDisasters';
+// Disaster pages
+import UserDisasters from "./pages/UserDisasters";
+import AdminDisasters from "./pages/AdminDisasters";
 
-// ✅ NEW: Issue pages (create these files)
-import UserIssues from './pages/UserIssues';
-import CreateIssue from './pages/CreateIssue';
-import IssueDetails from './pages/IssueDetails';
-import AdminIssues from './pages/AdminIssues';
-import AdminScoring from './pages/AdminScoring';
-import CollectorDashboard from './pages/CollectorDashboard';
-import WasteCalendar from './pages/WasteCalendar';
-import Profile from './pages/Profile';
+// Issue pages
+import UserIssues from "./pages/UserIssues";
+import CreateIssue from "./pages/CreateIssue";
+import IssueDetails from "./pages/IssueDetails";
+import AdminIssues from "./pages/AdminIssues";
+import AdminScoring from "./pages/AdminScoring";
+import CollectorDashboard from "./pages/CollectorDashboard";
+import WasteCalendar from "./pages/WasteCalendar";
+import Profile from "./pages/Profile";
 
-import Marketplace from './pages/Marketplace';
-import ProductDetails from './pages/ProductDetails';
-import AdminMarketplace from './pages/AdminMarketplace';
-import UserMarketplace from './pages/UserMarketplace';
-import Chatbot from './components/Chatbot';
+import Marketplace from "./pages/Marketplace";
+import ProductDetails from "./pages/ProductDetails";
+import AdminMarketplace from "./pages/AdminMarketplace";
+import UserMarketplace from "./pages/UserMarketplace";
+import Chatbot from "./components/Chatbot";
 
-import UserActions from './pages/UserActions';
-import AdminActions from './pages/AdminActions';
+import UserActions from "./pages/UserActions";
+import AdminActions from "./pages/AdminActions";
 
-// ✅ Articles pages
-import UserArticles from './pages/UserArticles';
-import AdminArticles from './pages/AdminArticles';
-import ArticleDetails from './pages/ArticleDetails';
+// Articles pages
+import UserArticles from "./pages/UserArticles";
+import AdminArticles from "./pages/AdminArticles";
+import ArticleDetails from "./pages/ArticleDetails";
 
 function App() {
   return (
@@ -56,9 +56,16 @@ function App() {
       <Router>
         <div className="flex flex-col min-h-screen">
           <Navbar />
-          <ToastContainer 
-            position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnHover theme="colored"
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            pauseOnHover
+            theme="colored"
           />
+
           <div className="flex-grow pt-[88px]">
             <Routes>
               {/* Public Routes */}
@@ -82,17 +89,18 @@ function App() {
                   <Route path="/dashboard" element={<UserDashboard />} />
                   <Route path="/audits" element={<UserAudits />} />
                   <Route path="/waste" element={<UserWaste />} />
-
-                  {/* users can only view */}
                   <Route path="/disasters" element={<UserDisasters />} />
 
-                  {/* ✅ NEW: Support Center routes */}
+                  {/* Support Center routes */}
                   <Route path="/issues" element={<UserIssues />} />
                   <Route path="/calendar" element={<WasteCalendar />} />
+
+                  {/* keep both so either link works */}
+                  <Route path="/issues/new" element={<CreateIssue />} />
                   <Route path="/issues/create" element={<CreateIssue />} />
+
                   <Route path="/issues/:id" element={<IssueDetails />} />
                   <Route path="/profile" element={<Profile />} />
-
                   <Route path="/my-marketplace" element={<UserMarketplace />} />
                 </Route>
               </Route>
@@ -103,20 +111,11 @@ function App() {
                   <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/admin/audits" element={<AdminAudits />} />
                   <Route path="/admin/waste" element={<AdminWaste />} />
-
-                  {/* admins can do anything */}
                   <Route path="/admin/disasters" element={<AdminDisasters />} />
-
-                  {/* ✅ NEW: Admin Issues */}
                   <Route path="/admin/issues" element={<AdminIssues />} />
                   <Route path="/admin/scoring" element={<AdminScoring />} />
-
-                  {/* Admin Actions (Flagged) */}
                   <Route path="/admin/actions" element={<AdminActions />} />
-
-                  {/* Admin Articles */}
                   <Route path="/admin/articles" element={<AdminArticles />} />
-
                   <Route path="/admin/marketplace" element={<AdminMarketplace />} />
                 </Route>
               </Route>
@@ -131,6 +130,7 @@ function App() {
               </Route>
             </Routes>
           </div>
+
           <Chatbot />
         </div>
       </Router>

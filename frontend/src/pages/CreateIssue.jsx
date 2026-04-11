@@ -15,10 +15,18 @@ const CreateIssue = () => {
   const [text, setText] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const categories = ["High Bill", "Spike", "Appliance Usage", "Billing Confusion", "Savings Advice", "Other"];
+  const categories = [
+    "High Bill",
+    "Spike",
+    "Appliance Usage",
+    "Billing Confusion",
+    "Savings Advice",
+    "Other",
+  ];
 
   const submit = async (e) => {
     e.preventDefault();
+
     if (!title || !text) {
       alert("Title and message are required");
       return;
@@ -49,11 +57,18 @@ const CreateIssue = () => {
   return (
     <div className="max-w-3xl">
       <h1 className="text-3xl font-bold mb-2">Create Issue</h1>
-      <p className="text-text-muted mb-6">Describe your power usage problem and get admin advice.</p>
+      <p className="text-text-muted mb-6">
+        Describe your power usage problem and get admin advice.
+      </p>
 
-      <form onSubmit={submit} className="bg-white rounded-2xl p-6 shadow-sm glass border border-border grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form
+        onSubmit={submit}
+        className="bg-white rounded-2xl p-6 shadow-sm glass border border-border grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Title *
+          </label>
           <input
             className="w-full px-3 py-2 border border-border rounded-xl outline-none"
             value={title}
@@ -64,14 +79,26 @@ const CreateIssue = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-          <select className="w-full px-3 py-2 border border-border rounded-xl" value={category} onChange={(e)=>setCategory(e.target.value)}>
-            {categories.map(c => <option key={c} value={c}>{c}</option>)}
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Category
+          </label>
+          <select
+            className="w-full px-3 py-2 border border-border rounded-xl"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {categories.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Monthly Bill (LKR) (optional)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Monthly Bill (LKR) (optional)
+          </label>
           <input
             className="w-full px-3 py-2 border border-border rounded-xl outline-none"
             value={monthlyBillLKR}
@@ -81,7 +108,9 @@ const CreateIssue = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Monthly kWh (optional)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Monthly kWh (optional)
+          </label>
           <input
             className="w-full px-3 py-2 border border-border rounded-xl outline-none"
             value={monthlyKwh}
@@ -91,17 +120,33 @@ const CreateIssue = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">From (optional)</label>
-          <input className="w-full px-3 py-2 border border-border rounded-xl" type="date" value={periodFrom} onChange={(e)=>setPeriodFrom(e.target.value)} />
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            From (optional)
+          </label>
+          <input
+            className="w-full px-3 py-2 border border-border rounded-xl"
+            type="date"
+            value={periodFrom}
+            onChange={(e) => setPeriodFrom(e.target.value)}
+          />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">To (optional)</label>
-          <input className="w-full px-3 py-2 border border-border rounded-xl" type="date" value={periodTo} onChange={(e)=>setPeriodTo(e.target.value)} />
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            To (optional)
+          </label>
+          <input
+            className="w-full px-3 py-2 border border-border rounded-xl"
+            type="date"
+            value={periodTo}
+            onChange={(e) => setPeriodTo(e.target.value)}
+          />
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Message *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Message *
+          </label>
           <textarea
             className="w-full px-3 py-2 border border-border rounded-xl outline-none min-h-[140px]"
             value={text}
@@ -112,10 +157,19 @@ const CreateIssue = () => {
         </div>
 
         <div className="md:col-span-2 flex justify-end gap-3">
-          <button type="button" onClick={() => navigate("/issues")} className="px-4 py-2 rounded-xl border border-border hover:bg-gray-50">
+          <button
+            type="button"
+            onClick={() => navigate("/issues")}
+            className="px-4 py-2 rounded-xl border border-border hover:bg-gray-50"
+          >
             Cancel
           </button>
-          <button disabled={saving} type="submit" className="px-5 py-2 rounded-xl bg-primary-teal text-white font-semibold hover:opacity-95">
+
+          <button
+            disabled={saving}
+            type="submit"
+            className="px-5 py-2 rounded-xl bg-primary-teal text-white font-semibold hover:opacity-95"
+          >
             {saving ? "Creating..." : "Create"}
           </button>
         </div>
