@@ -42,6 +42,14 @@ import AdminMarketplace from './pages/AdminMarketplace';
 import UserMarketplace from './pages/UserMarketplace';
 import Chatbot from './components/Chatbot';
 
+import UserActions from './pages/UserActions';
+import AdminActions from './pages/AdminActions';
+
+// ✅ Articles pages
+import UserArticles from './pages/UserArticles';
+import AdminArticles from './pages/AdminArticles';
+import ArticleDetails from './pages/ArticleDetails';
+
 function App() {
   return (
     <AuthProvider>
@@ -61,6 +69,11 @@ function App() {
                 <Route path="/verify-otp" element={<VerifyOTP />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/marketplace" element={<Marketplace />} />
+                <Route path="/marketplace/:id" element={<ProductDetails />} />
+                <Route path="/actions" element={<UserActions />} />
+                <Route path="/articles" element={<UserArticles />} />
+                <Route path="/articles/:id" element={<ArticleDetails />} />
               </Route>
 
               {/* User Protected Routes */}
@@ -80,8 +93,6 @@ function App() {
                   <Route path="/issues/:id" element={<IssueDetails />} />
                   <Route path="/profile" element={<Profile />} />
 
-                  <Route path="/marketplace" element={<Marketplace />} />
-                  <Route path="/marketplace/:id" element={<ProductDetails />} />
                   <Route path="/my-marketplace" element={<UserMarketplace />} />
                 </Route>
               </Route>
@@ -99,6 +110,12 @@ function App() {
                   {/* ✅ NEW: Admin Issues */}
                   <Route path="/admin/issues" element={<AdminIssues />} />
                   <Route path="/admin/scoring" element={<AdminScoring />} />
+
+                  {/* Admin Actions (Flagged) */}
+                  <Route path="/admin/actions" element={<AdminActions />} />
+
+                  {/* Admin Articles */}
+                  <Route path="/admin/articles" element={<AdminArticles />} />
 
                   <Route path="/admin/marketplace" element={<AdminMarketplace />} />
                 </Route>

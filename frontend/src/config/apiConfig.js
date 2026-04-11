@@ -13,12 +13,17 @@ export const API_ENDPOINTS = {
 
     ADMIN: {
         DASHBOARD: "/admin/dashboard",
-        USERS: "/admin/users", // GET, DELETE, PUT
+        USERS: "/admin/users",
         SCORING_CONFIG: "/admin/scoring-config",
     },
 
-
+    // ✅ DISASTER ENDPOINTS (UPDATED)
     DISASTERS: "/disasters",
+
+    DISASTER_EXTERNAL: {
+        LIVE_FEMA: "/disasters/live-fema",
+        IMPORT_FEMA: "/disasters/import-fema"
+    },
 
     AUDIT: {
         BASE: "/audit",
@@ -32,7 +37,7 @@ export const API_ENDPOINTS = {
         BY_ID: "/waste",
         BINS: "/waste/bins",
         MY_BIN: "/waste/my-bin",
-        BIN_STATUS: "/waste/bins", // Will append /:id/status in code
+        BIN_STATUS: "/waste/bins",
         CALENDAR: "/waste/calendar",
     },
 

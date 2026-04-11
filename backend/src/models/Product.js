@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
     co2Saved: Number,
 
     location: {
-        type: { type: String, enum: ["Point"], default: "Point" },
+        type: { type: String, enum: ["Point"] },
         coordinates: { type: [Number] }  // [lng, lat]
     },
     locationName: { type: String }  // e.g. "Matara"

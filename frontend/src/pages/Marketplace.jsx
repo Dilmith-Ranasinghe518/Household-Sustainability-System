@@ -17,8 +17,8 @@ const haversineKm = (lat1, lng1, lat2, lng2) => {
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLng / 2) ** 2;
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
@@ -211,10 +211,11 @@ const Marketplace = () => {
             {/* Nearby toggle */}
             <button
               onClick={handleNearbyToggle}
-              className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${nearbyActive
+              className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${
+                nearbyActive
                   ? "bg-teal-500 text-white shadow-md shadow-teal-100"
                   : "border border-gray-200 bg-gray-50 text-gray-600 hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50"
-                }`}
+              }`}
             >
               <LocateFixed size={15} />
               Nearby

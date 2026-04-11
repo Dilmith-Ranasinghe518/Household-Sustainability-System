@@ -28,6 +28,7 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
   const [imgError, setImgError] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [locationStatus, setLocationStatus] = useState("idle"); // idle | loading | resolved | denied
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -93,8 +94,10 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
     }
   };
 
-  const handleSubmit = (e) => { 
+  const handleSubmit = async (e) => { 
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const data = new FormData();
     Object.keys(formData).forEach(key => {
       if (formData[key] !== "") data.append(key, formData[key]);
@@ -102,7 +105,11 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
     if (imageFile) {
       data.append("image", imageFile);
     }
-    onSubmit(data); 
+    try {
+      await onSubmit(data); 
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -286,9 +293,11 @@ export const ProductForm = ({ isOpen, onClose, onSubmit, product = null }) => {
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white bg-teal-500 hover:bg-teal-600 transition-all shadow-sm"
+                disabled={isSubmitting}
+                className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white bg-teal-500 hover:bg-teal-600 transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {isEdit ? "Update Product" : "Create Product"}
+                {isSubmitting && <Loader2 size={16} className="animate-spin" />}
+                {isSubmitting ? "Saving..." : (isEdit ? "Update Product" : "Create Product")}
               </button>
             </div>
 

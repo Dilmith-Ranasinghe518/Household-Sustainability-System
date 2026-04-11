@@ -13,7 +13,7 @@ const Footer = () => {
                             <div className="w-10 h-10 bg-gradient-to-br from-primary-teal to-forest-dark rounded-xl flex items-center justify-center text-white shadow-md">
                                 <Leaf size={24} />
                             </div>
-                            <span className="text-2xl font-bold text-forest-dark tracking-tight">Sustaincity</span>
+                            <span className="text-2xl font-bold text-forest-dark tracking-tight">EcoPulse</span>
                         </Link>
                         <p className="text-text-muted leading-relaxed mb-6">
                             Empowering households to reduce their carbon footprint and live sustainably through data-driven insights and actionable tips.
@@ -74,7 +74,7 @@ const Footer = () => {
                 </div>
 
                 <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-text-muted">
-                    <p>&copy; {new Date().getFullYear()} Sustaincity. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} EcoPulse. All rights reserved.</p>
                     <div className="flex gap-6">
                         <Link to="/privacy" className="hover:text-primary-teal">Privacy</Link>
                         <Link to="/terms" className="hover:text-primary-teal">Terms</Link>

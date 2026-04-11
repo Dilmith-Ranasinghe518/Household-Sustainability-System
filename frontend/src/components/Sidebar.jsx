@@ -18,7 +18,9 @@ import {
   AlertCircle,
   Calendar as CalendarIcon,
   Store, 
-  ShoppingBag
+  ShoppingBag,
+  Users,
+  BookOpen
 } from 'lucide-react';
 import { ROLES } from '../utils/roles';
 import ConfirmModal from './ConfirmModal';
@@ -54,6 +56,9 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     // ✅ NEW: User support center
     { name: 'Support Center', path: '/issues', icon: <AlertCircle size={20} /> },
 
+    { name: 'Community Actions', path: '/actions', icon: <Users size={20} /> },
+    { name: 'Articles', path: '/articles', icon: <BookOpen size={20} /> },
+
     { name: 'Energy', path: '#', icon: <Zap size={20} /> },
     { name: 'Water', path: '#', icon: <Droplets size={20} /> },
     { name: 'Profile', path: '/profile', icon: <User size={20} /> },
@@ -68,6 +73,9 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     { name: 'Collection Calendar', path: '/calendar', icon: <CalendarIcon size={20} /> },
     { name: 'Manage Issues', path: '/admin/issues', icon: <AlertCircle size={20} /> },
 
+    { name: 'Manage Articles', path: '/admin/articles', icon: <BookOpen size={20} /> },
+    { name: 'Manage Actions', path: '/admin/actions', icon: <Users size={20} /> },
+    
     { name: 'Marketplace Mgmt', path: '/admin/marketplace', icon: <Store size={20} /> },
 
     { name: 'Analytics', path: '#', icon: <BarChart3 size={20} /> },
