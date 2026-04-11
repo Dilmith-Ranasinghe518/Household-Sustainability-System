@@ -312,7 +312,7 @@ const OrderManagement = () => {
                   <td className="p-3"><StatusBadge status={order.status} /></td>
 
                   <td className="p-3">
-                    {order.expiresAt ? (
+                    {order.status === "Pending" && order.expiresAt ? (
                       <div>
                         <div className="flex items-center gap-1 text-xs font-medium text-gray-700">
                           <Clock size={11} className="text-amber-400" />
