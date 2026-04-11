@@ -7,6 +7,7 @@ import ActionEditModal from "./ActionEditModal";
 import ActionImageGrid from "./ActionImageGrid";
 import ImagePreviewModal from "./ImagePreviewModal";
 import { Heart, MessageCircle, AlertTriangle  } from "lucide-react";
+import { toast } from "react-toastify";
 
 const getUserId = (value) => value?._id || value?.id || value || "";
 
@@ -47,6 +48,10 @@ const ActionCard = ({
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+const [reportOpen, setReportOpen] = useState(false);
+const [reportReason, setReportReason] = useState("");
+const [deleteOpen, setDeleteOpen] = useState(false);
+
   const currentUserId = getUserId(currentUser);
   const createdById = getUserId(action.createdBy);
 
@@ -77,30 +82,65 @@ const ActionCard = ({
     }
   };
 
-  const handleReport = async () => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-    const reason = window.prompt("Enter report reason:");
-    if (!reason || !reason.trim()) return;
+  // const handleReport = async () => {
+  //   if (!isAuthenticated) {
+  //     navigate("/login");
+  //     return;
+  //   }
+  //   const reason = window.prompt("Enter report reason:");
+  //   if (!reason || !reason.trim()) return;
+  // const handleReport = async () => {
+  //   const reason = window.prompt("Enter report reason:");
+  //   if (!reason || !reason.trim()) return;
 
-    try {
-      setReporting(true);
-      await reportAction(action._id, reason.trim(), token);
-      alert("Reported successfully");
-    } catch (err) {
-      alert(err?.response?.data?.msg || "Failed to report");
-    } finally {
-      setReporting(false);
-    }
-  };
+  //   try {
+  //     setReporting(true);
+  //     await reportAction(action._id, reason.trim(), token);
+  //     alert("Reported successfully");
+  //   } catch (err) {
+  //     alert(err?.response?.data?.msg || "Failed to report");
+  //   } finally {
+  //     setReporting(false);
+  //   }
+  // };
 
-  const handleDelete = async () => {
-    const ok = window.confirm("Are you sure you want to delete this action?");
-    if (!ok) return;
-    await onDelete(action._id);
-  };
+  const handleReport = () => {
+  setReportOpen(true);
+};
+
+const submitReport = async () => {
+  if (!reportReason.trim()) return;
+
+  try {
+    setReporting(true);
+    await reportAction(action._id, reportReason.trim(), token);
+    setReportOpen(false);
+    setReportReason("");
+    
+    toast.success("Reported successfully");
+  } catch (err) {
+    alert(err?.response?.data?.msg || "Failed to report");
+  } finally {
+    setReporting(false);
+  }
+};
+
+  // const handleDelete = async () => {
+  //   const ok = window.confirm("Are you sure you want to delete this action?");
+  //   if (!ok) return;
+  //   await onDelete(action._id);
+  // };
+
+  const handleDelete = () => {
+  setDeleteOpen(true);
+};
+
+const confirmDelete = async () => {
+  await onDelete(action._id);
+  setDeleteOpen(false);
+
+  toast.success("Action deleted successfully");
+};
 
   return (
     <>
@@ -288,6 +328,65 @@ const ActionCard = ({
           onClose={() => setShowModal(false)}
         />
       )}
+
+      {reportOpen && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+      <h2 className="mb-3 text-lg font-semibold">Report Action</h2>
+
+      <input
+        value={reportReason}
+        onChange={(e) => setReportReason(e.target.value)}
+        placeholder="Enter reason..."
+        className="w-full rounded-xl border px-4 py-2 outline-none"
+      />
+
+      <div className="mt-4 flex justify-end gap-2">
+        <button
+          onClick={() => setReportOpen(false)}
+          className="rounded-xl bg-gray-200 px-4 py-2"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={submitReport}
+          className="rounded-xl bg-red-500 px-4 py-2 text-white"
+        >
+          Report
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{deleteOpen && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+      <h2 className="text-lg font-semibold">Delete Action</h2>
+
+      <p className="mt-2 text-sm text-gray-600">
+        Are you sure you want to delete this action?
+      </p>
+
+      <div className="mt-4 flex justify-end gap-2">
+        <button
+          onClick={() => setDeleteOpen(false)}
+          className="rounded-xl bg-gray-200 px-4 py-2"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={confirmDelete}
+          className="rounded-xl bg-red-500 px-4 py-2 text-white"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 };
