@@ -1,9 +1,7 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
 import {
-    Zap,
     Recycle,
-    Droplets,
     Trophy,
     ChevronUp,
     TrendingDown,
@@ -74,14 +72,12 @@ const UserDashboard = () => {
     };
 
     const barData = {
-        labels: ['Waste', 'Energy', 'Water', 'Transport'],
+        labels: ['Waste', 'Transport'],
         datasets: [{
             label: 'Current Month Usage',
-            data: [12, 19, 3, 5],
+            data: [12, 5],
             backgroundColor: [
                 '#0f2e24',
-                '#0ea5a4',
-                '#facc15',
                 '#14b8a6'
             ],
             borderRadius: 8
@@ -90,9 +86,7 @@ const UserDashboard = () => {
 
     const stats = [
         { label: 'Sustainability Score', value: `${user?.sustainabilityScore || 0}%`, icon: <Trophy color="#10b981" />, trend: 'Overall', color: 'teal' },
-        { label: 'Energy Saved', value: '24%', icon: <Zap color="#facc15" />, trend: '+12%', color: 'yellow' },
-        { label: 'Waste Recycled', value: '85%', icon: <Recycle color="#0ea5a4" />, trend: '+5%', color: 'teal' },
-        { label: 'Water Usage', value: '-15%', icon: <Droplets color="#3b82f6" />, trend: '-3%', color: 'blue' }
+        { label: 'Waste Recycled', value: '85%', icon: <Recycle color="#0ea5a4" />, trend: '+5%', color: 'teal' }
     ];
 
     return (
@@ -186,14 +180,6 @@ const UserDashboard = () => {
                                     <span className="text-[13px] text-text-muted">Completed 7 days of zero waste living</span>
                                 </div>
                                 <span className="text-xs text-text-muted">2d ago</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className="w-2.5 h-2.5 rounded-full bg-warm-yellow"></div>
-                                <div className="flex-1">
-                                    <strong className="block text-[15px]">Energy Saver</strong>
-                                    <span className="text-[13px] text-text-muted">Reduced energy consumption by 15%</span>
-                                </div>
-                                <span className="text-xs text-text-muted">5d ago</span>
                             </div>
                         </div>
                     </div>

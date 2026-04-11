@@ -40,7 +40,6 @@ const Navbar = () => {
         { name: 'Marketplace', path: '/marketplace' },
         { name: 'Community', path: '/actions' },
         { name: 'Articles', path: '/articles' },
-        { name: 'Dashboard', path: '/dashboard' },
     ];
 
     if (user?.role === 'admin') {
