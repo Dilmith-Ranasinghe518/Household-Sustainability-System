@@ -82,28 +82,6 @@ const [deleteOpen, setDeleteOpen] = useState(false);
     }
   };
 
-  // const handleReport = async () => {
-  //   if (!isAuthenticated) {
-  //     navigate("/login");
-  //     return;
-  //   }
-  //   const reason = window.prompt("Enter report reason:");
-  //   if (!reason || !reason.trim()) return;
-  // const handleReport = async () => {
-  //   const reason = window.prompt("Enter report reason:");
-  //   if (!reason || !reason.trim()) return;
-
-  //   try {
-  //     setReporting(true);
-  //     await reportAction(action._id, reason.trim(), token);
-  //     alert("Reported successfully");
-  //   } catch (err) {
-  //     alert(err?.response?.data?.msg || "Failed to report");
-  //   } finally {
-  //     setReporting(false);
-  //   }
-  // };
-
   const handleReport = () => {
   setReportOpen(true);
 };
@@ -119,18 +97,17 @@ const submitReport = async () => {
     
     toast.success("Reported successfully");
   } catch (err) {
-    alert(err?.response?.data?.msg || "Failed to report");
-  } finally {
+  const message = err?.response?.data?.msg;
+
+  if (message === "Already reported") {
+    toast.warning("⚠️ You already reported this action");
+  } else {
+    toast.error(message || "Failed to report");
+  }
+} finally {
     setReporting(false);
   }
 };
-
-  // const handleDelete = async () => {
-  //   const ok = window.confirm("Are you sure you want to delete this action?");
-  //   if (!ok) return;
-  //   await onDelete(action._id);
-  // };
-
   const handleDelete = () => {
   setDeleteOpen(true);
 };
