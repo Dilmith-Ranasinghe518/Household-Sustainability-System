@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, CheckCircle, ArrowRight, Share2 } from 'lucide-react';
+import { Trophy, CheckCircle, ArrowRight, Share2, Copy } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const ConfettiPiece = ({ index }) => {
   const colors = ['#0ea5a4', '#facc15', '#3b82f6', '#ef4444', '#10b981'];
@@ -33,6 +34,29 @@ const ConfettiPiece = ({ index }) => {
 };
 
 const AuditSuccessModal = ({ isOpen, onClose, score, environmentalScore }) => {
+  const handleShare = async () => {
+    const shareData = {
+      title: 'EcoPulse Sustainability Achievement',
+      text: `I just scored ${Math.round(score)}% on my EcoPulse Sustainability Audit! 🌍 Can you beat my score and lead a greener life?`,
+      url: window.location.origin
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        toast.success('Shared successfully!');
+      } else {
+        await navigator.clipboard.writeText(`${shareData.text} Check it out here: ${shareData.url}`);
+        toast.info('Results copied to clipboard!');
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.error('Error sharing:', err);
+        toast.error('Failed to share results');
+      }
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -126,9 +150,10 @@ const AuditSuccessModal = ({ isOpen, onClose, score, environmentalScore }) => {
                     View My History <ArrowRight size={18} />
                   </button>
                   <button
-                    className="w-full py-4 bg-white text-text-main font-bold rounded-2xl border border-border hover:bg-off-white transition-all flex items-center justify-center gap-2"
+                    onClick={handleShare}
+                    className="w-full py-4 bg-white text-text-main font-bold rounded-2xl border border-border hover:bg-off-white transition-all flex items-center justify-center gap-2 group"
                   >
-                    <Share2 size={18} /> Share Results
+                    <Share2 size={18} className="group-hover:rotate-12 transition-transform" /> Share Results
                   </button>
                 </div>
               </div>
