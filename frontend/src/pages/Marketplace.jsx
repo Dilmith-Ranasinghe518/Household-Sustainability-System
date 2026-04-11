@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import ConfirmModal from "../components/ConfirmModal";
 import ReactPaginate from "react-paginate";
 import { LocateFixed, X, Search, SlidersHorizontal } from "lucide-react";
+import marketplaceHeroImg from "../assets/marketplace.png";
 
 // Haversine distance in km
 const haversineKm = (lat1, lng1, lat2, lng2) => {
@@ -157,7 +158,7 @@ const Marketplace = () => {
       {/* Hero Banner — full bleed, no padding */}
       <div className="relative w-full h-[20vh] min-h-[160px] max-h-[260px] overflow-hidden">
         <img
-          src="../assets/marketplace.png"
+          src={marketplaceHeroImg}
           alt="Sustainable Marketplace"
           className="w-full h-full object-cover object-center"
         />
