@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 import api from '../services/api';
 
 const Chatbot = () => {
@@ -117,13 +118,46 @@ const Chatbot = () => {
                       {msg.sender === 'user' ? <User className="w-5 h-5 text-green-700" /> : <Bot className="w-5 h-5 text-emerald-700" />}
                     </div>
                     <div
-                      className={`p-3 rounded-2xl shadow-sm text-sm whitespace-pre-wrap ${
+                      className={`p-4 rounded-2xl shadow-sm text-sm ${
                         msg.sender === 'user'
-                          ? 'bg-green-500 text-white rounded-tr-sm'
-                          : 'bg-white border border-gray-100 text-gray-800 rounded-tl-sm'
+                          ? 'bg-green-500 text-white rounded-tr-sm whitespace-pre-wrap'
+                          : 'bg-white border border-emerald-100 text-gray-800 rounded-tl-sm shadow-emerald-100/20'
                       }`}
                     >
-                      {msg.text}
+                      {msg.sender === 'user' ? (
+                        msg.text
+                      ) : (
+                        <div className="markdown-content">
+                          <ReactMarkdown
+                            components={{
+                              p: ({ node, ...props }) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
+                              strong: ({ node, ...props }) => <strong className="font-bold text-emerald-800" {...props} />,
+                              em: ({ node, ...props }) => <em className="italic text-emerald-700" {...props} />,
+                              h1: ({ node, ...props }) => <h1 className="text-lg font-bold text-emerald-900 mb-2 mt-1" {...props} />,
+                              h2: ({ node, ...props }) => <h2 className="text-md font-bold text-emerald-800 mb-1 mt-1" {...props} />,
+                              h3: ({ node, ...props }) => <h3 className="text-sm font-bold text-emerald-800 mb-1 mt-1" {...props} />,
+                              ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2 space-y-1" {...props} />,
+                              ol: ({ node, ...props }) => <ol className="list-decimal ml-4 mb-2 space-y-1" {...props} />,
+                              li: ({ node, ...props }) => (
+                                <li className="pl-1">
+                                  <span className="text-emerald-600 mr-1 opacity-0">•</span>
+                                  {props.children}
+                                </li>
+                              ),
+                              code: ({ node, inline, ...props }) => (
+                                <code
+                                  className={`${
+                                    inline ? 'bg-emerald-50 px-1 rounded' : 'block bg-gray-800 text-gray-100 p-2 rounded-lg my-2 overflow-x-auto'
+                                  } text-xs font-mono`}
+                                  {...props}
+                                />
+                              ),
+                            }}
+                          >
+                            {msg.text}
+                          </ReactMarkdown>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>
