@@ -153,20 +153,29 @@ const Marketplace = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
 
-        {/* Header */}
-        <div className="mb-8 sm:mb-10">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-1.5 h-8 bg-teal-500 rounded-full" />
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight">
-              Sustainable Marketplace
-            </h1>
-          </div>
-          <p className="text-gray-500 text-sm sm:text-base ml-[calc(0.375rem+12px)] pl-3">
+      {/* Hero Banner — full bleed, no padding */}
+      <div className="relative w-full h-[20vh] min-h-[160px] max-h-[260px] overflow-hidden">
+        <img
+          src="../assets/marketplace.png"
+          alt="Sustainable Marketplace"
+          className="w-full h-full object-cover object-center"
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-teal-900/70 via-teal-800/50 to-transparent" />
+
+        {/* Hero text */}
+        <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 lg:px-16">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight drop-shadow-sm">
+            Sustainable Marketplace
+          </h1>
+          <p className="text-teal-100 text-sm sm:text-base mt-1.5 max-w-md">
             Give items a second life and find great deals in your community.
           </p>
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
 
         {/* Search & Filters */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5 mb-6">
