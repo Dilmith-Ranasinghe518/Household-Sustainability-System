@@ -5,7 +5,6 @@ import {
   LayoutDashboard,
   Settings,
   LogOut,
-  BarChart3,
   User,
   ShieldCheck,
   Zap,
@@ -78,10 +77,7 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
     
     { name: 'Marketplace Mgmt', path: '/admin/marketplace', icon: <Store size={20} /> },
 
-    { name: 'Analytics', path: '#', icon: <BarChart3 size={20} /> },
-    { name: 'Users', path: '#', icon: <User size={20} /> },
     { name: 'Score Mgmt', path: '/admin/scoring', icon: <Settings size={20} /> }, // Changed icon to Settings
-    { name: 'Settings', path: '/settings', icon: <Settings size={20} /> },
   ];
 
   // ✅ NEW: Collector-specific menu items
