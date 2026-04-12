@@ -72,10 +72,10 @@ const CollectorDashboard = () => {
     const filteredRequests = requests.filter(req => filter === 'all' ? true : req.status === filter);
 
     return (
-        <div className="flex flex-col gap-6">
-            <header className="mb-6 md:mb-8">
-                <h1 className="text-2xl md:text-3xl font-bold mb-2">Collector Dashboard</h1>
-                <p className="text-sm md:text-base text-text-muted">Manage waste collection and track bin levels.</p>
+        <div className="flex flex-col gap-6 pb-24 md:pb-6">
+            <header className="px-1">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Collector Dashboard</h1>
+                <p className="text-sm md:text-base text-slate-500 mt-1">Manage waste collection and track bin status.</p>
             </header>
 
             <div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-6">

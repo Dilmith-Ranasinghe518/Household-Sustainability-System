@@ -83,10 +83,10 @@ const UserWaste = () => {
     };
 
     return (
-        <div className="flex flex-col gap-6">
-            <header className="mb-6">
-                <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Smart Waste Management</h1>
-                <p className="text-sm md:text-base text-text-muted">Monitor your bin levels and request pickups.</p>
+        <div className="flex flex-col gap-6 pb-24 md:pb-6">
+            <header className="px-1">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Smart Waste Management</h1>
+                <p className="text-sm md:text-base text-slate-500 mt-1">Monitor bin levels and coordinate pickups.</p>
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 pb-20 md:pb-0">

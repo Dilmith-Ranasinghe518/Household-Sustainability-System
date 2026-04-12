@@ -90,15 +90,15 @@ const UserDashboard = () => {
     ];
 
     return (
-        <div className="flex flex-col gap-6">
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, {user?.username}</h1>
-                    <p className="text-sm md:text-base text-text-muted">Here's what's happening with your sustainability goals today.</p>
+        <div className="flex flex-col gap-6 pb-24 md:pb-6">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 mb-4">
+                <div className="px-1">
+                    <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Welcome, {user?.username}</h1>
+                    <p className="text-sm md:text-base text-slate-500 mt-1">Sustainability goals for today.</p>
                 </div>
-                <div className="w-full md:w-auto">
-                    <button className="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-border rounded-xl font-medium text-text-main shadow-sm hover:bg-off-white transition-colors">
-                        <Calendar size={18} />
+                <div className="w-full md:w-auto px-1">
+                    <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition-all active:scale-95">
+                        <Calendar size={18} className="text-primary-teal" />
                         Last 30 Days
                     </button>
                 </div>

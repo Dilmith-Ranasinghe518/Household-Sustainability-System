@@ -87,17 +87,17 @@ const UserAudits = () => {
     };
 
     return (
-        <div className="flex flex-col gap-6">
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-10">
+        <div className="flex flex-col gap-6 pb-24 md:pb-6">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 px-1">
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">My Audits</h1>
-                    <p className="text-sm md:text-base text-text-muted">Manage your sustainability audit history.</p>
+                    <h1 className="text-2xl md:text-3xl font-bold text-slate-800">My Audits</h1>
+                    <p className="text-sm md:text-base text-slate-500 mt-1">Manage your sustainability audit history.</p>
                 </div>
                 <button
                     onClick={openNewAuditModal}
-                    className="flex items-center justify-center gap-2 px-6 py-2.5 bg-primary-teal text-white rounded-xl font-semibold text-sm hover:bg-teal-700 transition-all shadow-lg shadow-primary-teal/20 w-full md:w-auto"
+                    className="flex items-center justify-center gap-2 px-8 py-3.5 bg-primary-teal text-white rounded-2xl font-bold shadow-lg shadow-emerald-100 hover:-translate-y-0.5 transition-all active:scale-95 w-full md:w-auto mt-2 md:mt-0"
                 >
-                    <Plus size={18} />
+                    <Plus size={20} />
                     New Audit
                 </button>
             </header>

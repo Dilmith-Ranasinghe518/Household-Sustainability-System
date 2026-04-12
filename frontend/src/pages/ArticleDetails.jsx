@@ -52,9 +52,9 @@ const ArticleDetails = () => {
     if (!article) return null;
 
     return (
-        <div className="bg-off-white min-h-screen pb-20">
+        <div className="bg-white md:bg-off-white min-h-screen pb-24 md:pb-12">
             {/* Header/Banner Image */}
-            <div className="relative h-[400px] md:h-[500px] w-full bg-forest-dark overflow-hidden">
+            <div className="relative h-[280px] md:h-[500px] w-full bg-forest-dark overflow-hidden">
                 {article.image ? (
                     <>
                         <div className="absolute inset-0 bg-black/40 z-10"></div>
@@ -64,20 +64,21 @@ const ArticleDetails = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-forest-dark to-primary-teal z-10 opacity-90"></div>
                 )}
 
-                <div className="absolute top-8 left-4 md:left-8 z-20">
+                <div className="absolute top-4 md:top-8 left-4 md:left-8 z-20">
                     <button 
                         onClick={() => navigate('/articles')}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur text-white rounded-xl font-medium transition-colors"
+                        className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur text-white rounded-xl text-sm md:text-base font-medium transition-colors"
                     >
-                        <ArrowLeft size={18} />
-                        Back to Articles
+                        <ArrowLeft size={16} />
+                        <span className="hidden xs:inline">Back to Articles</span>
+                        <span className="xs:hidden">Back</span>
                     </button>
                 </div>
             </div>
 
             {/* Content Container */}
-            <main className="max-w-4xl mx-auto -mt-32 relative z-20 px-4">
-                <div className="bg-white rounded-[2rem] shadow-xl p-8 md:p-12 mb-12">
+            <main className="max-w-4xl mx-auto -mt-20 md:-mt-32 relative z-20 px-4">
+                <div className="bg-white rounded-[2rem] shadow-xl p-6 md:p-12 mb-12">
                     <div className="flex flex-wrap items-center gap-4 mb-6">
                         <span className="px-4 py-1.5 bg-teal-soft-bg text-primary-teal rounded-full font-bold text-sm flex items-center gap-1.5">
                             <BookOpen size={16} /> {article.category}
@@ -88,7 +89,7 @@ const ArticleDetails = () => {
                         </div>
                     </div>
 
-                    <h1 className="text-3xl md:text-5xl font-extrabold text-forest-dark leading-tight mb-8">
+                    <h1 className="text-2xl md:text-5xl font-extrabold text-forest-dark leading-tight mb-6 md:mb-8">
                         {article.title}
                     </h1>
 

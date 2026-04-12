@@ -139,23 +139,23 @@ const AdminWaste = () => {
     });
 
     return (
-        <div className="flex flex-col gap-6">
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Waste Management</h1>
-                    <p className="text-sm md:text-base text-text-muted">Manage pickup requests and bin assignments.</p>
+        <div className="flex flex-col gap-6 pb-24 md:pb-6">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5">
+                <div className="px-1">
+                    <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Waste Management</h1>
+                    <p className="text-sm md:text-base text-slate-500 mt-1">Manage requests and bin assignments.</p>
                 </div>
-                <div className="flex items-center gap-3 w-full md:w-auto">
-                    <div className="flex bg-white p-1 rounded-xl shadow-sm border border-border w-full md:w-auto">
+                <div className="flex items-center gap-3 w-full md:w-auto px-1">
+                    <div className="flex bg-white p-1 rounded-2xl shadow-sm border border-slate-200 w-full md:w-auto">
                         <button
                             onClick={() => setActiveTab('requests')}
-                            className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'requests' ? 'bg-primary-teal text-white shadow-sm' : 'text-text-muted hover:bg-gray-50'}`}
+                            className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${activeTab === 'requests' ? 'bg-primary-teal text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}`}
                         >
                             Requests
                         </button>
                         <button
                             onClick={() => setActiveTab('bins')}
-                            className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'bins' ? 'bg-primary-teal text-white shadow-sm' : 'text-text-muted hover:bg-gray-50'}`}
+                            className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${activeTab === 'bins' ? 'bg-primary-teal text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}`}
                         >
                             Bins
                         </button>

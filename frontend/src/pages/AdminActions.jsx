@@ -70,10 +70,13 @@ const confirmDelete = async () => {
 
   return (
     <>
-    <div className="p-6 min-h-screen bg-gray-50">
-      <h1 className="text-2xl font-bold mb-6">
-        🚩 Flagged Actions
-      </h1>
+    <div className="p-4 md:p-6 min-h-screen bg-gray-50 pb-24 md:pb-6">
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-2">
+          <span className="text-2xl">🚩</span> Flagged Actions
+        </h1>
+        <p className="text-sm text-slate-500 mt-1">Review reported content from the community.</p>
+      </div>
 
       {actions.length === 0 ? (
         <p>No flagged actions</p>
@@ -85,26 +88,24 @@ const confirmDelete = async () => {
               className="bg-white rounded-xl shadow p-5 border"
             >
               {/* HEADER */}
-              <div className="flex justify-between">
+              <div className="flex flex-col sm:flex-row justify-between gap-3 items-start">
                 <div>
-                  <h2 className="text-lg font-semibold">
+                  <h2 className="text-lg font-semibold text-slate-800">
                     {action.title}
                   </h2>
-                  <p className="text-sm text-gray-500">
-                    by{" "}
-                    {action.createdBy?.username ||
-                      "Unknown"}
+                  <p className="text-sm text-slate-500">
+                    by <span className="font-medium text-slate-700">{action.createdBy?.username || "Unknown"}</span>
                   </p>
                 </div>
 
                 {/* REPORT COUNT */}
-                <div className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-bold">
+                <div className="bg-red-50 text-red-700 border border-red-100 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">
                   🚨 {action.reports?.length || 0} Reports
                 </div>
               </div>
 
               {/* DESCRIPTION */}
-              <p className="mt-2 text-gray-700">
+              <p className="mt-3 text-slate-600 text-sm md:text-base line-clamp-3">
                 {action.description}
               </p>
 
@@ -113,23 +114,23 @@ const confirmDelete = async () => {
                 <img
                   src={action.images[0]}
                   alt="action"
-                  className="mt-3 w-full h-60 object-cover rounded-lg"
+                  className="mt-4 w-full h-48 md:h-60 object-cover rounded-xl"
                 />
               )}
 
               {/* REPORT DETAILS */}
-              <div className="mt-4">
-                <h3 className="font-semibold text-gray-800 mb-2">
-                  Report Reasons:
+              <div className="mt-5 p-3 md:p-4 bg-slate-50 rounded-xl border border-slate-100">
+                <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2">
+                  Recent Reports
                 </h3>
 
                 <div className="space-y-2">
-                  {action.reports?.map((r, index) => (
+                  {action.reports?.slice(0, 3).map((r, index) => (
                     <div
                       key={index}
-                      className="bg-gray-100 p-2 rounded"
+                      className="bg-white p-2 md:p-3 rounded-lg border border-slate-200 text-sm"
                     >
-                      <span className="font-semibold">
+                      <span className="font-bold text-slate-700">
                         {r.user?.username || "User"}:
                       </span>{" "}
                       {r.reason}
@@ -139,10 +140,10 @@ const confirmDelete = async () => {
               </div>
 
               {/* DELETE BUTTON */}
-              <div className="mt-4 flex justify-end">
+              <div className="mt-5 flex justify-end">
                 <button
                   onClick={() => handleDelete(action._id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                  className="w-full md:w-auto bg-red-500 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-red-600 transition-colors shadow-sm"
                 >
                   Delete Action
                 </button>
@@ -153,36 +154,33 @@ const confirmDelete = async () => {
       )}
         </div>
 
-    {/* 🔥 DELETE MODAL HERE */}
-    {deleteOpen && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-        <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-          <h2 className="text-lg font-semibold">
-            Delete Action
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div className="w-full max-w-md rounded-t-3xl sm:rounded-2xl bg-white p-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
+          <h2 className="text-xl font-bold text-slate-800">
+            Confirm Deletion
           </h2>
 
-          <p className="mt-2 text-sm text-gray-600">
-            Are you sure you want to delete this action?
+          <p className="mt-2 text-slate-600">
+            Are you sure you want to permanently delete this action? This cannot be undone.
           </p>
 
-          <div className="mt-4 flex justify-end gap-2">
+          <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3">
             <button
               onClick={() => setDeleteOpen(false)}
-              className="rounded-xl bg-gray-200 px-4 py-2"
+              className="order-2 sm:order-1 flex-1 sm:flex-none rounded-xl bg-slate-100 px-6 py-3 font-semibold text-slate-600 hover:bg-slate-200 transition-all"
             >
               Cancel
             </button>
 
             <button
               onClick={confirmDelete}
-              className="rounded-xl bg-red-500 px-4 py-2 text-white"
+              className="order-1 sm:order-2 flex-1 sm:flex-none rounded-xl bg-red-500 px-6 py-3 font-bold text-white hover:bg-red-600 transition-all shadow-md shadow-red-200"
             >
-              Delete
+              Delete Action
             </button>
           </div>
         </div>
       </div>
-    )}
   </>
 );
 

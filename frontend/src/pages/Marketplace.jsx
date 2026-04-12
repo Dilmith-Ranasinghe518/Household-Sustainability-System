@@ -153,7 +153,7 @@ const Marketplace = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
+    <div className="min-h-screen bg-gray-50 pb-24 md:pb-12">
 
       {/* Hero Banner — full bleed, no padding */}
       <div className="relative w-full h-40 md:h-[20vh] min-h-[160px] md:max-h-[260px] overflow-hidden">

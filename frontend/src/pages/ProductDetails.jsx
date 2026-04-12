@@ -82,7 +82,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 md:p-6 pb-24 md:pb-6">
+    <div className="max-w-6xl mx-auto px-4 py-8 md:p-6 pb-24 md:pb-12">
 
       <button 
         onClick={() => navigate(-1)} 

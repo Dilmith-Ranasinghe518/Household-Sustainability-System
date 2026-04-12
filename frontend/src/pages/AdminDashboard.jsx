@@ -158,15 +158,15 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="flex flex-col gap-6">
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-bold mb-2">Admin Control Center</h1>
-                    <p className="text-sm md:text-base text-text-muted">Welcome {user?.username}. System-wide sustainability metrics.</p>
+        <div className="flex flex-col gap-6 pb-24 md:pb-6">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 mb-4">
+                <div className="px-1">
+                    <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Admin Control Center</h1>
+                    <p className="text-sm md:text-base text-slate-500 mt-1">System-wide monitoring and oversight.</p>
                 </div>
-                <div className="w-full md:w-auto">
-                    <button className="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-border rounded-xl font-medium text-text-main shadow-sm hover:bg-off-white transition-colors">
-                        <Download size={18} />
+                <div className="w-full md:w-auto px-1">
+                    <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition-all active:scale-95">
+                        <Download size={18} className="text-primary-teal" />
                         Export Reports
                     </button>
                 </div>
@@ -337,47 +337,63 @@ const AdminDashboard = () => {
 
             {/* Edit User Modal */}
             {editingUser && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-2xl w-full max-w-md shadow-lg">
-                        <h3 className="text-xl font-bold mb-4">Edit User</h3>
+                <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
+                    <motion.div 
+                        initial={{ y: "100%" }}
+                        animate={{ y: 0 }}
+                        className="bg-white p-6 rounded-t-3xl sm:rounded-[2rem] w-full max-w-md shadow-2xl"
+                    >
+                        <h3 className="text-xl font-bold text-slate-800 mb-6">Edit User Profile</h3>
                         <form onSubmit={handleUpdateUser} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5 ml-1">Username</label>
                                 <input
                                     type="text"
                                     value={editFormData.username}
                                     onChange={(e) => setEditFormData({ ...editFormData, username: e.target.value })}
-                                    className="w-full px-3 py-2 border border-border rounded-lg outline-none focus:ring-2 focus:ring-primary-teal/50"
+                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-primary-teal focus:ring-1 focus:ring-primary-teal transition-all"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5 ml-1">Email Address</label>
                                 <input
                                     type="email"
                                     value={editFormData.email}
                                     onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
-                                    className="w-full px-3 py-2 border border-border rounded-lg outline-none focus:ring-2 focus:ring-primary-teal/50"
+                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-primary-teal focus:ring-1 focus:ring-primary-teal transition-all"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5 ml-1">Access Role</label>
                                 <select
                                     value={editFormData.role}
                                     onChange={(e) => setEditFormData({ ...editFormData, role: e.target.value })}
-                                    className="w-full px-3 py-2 border border-border rounded-lg outline-none focus:ring-2 focus:ring-primary-teal/50"
+                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-primary-teal focus:ring-1 focus:ring-primary-teal transition-all"
                                 >
                                     <option value="user">User</option>
-                                    <option value="admin">Admin</option>
+                                    <option value="admin">Administrator</option>
+                                    <option value="waste_collector">Waste Collector</option>
                                 </select>
                             </div>
-                            <div className="flex justify-end gap-3 mt-6">
-                                <button type="button" onClick={cancelEdit} className="px-4 py-2 text-text-muted hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-                                <button type="submit" className="px-4 py-2 bg-primary-teal text-white rounded-lg hover:bg-teal-700 transition-colors">Save Changes</button>
+                            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-8">
+                                <button 
+                                    type="button" 
+                                    onClick={cancelEdit} 
+                                    className="order-2 sm:order-1 px-6 py-3 text-slate-600 font-semibold hover:bg-slate-100 rounded-xl transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="order-1 sm:order-2 px-8 py-3 bg-primary-teal text-white font-bold rounded-xl hover:bg-teal-700 transition-all shadow-md shadow-emerald-100"
+                                >
+                                    Save Changes
+                                </button>
                             </div>
                         </form>
-                    </div>
+                    </motion.div>
                 </div>
             )}
         </div >

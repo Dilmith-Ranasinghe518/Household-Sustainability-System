@@ -71,15 +71,17 @@ const IssueDetails = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl">
-      <div className="bg-white rounded-2xl p-6 shadow-sm glass border border-border">
-        <div className="flex items-start justify-between gap-4">
+    <div className="flex flex-col gap-6 max-w-4xl pb-24 md:pb-6">
+      <div className="bg-white rounded-3xl p-5 md:p-6 shadow-sm border border-slate-100">
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">{ticket.title}</h1>
-            <p className="text-sm text-text-muted mt-1">{ticket.category}</p>
+            <h1 className="text-xl md:text-2xl font-bold text-slate-800">{ticket.title}</h1>
+            <div className="inline-flex items-center mt-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+              {ticket.category}
+            </div>
           </div>
 
-          <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center sm:items-end gap-2">
             <StatusBadge status={ticket.status} />
             <PriorityBadge priority={ticket.priority} />
           </div>
@@ -127,26 +129,29 @@ const IssueDetails = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-6 shadow-sm glass border border-border">
-        <h2 className="text-lg font-semibold mb-4">Conversation</h2>
+      <div className="bg-white rounded-3xl p-5 md:p-8 shadow-sm border border-slate-100">
+        <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <MessageCircle size={20} className="text-primary-teal" />
+          Conversation Thread
+        </h2>
 
         <MessageThread messages={ticket.messages || []} />
 
-        <div className="mt-5 flex flex-col gap-3">
+        <div className="mt-8 flex flex-col gap-4">
           <textarea
-            className="w-full px-3 py-2 border border-border rounded-xl outline-none min-h-[90px]"
-            placeholder="Add a message..."
+            className="w-full px-4 py-3 border border-slate-200 bg-slate-50 rounded-2xl outline-none focus:border-primary-teal focus:ring-1 focus:ring-primary-teal transition-all min-h-[120px] text-sm md:text-base resize-none"
+            placeholder="Type your message here..."
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
 
           <div className="flex justify-end">
             <button
-              disabled={sending}
+              disabled={sending || !text.trim()}
               onClick={sendMessage}
-              className="px-5 py-2 rounded-xl bg-primary-teal text-white font-semibold hover:opacity-95"
+              className="w-full sm:w-auto px-10 py-3 rounded-xl bg-primary-teal text-white font-bold hover:opacity-95 transition-all shadow-md shadow-emerald-100 disabled:opacity-50"
             >
-              {sending ? "Sending..." : "Send"}
+              {sending ? "Sending..." : "Send Message"}
             </button>
           </div>
         </div>

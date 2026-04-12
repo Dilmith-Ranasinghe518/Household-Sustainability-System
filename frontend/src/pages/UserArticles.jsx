@@ -47,7 +47,7 @@ const UserArticles = () => {
     const categoriesList = CATEGORIES.filter(cat => cat === "All" || articles.some(a => a.category === cat));
 
     return (
-        <div className="flex flex-col gap-8 p-4 md:p-8 max-w-7xl mx-auto min-h-screen pb-20">
+        <div className="flex flex-col gap-8 p-4 md:p-8 max-w-7xl mx-auto min-h-screen pb-24 md:pb-12">
             {/* Header Section */}
             <motion.section 
                 initial={{ opacity: 0, y: 20 }}
@@ -61,21 +61,21 @@ const UserArticles = () => {
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-sm font-medium mb-4 border border-white/20">
                         <BookOpen size={16} /> Eco-Education
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
+                    <h1 className="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
                         Discover Sustainable Living
                     </h1>
-                    <p className="text-lg text-white/80 mb-8 max-w-xl">
+                    <p className="text-base md:text-lg text-white/80 mb-6 md:mb-8 max-w-xl">
                         Explore our curated collection of articles on waste reduction, energy efficiency, and modern eco-friendly practices to power your green journey.
                     </p>
                     
-                    <div className="relative max-w-lg">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={20} />
+                    <div className="relative w-full">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
                         <input
                             type="text"
-                            placeholder="Search topics, tips, and guides..."
+                            placeholder="Search topics and guides..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-12 pr-4 py-4 bg-white text-text-main rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-teal transition-shadow"
+                            className="w-full pl-11 pr-4 py-3 md:py-4 bg-white text-text-main rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-teal transition-shadow text-sm md:text-base"
                         />
                     </div>
                 </div>

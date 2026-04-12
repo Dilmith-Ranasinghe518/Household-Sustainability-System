@@ -213,23 +213,25 @@ const confirmDelete = async () => {
           <button
             onClick={handleLikeToggle}
             disabled={liking}
-            className="flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 transition active:scale-90"
-            >
+            className={`flex items-center justify-center gap-2 rounded-2xl px-4 py-3 transition active:scale-95 ${
+              isLiked ? "bg-red-50" : "bg-slate-50"
+            }`}
+          >
             <Heart
                 size={22}
                 className={`transition-all duration-200 ${
                 isLiked
-                    ? "fill-red-500 text-red-500 scale-125"
-                    : "text-gray-400 hover:text-red-400"
+                    ? "fill-red-500 text-red-500"
+                    : "text-slate-400"
                 }`}
             />
 
-            <span className="text-sm font-semibold text-slate-700">
+            <span className={`text-sm font-bold ${isLiked ? "text-red-700" : "text-slate-700"}`}>
                 {action.likes?.length || 0}
             </span>
-            </button>
+          </button>
 
-            <button
+          <button
             onClick={() => {
               if (!isAuthenticated) {
                 navigate("/login");
@@ -237,44 +239,42 @@ const confirmDelete = async () => {
               }
               setShowComments(!showComments);
             }}
-            className="flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 transition active:scale-90 bg-slate-100 hover:bg-slate-200"
-            >
-            <MessageCircle size={20} className="text-gray-600" />
-            <span className="text-sm font-semibold text-slate-700">
+            className={`flex items-center justify-center gap-2 rounded-2xl px-4 py-3 transition active:scale-95 ${
+              showComments ? "bg-emerald-50 text-emerald-700" : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+            }`}
+          >
+            <MessageCircle size={20} className={showComments ? "text-emerald-600" : "text-slate-500"} />
+            <span className="text-sm font-bold">
                 {action.comments?.length || 0}
             </span>
-            </button>
+          </button>
 
-          {!isOwner && (
-            <button
-              onClick={handleReport}
-              title="Report"
-              className="flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 transition active:scale-90 bg-slate-100 hover:bg-slate-200"
-            >
-              <AlertTriangle size={20} strokeWidth={2} className="text-slate-500" />
-            </button>
-          )}
-          
           {isOwner ? (
             <>
               <button
                 onClick={() => setEditOpen(true)}
-                className="rounded-2xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+                className="rounded-2xl bg-blue-50 px-4 py-3 text-sm font-bold text-blue-700 transition hover:bg-blue-100 active:scale-95"
               >
                 Edit
               </button>
 
               <button
                 onClick={handleDelete}
-                className="rounded-2xl bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-100"
+                className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-600 transition hover:bg-red-100 active:scale-95"
               >
                 Delete
               </button>
             </>
           ) : (
             <>
-              <div />
-              <div />
+              <button
+                onClick={handleReport}
+                className="flex items-center justify-center gap-2 rounded-2xl bg-slate-50 px-4 py-3 transition hover:bg-slate-100 active:scale-95"
+              >
+                <AlertTriangle size={20} className="text-slate-400" />
+                <span className="text-xs font-bold text-slate-500 sm:hidden">Report</span>
+              </button>
+              <div className="hidden sm:block" />
             </>
           )}
         </div>
@@ -307,30 +307,32 @@ const confirmDelete = async () => {
       )}
 
       {reportOpen && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-      <h2 className="mb-3 text-lg font-semibold">Report Action</h2>
+  <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
+    <div className="w-full max-w-md rounded-t-3xl sm:rounded-2xl bg-white p-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
+      <h2 className="mb-4 text-xl font-bold text-slate-800">Report Action</h2>
 
-      <input
+      <textarea
         value={reportReason}
         onChange={(e) => setReportReason(e.target.value)}
-        placeholder="Enter reason..."
-        className="w-full rounded-xl border px-4 py-2 outline-none"
+        placeholder="Why are you reporting this content?"
+        rows={4}
+        className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all resize-none"
       />
 
-      <div className="mt-4 flex justify-end gap-2">
+      <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3">
         <button
           onClick={() => setReportOpen(false)}
-          className="rounded-xl bg-gray-200 px-4 py-2"
+          className="order-2 sm:order-1 flex-1 sm:flex-none rounded-xl bg-slate-100 px-6 py-3 font-semibold text-slate-600 hover:bg-slate-200 transition-all"
         >
           Cancel
         </button>
 
         <button
           onClick={submitReport}
-          className="rounded-xl bg-red-500 px-4 py-2 text-white"
+          disabled={reporting || !reportReason.trim()}
+          className="order-1 sm:order-2 flex-1 sm:flex-none rounded-xl bg-red-500 px-6 py-3 font-bold text-white hover:bg-red-600 transition-all shadow-md shadow-red-200 disabled:opacity-50"
         >
-          Report
+          {reporting ? "Reporting..." : "Submit Report"}
         </button>
       </div>
     </div>
@@ -338,25 +340,25 @@ const confirmDelete = async () => {
 )}
 
 {deleteOpen && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-      <h2 className="text-lg font-semibold">Delete Action</h2>
+  <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-0 sm:p-4">
+    <div className="w-full max-w-md rounded-t-3xl sm:rounded-2xl bg-white p-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
+      <h2 className="text-xl font-bold text-slate-800">Delete Action</h2>
 
-      <p className="mt-2 text-sm text-gray-600">
-        Are you sure you want to delete this action?
+      <p className="mt-2 text-slate-600">
+        Are you sure you want to delete this action? This will permanently remove it from the community feed.
       </p>
 
-      <div className="mt-4 flex justify-end gap-2">
+      <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3">
         <button
           onClick={() => setDeleteOpen(false)}
-          className="rounded-xl bg-gray-200 px-4 py-2"
+          className="order-2 sm:order-1 flex-1 sm:flex-none rounded-xl bg-slate-100 px-6 py-3 font-semibold text-slate-600 hover:bg-slate-200 transition-all"
         >
           Cancel
         </button>
 
         <button
           onClick={confirmDelete}
-          className="rounded-xl bg-red-500 px-4 py-2 text-white"
+          className="order-1 sm:order-2 flex-1 sm:flex-none rounded-xl bg-red-500 px-6 py-3 font-extrabold text-white hover:bg-red-600 transition-all shadow-md shadow-red-200"
         >
           Delete
         </button>

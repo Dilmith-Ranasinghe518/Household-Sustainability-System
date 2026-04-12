@@ -44,10 +44,10 @@ const Profile = () => {
     };
 
     return (
-        <div className="flex flex-col gap-6">
-            <header className="mb-8">
-                <h1 className="text-3xl font-bold mb-2">My Profile</h1>
-                <p className="text-text-muted">Manage your personal information and account settings.</p>
+        <div className="flex flex-col gap-6 pb-24 md:pb-6">
+            <header className="px-1">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-800">My Profile</h1>
+                <p className="text-sm md:text-base text-slate-500 mt-1">Manage your account and personal settings.</p>
             </header>
 
             <div className="max-w-2xl bg-white p-8 rounded-[1.5rem] shadow-sm glass">

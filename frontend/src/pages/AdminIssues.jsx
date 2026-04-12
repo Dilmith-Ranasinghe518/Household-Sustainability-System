@@ -114,35 +114,34 @@ const AdminIssues = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="rounded-3xl border border-border bg-white p-6 shadow-sm">
+      <header className="rounded-3xl border border-border bg-white p-5 md:p-6 shadow-sm">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-primary-teal border border-teal-100">
-              <FolderOpen size={14} />
+            <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-[11px] font-bold text-primary-teal border border-teal-100 uppercase tracking-wider">
+              <FolderOpen size={12} />
               Admin Panel
             </div>
 
-            <h1 className="mt-3 text-3xl font-bold text-text-main">Manage Issues</h1>
+            <h1 className="mt-3 text-2xl md:text-3xl font-bold text-text-main">Manage Issues</h1>
             <p className="mt-2 text-sm text-text-muted max-w-2xl">
-              Review user tickets, update ticket status and priority, and provide clear
-              energy-saving advice through the conversation panel.
+              Review user tickets, update ticket status and priority, and provide advice.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <div className="rounded-2xl border border-border bg-off-white px-4 py-3 min-w-[120px]">
-              <p className="text-xs font-medium text-text-muted">Total Tickets</p>
-              <p className="mt-1 text-2xl font-bold text-text-main">{summary.total}</p>
+              <p className="text-[10px] uppercase font-bold text-text-muted">Total</p>
+              <p className="mt-1 text-xl md:text-2xl font-bold text-text-main">{summary.total}</p>
             </div>
 
             <div className="rounded-2xl border border-border bg-off-white px-4 py-3 min-w-[120px]">
-              <p className="text-xs font-medium text-text-muted">Open</p>
-              <p className="mt-1 text-2xl font-bold text-orange-600">{summary.open}</p>
+              <p className="text-[10px] uppercase font-bold text-text-muted">Open</p>
+              <p className="mt-1 text-xl md:text-2xl font-bold text-orange-600">{summary.open}</p>
             </div>
 
-            <div className="rounded-2xl border border-border bg-off-white px-4 py-3 min-w-[120px]">
-              <p className="text-xs font-medium text-text-muted">High Priority</p>
-              <p className="mt-1 text-2xl font-bold text-red-600">{summary.high}</p>
+            <div className="rounded-2xl border border-border bg-off-white px-4 py-3 min-w-[120px] col-span-2 sm:col-span-1">
+              <p className="text-[10px] uppercase font-bold text-text-muted">High Priority</p>
+              <p className="mt-1 text-xl md:text-2xl font-bold text-red-600">{summary.high}</p>
             </div>
           </div>
         </div>
@@ -154,8 +153,8 @@ const AdminIssues = () => {
           <h2 className="text-lg font-semibold text-text-main">Filters</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr_0.7fr_auto_auto] gap-3">
-          <div className="flex items-center gap-3 rounded-2xl border border-border bg-off-white px-4 py-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.3fr_0.7fr_0.7fr_auto_auto] gap-3">
+          <div className="flex items-center gap-3 rounded-2xl border border-border bg-off-white px-4 py-3 md:col-span-2 lg:col-span-1">
             <Search size={18} className="text-text-muted shrink-0" />
             <input
               className="w-full bg-transparent outline-none text-sm text-text-main placeholder:text-text-muted"
@@ -195,7 +194,7 @@ const AdminIssues = () => {
             onClick={fetchAll}
             className="rounded-2xl border border-primary-teal bg-primary-teal px-5 py-3 text-sm font-semibold text-white hover:opacity-95 transition"
           >
-            Apply Filters
+            Apply
           </button>
 
           <button
@@ -203,7 +202,7 @@ const AdminIssues = () => {
             className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-white px-5 py-3 text-sm font-semibold text-text-main hover:bg-off-white transition"
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-            Refresh
+            <span className="md:hidden">Refresh</span>
           </button>
         </div>
       </div>

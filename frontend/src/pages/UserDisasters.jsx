@@ -50,35 +50,34 @@ const UserDisasters = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="rounded-3xl border border-border bg-white p-6 shadow-sm">
+      <header className="rounded-3xl border border-border bg-white p-5 md:p-6 shadow-sm">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-3 py-1 text-xs font-semibold text-red-600">
-              <ShieldAlert size={14} />
+            <div className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-3 py-1 text-[11px] font-bold text-red-600 uppercase tracking-wider">
+              <ShieldAlert size={12} />
               Safety Updates
             </div>
 
-            <h1 className="mt-3 text-3xl font-bold text-text-main">Disaster Alerts</h1>
+            <h1 className="mt-3 text-2xl md:text-3xl font-bold text-text-main">Disaster Alerts</h1>
             <p className="mt-2 max-w-2xl text-sm text-text-muted">
-              Verified alerts created by administrators. Stay informed, stay prepared,
-              and check the latest situation updates in your area.
+              Verified alerts. Stay informed and prepared for situations in your area.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="min-w-[120px] rounded-2xl border border-border bg-off-white px-4 py-3">
-              <p className="text-xs font-medium text-text-muted">Total Alerts</p>
-              <p className="mt-1 text-2xl font-bold text-text-main">{items.length}</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="min-w-[100px] rounded-2xl border border-border bg-off-white px-4 py-3">
+              <p className="text-[10px] uppercase font-bold text-text-muted">Total</p>
+              <p className="mt-1 text-xl md:text-2xl font-bold text-text-main">{items.length}</p>
             </div>
 
-            <div className="min-w-[120px] rounded-2xl border border-border bg-off-white px-4 py-3">
-              <p className="text-xs font-medium text-text-muted">Active</p>
-              <p className="mt-1 text-2xl font-bold text-red-600">{activeCount}</p>
+            <div className="min-w-[100px] rounded-2xl border border-border bg-off-white px-4 py-3">
+              <p className="text-[10px] uppercase font-bold text-text-muted">Active</p>
+              <p className="mt-1 text-xl md:text-2xl font-bold text-red-600">{activeCount}</p>
             </div>
 
-            <div className="min-w-[120px] rounded-2xl border border-border bg-off-white px-4 py-3">
-              <p className="text-xs font-medium text-text-muted">Resolved</p>
-              <p className="mt-1 text-2xl font-bold text-green-600">{resolvedCount}</p>
+            <div className="min-w-[100px] rounded-2xl border border-border bg-off-white px-4 py-3 col-span-2 sm:col-span-1">
+              <p className="text-[10px] uppercase font-bold text-text-muted">Resolved</p>
+              <p className="mt-1 text-xl md:text-2xl font-bold text-green-600">{resolvedCount}</p>
             </div>
           </div>
         </div>
@@ -205,12 +204,12 @@ const UserDisasters = () => {
           </div>
         </div>
       ) : (
-        <div>
-          <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="pb-24">
+          <div className="mb-4 flex items-center justify-between gap-3 px-1">
             <div>
               <h2 className="text-xl font-bold text-text-main">Latest Alerts</h2>
               <p className="text-sm text-text-muted">
-                Showing verified disaster alerts based on your current filters.
+                Showing verified disaster alerts.
               </p>
             </div>
 
