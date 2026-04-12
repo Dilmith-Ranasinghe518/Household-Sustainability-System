@@ -103,13 +103,13 @@ const UserOrders = () => {
   };
 
   const renderTable = (data, role) => (
-    <div className="rounded-2xl overflow-x-auto bg-white border border-gray-100 shadow-sm mt-4">
+    <div className="rounded-2xl overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 bg-white border border-gray-100 shadow-sm mt-4">
       {data.length === 0 ? (
         <div className="text-center py-12 text-sm text-gray-400">
           No orders found.
         </div>
       ) : (
-        <table className="w-full text-sm border-collapse">
+        <table className="w-full text-sm border-collapse min-w-[800px]">
           <thead>
             <tr className="bg-green-50 border-b border-green-100">
               {["Product", "Counterparty", "Status", "Expires", "Actions"].map(

@@ -132,34 +132,33 @@ const UserProducts = () => {
   return (
     <div className="flex flex-col gap-5">
 
-      {/* HEADER */}
       <header className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">My Products</h2>
-          <p className="text-sm text-gray-400 mt-0.5">Create and manage your listings. Edit available items or track their status.</p>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800">My Products</h2>
+          <p className="text-xs md:text-sm text-gray-400 mt-0.5">Create and manage your listings. Edit available items or track their status.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full md:w-auto">
           <button
             onClick={fetchProducts}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 text-teal-700 bg-white hover:bg-teal-50 transition-all shadow-sm"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 text-teal-700 bg-white hover:bg-teal-50 transition-all shadow-sm"
           >
             <RefreshCw size={15} /> Refresh
           </button>
           <button
             onClick={() => { setEditingProduct(null); setIsFormOpen(true); }}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-teal-500 hover:bg-teal-600 transition-all shadow-sm"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-teal-500 hover:bg-teal-600 transition-all shadow-sm"
           >
-            <Plus size={15} /> Add Product
+            <Plus size={15} /> Add
           </button>
         </div>
       </header>
 
       {/* STAT CARDS */}
-      <div className="flex flex-wrap gap-3">
-        <StatCard icon={Tag}          label="Total Products"  value={products.length}    iconClass="text-teal-500" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard icon={Tag}          label="Total"  value={products.length}    iconClass="text-teal-500" />
         <StatCard icon={Activity}     label="Available"        value={availableCount}      iconClass="text-teal-400" />
         <StatCard icon={CalendarCheck} label="Sold"            value={soldCount}           iconClass="text-amber-400" />
-        <StatCard icon={Leaf}         label="CO₂ Saved"        value={`${totalCO2} kg`}   iconClass="text-green-500" />
+        <StatCard icon={Leaf}         label="CO₂ Saved"        value={`${totalCO2}`}   iconClass="text-green-500" />
       </div>
 
       {/* FILTERS */}
@@ -188,7 +187,7 @@ const UserProducts = () => {
       </div>
 
       {/* TABLE */}
-      <div className="rounded-2xl overflow-x-auto bg-white border border-gray-100 shadow-sm">
+      <div className="rounded-2xl overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 bg-white border border-gray-100 shadow-sm">
         {loading ? (
           <div className="flex items-center justify-center py-16 gap-3 text-teal-600">
             <RefreshCw size={20} className="animate-spin" />
@@ -197,7 +196,7 @@ const UserProducts = () => {
         ) : currentItems.length === 0 ? (
           <div className="text-center py-16 text-sm text-gray-400">No products found.</div>
         ) : (
-          <table className="w-full text-sm border-collapse">
+          <table className="w-full text-sm border-collapse min-w-[900px]">
             <thead>
               <tr className="bg-green-50 border-b border-green-100">
                 {["Title", "Price", "Category", "CO₂ Saved", "Status", "Created", "Updated", "Actions"].map(h => (

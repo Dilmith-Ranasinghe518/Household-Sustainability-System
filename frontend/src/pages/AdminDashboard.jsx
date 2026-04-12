@@ -159,21 +159,21 @@ const AdminDashboard = () => {
 
     return (
         <div className="flex flex-col gap-6">
-            <header className="flex justify-between items-center mb-10">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
                 <div>
-                    <h1 className="text-3xl font-bold mb-2">Admin Control Center</h1>
-                    <p className="text-text-muted">Welcome {user?.username}. System-wide sustainability metrics.</p>
+                    <h1 className="text-2xl md:text-3xl font-bold mb-2">Admin Control Center</h1>
+                    <p className="text-sm md:text-base text-text-muted">Welcome {user?.username}. System-wide sustainability metrics.</p>
                 </div>
-                <div>
-                    <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-border rounded-xl font-medium text-text-main shadow-sm hover:bg-off-white transition-colors">
+                <div className="w-full md:w-auto">
+                    <button className="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-border rounded-xl font-medium text-text-main shadow-sm hover:bg-off-white transition-colors">
                         <Download size={18} />
                         Export Reports
                     </button>
                 </div>
             </header>
 
-            <section className="flex flex-col gap-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <section className="flex flex-col gap-6 md:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -229,17 +229,17 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="bg-white rounded-[1.5rem] p-6 shadow-sm glass">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
                         <div>
                             <h3 className="text-lg font-semibold">User Management</h3>
                             <p className="text-xs text-text-muted mt-1">Manage system access and permissions</p>
                         </div>
-                        <div className="flex items-center gap-2 bg-off-white p-1 rounded-xl border border-border mt-2 md:mt-0">
+                        <div className="flex flex-wrap items-center gap-2 bg-off-white p-1 rounded-xl border border-border w-full lg:w-auto">
                             {['all', 'user', 'admin', 'waste_collector'].map((role) => (
                                 <button
                                     key={role}
                                     onClick={() => setActiveRole(role)}
-                                    className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${activeRole === role
+                                    className={`flex-1 lg:flex-none px-3 md:px-4 py-2 md:py-1.5 rounded-lg text-xs font-bold transition-all ${activeRole === role
                                         ? 'bg-white text-primary-teal shadow-sm border border-border/50'
                                         : 'text-text-muted hover:text-text-main'
                                         }`}
@@ -248,13 +248,13 @@ const AdminDashboard = () => {
                                 </button>
                             ))}
                         </div>
-                        <button onClick={fetchUsers} className="flex items-center gap-2 px-4 py-2 bg-off-white border border-border rounded-xl font-medium text-sm text-text-main hover:bg-gray-100 transition-colors">Refresh List</button>
+                        <button onClick={fetchUsers} className="w-full lg:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-off-white border border-border rounded-xl font-bold text-sm text-text-main hover:bg-gray-100 transition-colors">Refresh List</button>
                     </div>
                     {loadingUsers ? (
                         <div className="text-center py-10">Loading users...</div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <table className="w-full border-collapse">
+                        <div className="overflow-x-auto -mx-6 px-6 pb-2">
+                            <table className="w-full border-collapse min-w-[600px]">
                                 <thead>
                                     <tr>
                                         <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">User</th>

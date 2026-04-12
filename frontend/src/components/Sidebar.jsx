@@ -86,7 +86,7 @@ const Sidebar = ({ isAdmin = false, isOpen = true, toggleSidebar }) => {
 
   return (
     <aside
-      className={`fixed left-0 top-[88px] z-40 h-[calc(100vh-88px)] bg-forest-dark text-white flex flex-col transition-all duration-300 shadow-xl ${isOpen ? 'w-[70px] md:w-[260px]' : 'w-[70px] md:w-[80px]'
+      className={`hidden md:flex fixed left-0 top-[88px] z-40 h-[calc(100vh-88px)] bg-forest-dark text-white flex-col transition-all duration-300 shadow-xl ${isOpen ? 'md:w-[260px]' : 'md:w-[80px]'
         }`}
     >
       {/* Toggle Button (Desktop Only) */}

@@ -84,16 +84,16 @@ const UserWaste = () => {
 
     return (
         <div className="flex flex-col gap-6">
-            <header className="mb-4">
-                <h1 className="text-3xl font-bold mb-2">Smart Waste Management</h1>
-                <p className="text-text-muted">Monitor your bin levels and request pickups.</p>
+            <header className="mb-6">
+                <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Smart Waste Management</h1>
+                <p className="text-sm md:text-base text-text-muted">Monitor your bin levels and request pickups.</p>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 pb-20 md:pb-0">
                 {/* Smart Bin Section */}
-                <div className="bg-white rounded-[1.5rem] p-8 shadow-sm glass flex flex-col items-center justify-center text-center">
-                    <div className="w-full flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-semibold">Live Bin Status</h2>
+                <div className="bg-white rounded-[1.5rem] p-5 md:p-8 shadow-sm glass flex flex-col items-center justify-center text-center">
+                    <div className="w-full flex flex-col md:flex-row justify-between items-center gap-3 mb-6">
+                        <h2 className="text-lg md:text-xl font-semibold">Live Bin Status</h2>
                         {bin && (
                             <span className="flex items-center gap-1.5 px-3 py-1 bg-teal-soft-bg text-primary-teal text-[11px] font-bold rounded-full border border-primary-teal/20">
                                 <Recycle size={12} /> {bin.name}

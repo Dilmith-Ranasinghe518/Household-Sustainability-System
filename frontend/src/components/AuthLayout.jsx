@@ -22,12 +22,12 @@ const AuthLayout = ({ children, title, subtitle, linkText, linkPath, linkActionT
             </div>
 
             {/* Form Side */}
-            <div className="flex items-center justify-center p-10 bg-off-white overflow-y-auto">
+            <div className="flex items-center justify-center p-6 md:p-10 bg-off-white overflow-y-auto">
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="w-full max-w-[440px] bg-white p-12 rounded-[2rem] shadow-[0_20px_40px_rgba(0,0,0,0.08)]"
+                    className="w-full max-w-[440px] bg-white p-8 md:p-12 rounded-[2rem] shadow-[0_20px_40px_rgba(0,0,0,0.08)]"
                 >
                     <div className="mb-8 text-center">
                         <h1 className="text-3xl font-bold mb-2">{title}</h1>

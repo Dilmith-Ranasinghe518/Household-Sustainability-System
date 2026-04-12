@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Leaf, Menu, X, User, LogIn, LogOut, ChevronDown } from 'lucide-react';
+import { Leaf, Menu, X, User, LogIn, LogOut, ChevronDown, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from './ConfirmModal';
@@ -18,11 +18,19 @@ const Navbar = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+            setScrolled(window.scrollY > 10);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [isOpen]);
 
     const handleLogout = () => {
         setShowLogoutConfirm(true);
@@ -137,60 +145,83 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Toggle */}
-                <button className="md:hidden text-forest-dark" onClick={() => setIsOpen(!isOpen)}>
+                <button className="md:hidden text-forest-dark p-2 hover:bg-off-white rounded-lg transition-colors" onClick={() => setIsOpen(!isOpen)}>
                     {isOpen ? <X size={28} /> : <Menu size={28} />}
                 </button>
             </div>
 
-            {/* Mobile Nav */}
+            {/* Mobile Nav Overlay */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="bg-white border-b border-border overflow-hidden md:hidden shadow-lg"
+                        initial={{ opacity: 0, x: '100%' }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        className="fixed inset-0 top-[60px] md:hidden bg-white/95 backdrop-blur-xl z-[45] overflow-y-auto"
                     >
-                        <div className="p-6 flex flex-col gap-5">
-                            {navLinks.map((link) => (
-                                <Link
-                                    key={link.name}
-                                    to={link.path}
-                                    onClick={() => setIsOpen(false)}
-                                    className="text-lg font-medium text-text-main"
-                                >
-                                    {link.name}
-                                </Link>
-                            ))}
-                            <div className="h-px bg-border" />
-                            {isAuthenticated ? (
-                                <>
-                                    <div className="flex items-center gap-3 py-2">
-                                        <div className="w-10 h-10 bg-teal-soft-bg text-primary-teal rounded-full flex items-center justify-center font-bold">
-                                            {user?.username?.charAt(0).toUpperCase()}
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-text-main">{user?.username}</p>
-                                            <p className="text-xs text-text-muted">{user?.email}</p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => { handleLogout(); setIsOpen(false); }}
-                                        className="flex items-center gap-3 text-lg font-medium text-red-600"
+                        <div className="p-8 flex flex-col gap-6 min-h-[calc(100vh-60px)]">
+                            <div className="flex flex-col gap-4">
+                                <span className="text-xs font-bold text-text-muted uppercase tracking-widest pl-2">Navigation</span>
+                                {navLinks.map((link) => (
+                                    <Link
+                                        key={link.name}
+                                        to={link.path}
+                                        onClick={() => setIsOpen(false)}
+                                        className={`flex items-center justify-between p-4 rounded-2xl text-lg font-bold transition-all ${
+                                            location.pathname === link.path
+                                                ? 'bg-primary-teal text-white shadow-lg'
+                                                : 'text-text-main hover:bg-off-white'
+                                        }`}
                                     >
-                                        <LogOut size={20} /> Logout
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <Link to="/login" onClick={() => setIsOpen(false)} className="flex items-center gap-3 text-lg font-medium text-text-main">
-                                        <LogIn size={20} /> Log in
+                                        {link.name}
+                                        <ArrowRight size={20} className={location.pathname === link.path ? 'opacity-100' : 'opacity-0'} />
                                     </Link>
-                                    <Link to="/register" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-3 text-lg font-semibold text-primary-teal border border-primary-teal p-3 rounded-xl">
-                                        <User size={20} /> Get Started
-                                    </Link>
-                                </>
-                            )}
+                                ))}
+                            </div>
+                            
+                            <div className="h-px bg-border my-2" />
+                            
+                            <div className="flex flex-col gap-4">
+                                <span className="text-xs font-bold text-text-muted uppercase tracking-widest pl-2">Account</span>
+                                {isAuthenticated ? (
+                                    <>
+                                        <div className="flex items-center gap-4 p-4 bg-teal-soft-bg rounded-2xl">
+                                            <div className="w-12 h-12 bg-white text-primary-teal rounded-full flex items-center justify-center font-bold text-xl shadow-sm">
+                                                {user?.username?.charAt(0).toUpperCase()}
+                                            </div>
+                                            <div className="overflow-hidden">
+                                                <p className="font-bold text-text-main truncate">{user?.username}</p>
+                                                <p className="text-sm text-text-muted truncate">{user?.email}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <Link
+                                            to="/profile"
+                                            onClick={() => setIsOpen(false)}
+                                            className="flex items-center gap-3 p-4 text-lg font-bold text-text-main hover:bg-off-white rounded-2xl transition-all"
+                                        >
+                                            <User size={22} className="text-primary-teal" /> Profile
+                                        </Link>
+                                        
+                                        <button
+                                            onClick={() => { handleLogout(); setIsOpen(false); }}
+                                            className="flex items-center gap-3 p-4 text-lg font-bold text-red-600 hover:bg-red-50 rounded-2xl transition-all"
+                                        >
+                                            <LogOut size={22} /> Logout
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="grid grid-cols-1 gap-4 mt-2">
+                                        <Link to="/login" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 p-4 text-lg font-bold text-text-main bg-off-white rounded-2xl transition-all">
+                                            <LogIn size={20} /> Log in
+                                        </Link>
+                                        <Link to="/register" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 p-4 text-lg font-bold text-white bg-forest-dark rounded-2xl shadow-lg transition-all active:scale-95">
+                                            Get Started
+                                        </Link>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </motion.div>
                 )}

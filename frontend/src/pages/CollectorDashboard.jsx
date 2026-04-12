@@ -73,13 +73,13 @@ const CollectorDashboard = () => {
 
     return (
         <div className="flex flex-col gap-6">
-            <header>
-                <h1 className="text-3xl font-bold mb-2">Collector Dashboard</h1>
-                <p className="text-text-muted">Manage waste collection and track bin levels.</p>
+            <header className="mb-6 md:mb-8">
+                <h1 className="text-2xl md:text-3xl font-bold mb-2">Collector Dashboard</h1>
+                <p className="text-sm md:text-base text-text-muted">Manage waste collection and track bin levels.</p>
             </header>
 
             <div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-6">
-                <div className="bg-white rounded-[1.5rem] p-4 shadow-sm glass h-[500px] relative overflow-hidden border border-border">
+                <div className="bg-white rounded-[1.5rem] p-4 shadow-sm glass h-[350px] md:h-[500px] relative overflow-hidden border border-border">
                     <MapContainer center={[6.9271, 79.8612]} zoom={13} style={{ height: '100%', width: '100%', borderRadius: '1rem' }}>
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                         {bins.map(bin => (
@@ -109,7 +109,7 @@ const CollectorDashboard = () => {
                     </MapContainer>
                 </div>
 
-                <div className="bg-white rounded-[1.5rem] p-6 shadow-sm glass border border-border flex flex-col h-[500px]">
+                <div className="bg-white rounded-[1.5rem] p-6 shadow-sm glass border border-border flex flex-col h-[400px] md:h-[500px]">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-lg font-bold">Pickup Requests</h3>
                         <button onClick={fetchRequests} className="text-text-muted hover:text-primary-teal transition-colors">

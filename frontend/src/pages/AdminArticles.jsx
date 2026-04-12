@@ -151,14 +151,14 @@ const AdminArticles = () => {
     );
 
     return (
-        <div className="flex flex-col gap-6 p-4 md:p-8 max-w-7xl mx-auto">
+        <div className="flex flex-col gap-6 md:p-8 max-w-7xl mx-auto pb-24 md:pb-8">
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-[1.5rem] shadow-sm glass">
                 <div>
-                    <h1 className="text-3xl font-bold flex items-center gap-3 text-forest-dark">
-                        <BookOpen className="text-primary-teal" size={32} />
-                        Manage Articles
+                    <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3 text-forest-dark">
+                        <BookOpen className="text-primary-teal" size={28} />
+                        Articles
                     </h1>
-                    <p className="text-text-muted mt-2">Create and organize educational sustainability articles.</p>
+                    <p className="text-xs md:text-sm text-text-muted mt-1 md:mt-2">Create and organize educational sustainability articles.</p>
                 </div>
                 <button 
                     onClick={() => handleOpenModal()}
@@ -260,10 +260,10 @@ const AdminArticles = () => {
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             className="relative bg-white rounded-[2rem] w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col"
                         >
-                            <div className="sticky top-0 z-10 flex items-center justify-between p-6 bg-white border-b border-border">
-                                <h2 className="text-2xl font-bold text-forest-dark">{editingArticle ? 'Edit Article' : 'Create Article'}</h2>
+                            <div className="sticky top-0 z-10 flex items-center justify-between p-4 md:p-6 bg-white border-b border-border">
+                                <h2 className="text-xl md:text-2xl font-bold text-forest-dark">{editingArticle ? 'Edit Article' : 'Create Article'}</h2>
                                 <button onClick={handleCloseModal} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                                    <X size={24} className="text-text-muted" />
+                                    <X size={20} className="text-text-muted" />
                                 </button>
                             </div>
 

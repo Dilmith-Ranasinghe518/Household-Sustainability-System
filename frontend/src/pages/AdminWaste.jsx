@@ -142,22 +142,22 @@ const AdminWaste = () => {
         <div className="flex flex-col gap-6">
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold mb-2">Waste Management</h1>
-                    <p className="text-text-muted">Manage pickup requests and bin assignments.</p>
+                    <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Waste Management</h1>
+                    <p className="text-sm md:text-base text-text-muted">Manage pickup requests and bin assignments.</p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex bg-white p-1 rounded-xl shadow-sm border border-border">
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                    <div className="flex bg-white p-1 rounded-xl shadow-sm border border-border w-full md:w-auto">
                         <button
                             onClick={() => setActiveTab('requests')}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'requests' ? 'bg-primary-teal text-white shadow-sm' : 'text-text-muted hover:bg-gray-50'}`}
+                            className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'requests' ? 'bg-primary-teal text-white shadow-sm' : 'text-text-muted hover:bg-gray-50'}`}
                         >
                             Requests
                         </button>
                         <button
                             onClick={() => setActiveTab('bins')}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'bins' ? 'bg-primary-teal text-white shadow-sm' : 'text-text-muted hover:bg-gray-50'}`}
+                            className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'bins' ? 'bg-primary-teal text-white shadow-sm' : 'text-text-muted hover:bg-gray-50'}`}
                         >
-                            Manage Bins
+                            Bins
                         </button>
                     </div>
                 </div>
@@ -165,8 +165,8 @@ const AdminWaste = () => {
 
             {activeTab === 'requests' ? (
                 <>
-                    <div className="flex justify-end gap-3 mb-2">
-                        <div className="flex bg-white p-1 rounded-xl shadow-sm border border-border">
+                    <div className="flex flex-wrap justify-end gap-3 mb-2">
+                        <div className="flex bg-white p-1 rounded-xl shadow-sm border border-border order-2 md:order-1">
                             <button
                                 onClick={() => setFilter('all')}
                                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${filter === 'all' ? 'bg-off-white text-text-main shadow-sm' : 'text-text-muted hover:bg-gray-50'}`}
@@ -186,17 +186,17 @@ const AdminWaste = () => {
                                 Completed
                             </button>
                         </div>
-                        <button onClick={fetchRequests} className="p-2 bg-white border border-border rounded-xl hover:bg-off-white transition-colors shadow-sm text-text-muted">
+                        <button onClick={fetchRequests} className="order-1 md:order-2 p-2 bg-white border border-border rounded-xl hover:bg-off-white transition-colors shadow-sm text-text-muted">
                             <RefreshCw size={20} />
                         </button>
                     </div>
 
-                    <div className="bg-white rounded-[1.5rem] p-6 shadow-sm glass">
+                    <div className="bg-white rounded-[1.5rem] p-4 md:p-6 shadow-sm glass pb-24 md:pb-6">
                         {loading ? (
                             <div className="text-center py-20 text-text-muted">Loading requests...</div>
                         ) : (
-                            <div className="overflow-x-auto">
-                                <table className="w-full border-collapse">
+                            <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+                                <table className="w-full border-collapse min-w-[800px]">
                                     <thead>
                                         <tr>
                                             <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">User</th>
@@ -266,8 +266,8 @@ const AdminWaste = () => {
                     </div>
                 </>
             ) : (
-                <div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-6">
-                    <div className="bg-white rounded-[1.5rem] p-4 shadow-sm glass h-[600px] relative overflow-hidden">
+                <div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-6 pb-24 md:pb-0">
+                    <div className="bg-white rounded-[1.5rem] p-2 md:p-4 shadow-sm glass h-[400px] md:h-[600px] relative overflow-hidden">
                         <MapContainer center={[6.9271, 79.8612]} zoom={13} style={{ height: '100%', width: '100%', borderRadius: '1rem' }}>
                             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                             <MapClickHandler />

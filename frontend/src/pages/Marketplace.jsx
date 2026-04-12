@@ -153,10 +153,10 @@ const Marketplace = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
 
       {/* Hero Banner — full bleed, no padding */}
-      <div className="relative w-full h-[20vh] min-h-[160px] max-h-[260px] overflow-hidden">
+      <div className="relative w-full h-40 md:h-[20vh] min-h-[160px] md:max-h-[260px] overflow-hidden">
         <img
           src={marketplaceHeroImg}
           alt="Sustainable Marketplace"
@@ -167,7 +167,7 @@ const Marketplace = () => {
 
         {/* Hero text */}
         <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 lg:px-16">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight drop-shadow-sm">
+          <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight drop-shadow-sm">
             Sustainable Marketplace
           </h1>
           <p className="text-teal-100 text-sm sm:text-base mt-1.5 max-w-md">

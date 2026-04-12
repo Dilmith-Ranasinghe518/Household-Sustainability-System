@@ -182,22 +182,21 @@ const OrderManagement = () => {
   return (
     <div className="flex flex-col gap-5">
 
-      {/* HEADER */}
       <header className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Orders</h2>
-          <p className="text-sm text-gray-400 mt-0.5">Manage marketplace orders and confirmations.</p>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800">Orders</h2>
+          <p className="text-xs md:text-sm text-gray-400 mt-0.5">Manage marketplace orders and confirmations.</p>
         </div>
-        <div className="flex gap-2 self-start">
+        <div className="flex gap-2 w-full md:w-auto">
           <button
             onClick={generateReport}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 transition-all shadow-sm"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 transition-all shadow-sm"
           >
-            <Download size={15} /> Generate Report
+            <Download size={15} /> Report
           </button>
           <button
             onClick={fetchOrders}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 text-teal-700 bg-white hover:bg-teal-50 transition-all shadow-sm"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 text-teal-700 bg-white hover:bg-teal-50 transition-all shadow-sm"
           >
             <RefreshCw size={15} /> Refresh
           </button>
@@ -205,8 +204,8 @@ const OrderManagement = () => {
       </header>
 
       {/* STAT CARDS */}
-      <div className="flex flex-wrap gap-3">
-        <StatCard icon={ShoppingCart} label="Total Orders" value={orders.length} iconClass="text-teal-500" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard icon={ShoppingCart} label="Total" value={orders.length} iconClass="text-teal-500" />
         <StatCard icon={AlertCircle} label="Pending" value={pendingCount} iconClass="text-yellow-400" />
         <StatCard icon={CheckCircle} label="Confirmed" value={confirmedCount} iconClass="text-teal-400" />
         <StatCard icon={XCircle} label="Cancelled" value={cancelledCount} iconClass="text-red-400" />
@@ -262,14 +261,14 @@ const OrderManagement = () => {
       </div>
 
       {/* TABLE */}
-      <div className="rounded-2xl overflow-x-auto bg-white border border-gray-100 shadow-sm">
+      <div className="rounded-2xl overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 bg-white border border-gray-100 shadow-sm">
         {loading ? (
           <div className="flex items-center justify-center py-16 gap-3 text-teal-600">
             <RefreshCw size={20} className="animate-spin" />
             <span className="text-sm font-medium">Loading orders…</span>
           </div>
         ) : (
-          <table className="w-full text-sm border-collapse">
+          <table className="w-full text-sm border-collapse min-w-[1000px]">
             <thead>
               <tr className="bg-green-50 border-b border-green-100">
                 {["Order ID", "Product", "Buyer", "Seller", "Status", "Expires", "Actions"].map(h => (

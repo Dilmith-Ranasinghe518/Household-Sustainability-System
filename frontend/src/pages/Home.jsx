@@ -271,8 +271,8 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-6 min-h-[calc(100vh-90px)] flex items-center">
-          <div className="max-w-[720px]">
+        <div className="relative z-10 container mx-auto px-6 min-h-[calc(100vh-90px)] flex items-center py-12 md:py-0">
+          <div className="max-w-[720px] w-full">
             <motion.div
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
@@ -283,20 +283,20 @@ const Home = () => {
                 Welcome to EcoPulse
               </span>
 
-              <h1 className="text-[3.6rem] leading-[1.05] mb-5 text-white font-extrabold">
+              <h1 className="text-4xl sm:text-5xl md:text-[3.6rem] leading-[1.1] md:leading-[1.05] mb-5 text-white font-extrabold">
                 Live <span className="text-warm-yellow">Greener</span> without
                 limits
               </h1>
 
-              <p className="text-xl text-white/90 mb-9 leading-relaxed max-w-[640px]">
+              <p className="text-lg md:text-xl text-white/90 mb-9 leading-relaxed max-w-[640px]">
                 Track energy, reduce waste, calculate carbon footprint, and join
                 community challenges — all in one smart dashboard.
               </p>
 
-              <div className="flex flex-wrap gap-4 mb-10">
+              <div className="flex flex-col sm:flex-row gap-4 mb-10">
                 <Link
                   to="/register"
-                  className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-lg transition-all bg-warm-yellow text-forest-dark shadow-[0_12px_28px_rgba(250,204,21,0.28)] hover:bg-golden-accent hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(250,204,21,0.38)]"
+                  className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full font-semibold text-lg transition-all bg-warm-yellow text-forest-dark shadow-[0_12px_28px_rgba(250,204,21,0.28)] hover:bg-golden-accent hover:-translate-y-0.5"
                 >
                   Start Free Trial
                   <ArrowRight
@@ -307,7 +307,7 @@ const Home = () => {
 
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-lg transition-all bg-white/10 text-white border border-white/20 backdrop-blur hover:bg-white/15 hover:-translate-y-0.5"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full font-semibold text-lg transition-all bg-white/10 text-white border border-white/20 backdrop-blur hover:bg-white/15 hover:-translate-y-0.5"
                 >
                   View Demo
                 </Link>
@@ -332,7 +332,7 @@ const Home = () => {
       </section>
 
       {/* FLOATING STRIP */}
-      <section className="relative -mt-12 z-20">
+      <section className="relative mt-8 md:-mt-12 z-20">
         <div className="container mx-auto px-6">
           <div className="rounded-[2rem] border border-white/60 bg-white/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] p-6 md:p-8 grid grid-cols-1 md:grid-cols-4 gap-5">
             {[
@@ -356,7 +356,7 @@ const Home = () => {
       </section>
 
       {/* FEATURES */}
-      <section className="relative py-[130px] bg-gradient-to-b from-[#f8fcfb] to-[#eef8f5]">
+      <section className="relative py-16 md:py-[130px] bg-gradient-to-b from-[#f8fcfb] to-[#eef8f5]">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-14 left-10 w-56 h-56 rounded-full bg-primary-teal/10 blur-3xl" />
           <div className="absolute bottom-10 right-10 w-72 h-72 rounded-full bg-warm-yellow/10 blur-3xl" />
@@ -369,7 +369,7 @@ const Home = () => {
               Core Features
             </span>
 
-            <h2 className="text-[2.8rem] leading-tight font-extrabold mb-4 text-forest-dark">
+            <h2 className="text-3xl md:text-[2.8rem] leading-tight font-extrabold mb-4 text-forest-dark">
               Everything you need for a{" "}
               <span className="text-primary-teal">Sustainable Home</span>
             </h2>
@@ -431,7 +431,7 @@ const Home = () => {
       </section>
 
       {/* HOW IT WORKS + IMAGE */}
-      <section className="relative py-[125px] bg-[#f6fbf9]">
+      <section className="relative py-16 md:py-[125px] bg-[#f6fbf9]">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-teal/30 to-transparent" />
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
@@ -446,7 +446,7 @@ const Home = () => {
                 How it works
               </span>
 
-              <h2 className="text-[2.6rem] font-extrabold mb-4 text-forest-dark leading-tight">
+              <h2 className="text-3xl md:text-[2.6rem] font-extrabold mb-4 text-forest-dark leading-tight">
                 Simple steps.{" "}
                 <span className="text-primary-teal">Big impact.</span>
               </h2>
@@ -558,14 +558,14 @@ const Home = () => {
       </section>
 
       {/* WHY SUSTAINCITY */}
-      <section className="relative py-[120px] bg-gradient-to-b from-white to-[#f6fbf9]">
+      <section className="relative py-16 md:py-[120px] bg-gradient-to-b from-white to-[#f6fbf9]">
         <div className="container mx-auto px-6">
           <div className="text-center max-w-[760px] mx-auto mb-16">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-soft-bg text-forest-dark font-semibold text-sm mb-5">
               <Sparkles size={16} className="text-primary-teal" />
               Why EcoPulse
             </span>
-            <h2 className="text-[2.6rem] font-extrabold mb-4 text-forest-dark">
+            <h2 className="text-3xl md:text-[2.6rem] font-extrabold mb-4 text-forest-dark">
               More than a tracker — a smarter way to{" "}
               <span className="text-primary-teal">live sustainably</span>
             </h2>
@@ -596,7 +596,7 @@ const Home = () => {
       </section>
 
       {/* TRUST / CERTIFICATES */}
-      <section className="relative py-[125px] bg-white">
+      <section className="relative py-16 md:py-[125px] bg-white">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-primary-teal/7 blur-3xl" />
         </div>
@@ -614,7 +614,7 @@ const Home = () => {
                 Trust & Recognition
               </span>
 
-              <h2 className="text-[2.7rem] leading-tight font-extrabold text-forest-dark mb-5">
+              <h2 className="text-3xl md:text-[2.7rem] leading-tight font-extrabold text-forest-dark mb-5">
                 Earn <span className="text-primary-teal">Certificates</span> for
                 real progress
               </h2>
@@ -686,7 +686,7 @@ const Home = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="relative py-[125px] bg-gradient-to-b from-[#eff8f4] to-[#f9fcfb]">
+      <section className="relative py-16 md:py-[125px] bg-gradient-to-b from-[#eff8f4] to-[#f9fcfb]">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-teal/30 to-transparent" />
         <div className="container mx-auto px-6">
           <div className="text-center max-w-[760px] mx-auto mb-16">
@@ -695,7 +695,7 @@ const Home = () => {
               Testimonials
             </span>
 
-            <h2 className="text-[2.7rem] font-extrabold mb-4 text-forest-dark">
+            <h2 className="text-3xl md:text-[2.7rem] font-extrabold mb-4 text-forest-dark">
               Loved by households improving{" "}
               <span className="text-primary-teal">every week</span>
             </h2>
@@ -774,7 +774,7 @@ const Home = () => {
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-700 font-semibold text-sm mb-4">
                 <Users size={16} /> Community Highlights
               </span>
-              <h2 className="text-[2.6rem] font-extrabold text-forest-dark leading-tight">
+              <h2 className="text-3xl md:text-[2.6rem] font-extrabold text-forest-dark leading-tight">
                 See what the <span className="text-emerald-600">Eco-Community</span> is up to
               </h2>
             </div>

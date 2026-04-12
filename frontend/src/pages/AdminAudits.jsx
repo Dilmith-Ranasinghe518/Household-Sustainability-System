@@ -28,24 +28,25 @@ const AdminAudits = () => {
 
     return (
         <div className="flex flex-col gap-6">
-            <header className="flex justify-between items-center mb-10">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-10">
                 <div>
-                    <h1 className="text-3xl font-bold mb-2">Audit Logs</h1>
-                    <p className="text-text-muted">Review all sustainability audits submitted by users.</p>
+                    <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Audit Logs</h1>
+                    <p className="text-sm md:text-base text-text-muted">Review all sustainability audits submitted by users.</p>
                 </div>
-                <button onClick={fetchAllAudits} className="flex items-center gap-2 px-4 py-2 bg-white border border-border rounded-xl font-medium text-sm text-text-main hover:bg-off-white transition-colors shadow-sm">
+                <button onClick={fetchAllAudits} className="flex items-center gap-2 px-4 py-2 bg-white border border-border rounded-xl font-medium text-sm text-text-main hover:bg-off-white transition-colors shadow-sm w-full md:w-auto justify-center">
                     <FileText size={16} />
                     Refresh List
                 </button>
             </header>
 
             <section>
-                <div className="bg-white rounded-[1.5rem] p-6 shadow-sm glass">
+                <div className="bg-white rounded-[1.5rem] p-4 md:p-6 shadow-sm glass pb-24 md:pb-6">
                     {loadingAudits ? (
                         <div className="text-center py-10">Loading audits...</div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <table className="w-full border-collapse">
+                        <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+                            <table className="w-full border-collapse min-w-[900px]">
+ pockets
                                 <thead>
                                     <tr>
                                         <th className="text-left p-4 border-b border-border text-text-muted font-semibold text-[13px] uppercase">User</th>

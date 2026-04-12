@@ -82,7 +82,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto px-4 py-8 md:p-6 pb-24 md:pb-6">
 
       <button 
         onClick={() => navigate(-1)} 
@@ -92,13 +92,13 @@ const ProductDetails = () => {
         Back to Marketplace
       </button>
 
-      <div className="grid md:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
 
         <div>
           <img
             src={product.imageUrl || placeholderImage}
             alt={product.title}
-            className="w-full h-[400px] rounded-2xl shadow-xl object-cover"
+            className="w-full h-[300px] md:h-[400px] rounded-2xl shadow-xl object-cover"
             onError={(e) => { e.target.onerror = null; e.target.src = placeholderImage; }}
           />
 
@@ -124,7 +124,7 @@ const ProductDetails = () => {
         {/* DETAILS SECTION */}
         <div className="flex flex-col gap-6">
 
-          <h1 className="text-3xl font-bold text-[#0F2E24]">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#0F2E24] leading-tight">
             {product.title}
           </h1>
 
