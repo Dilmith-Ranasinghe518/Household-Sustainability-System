@@ -10,8 +10,141 @@ A full-stack sustainability platform that helps households monitor energy usage,
 https://household-sustainability-system.onrender.com/api
 
 ### Frontend
-Hosted on Vercel (or run locally using Vite)
+https://household-sustainability-system.vercel.app/
 
+# 🚀 Deployment Guide
+
+This project uses a split deployment setup:
+
+- **Backend** is hosted on **Render**
+- **Frontend** is hosted on **Vercel**
+
+This setup allows the frontend and backend to be deployed independently while still working together as one full-stack application.
+---
+
+## 🧩 How Deployment Works
+
+The system is deployed in two parts:
+
+### 1. Frontend on Vercel
+The frontend contains the user interface of the application.  
+It is responsible for:
+
+- showing pages and dashboards
+- handling navigation
+- collecting user input
+- sending requests to the backend API
+
+When a user opens the website, they are using the frontend hosted on Vercel.
+
+### 2. Backend on Render
+The backend contains the server-side logic and API endpoints.  
+It is responsible for:
+
+- authentication and authorization
+- database operations
+- handling business logic
+- processing user requests
+- returning data to the frontend
+
+When the frontend needs data, it sends a request to the backend hosted on Render.
+
+---
+
+## 🔁 Request Flow
+
+The deployment flow works like this:
+
+1. The user opens the frontend on Vercel
+2. The frontend sends API requests to the Render backend
+3. The backend processes the request
+4. The backend connects to the database and returns a response
+5. The frontend displays the returned data to the user
+
+In simple terms:
+
+**User → Vercel Frontend → Render Backend → Database → Frontend → User**
+
+---
+
+## ⚙️ Why Use Render for Backend and Vercel for Frontend
+
+This project uses two platforms because each one is well suited for a different part of the system.
+
+### Render is used for the backend because:
+- it is suitable for hosting Node.js/Express backend services
+- it supports environment variables securely
+- it can redeploy automatically when code is pushed
+- it is easy to connect with GitHub repositories
+
+### Vercel is used for the frontend because:
+- it is very convenient for deploying modern frontend applications
+- it supports fast frontend builds and updates
+- it works well with GitHub-based deployment
+- it automatically creates production deployments from the connected project
+
+---
+
+## 🛠️ Deployment Process
+
+### Backend Deployment on Render
+The backend is deployed by connecting the GitHub repository to Render as a Web Service.
+
+Basic process:
+1. Connect the GitHub repository to Render
+2. Select the backend service or backend root folder
+3. Add environment variables in Render dashboard
+4. Set build and start commands
+5. Deploy the backend
+6. Render provides a live backend URL
+
+### Frontend Deployment on Vercel
+The frontend is deployed by connecting the same GitHub repository to Vercel.
+
+Basic process:
+1. Connect the GitHub repository to Vercel
+2. Select the frontend root folder
+3. Add environment variables if needed
+4. Set the frontend framework/build settings
+5. Deploy the frontend
+6. Vercel provides a live frontend URL
+
+---
+
+## 🔐 Environment Variables
+
+Sensitive values such as API keys, database URLs, and secrets are not stored directly in the source code.
+
+Instead:
+- backend environment variables are configured in **Render**
+- frontend environment variables are configured in **Vercel**
+
+This makes the deployment more secure and easier to manage across different environments.
+
+---
+
+## 🔄 Automatic Updates
+
+After the hosting platforms are connected to GitHub:
+
+- pushing backend changes can trigger a new backend deployment on Render
+- pushing frontend changes can trigger a new frontend deployment on Vercel
+
+This helps keep the live application updated with the latest code changes.
+
+---
+
+## ✅ Summary
+
+This project uses a modern full-stack deployment strategy:
+
+- **Frontend** is deployed on **Vercel**
+- **Backend** is deployed on **Render**
+- both services are connected through API communication
+- GitHub is used as the source for deployment
+- environment variables are managed securely in each platform
+
+This deployment approach makes the system easier to maintain, update, and scale.
 ---
 
 # ✨ System Features
